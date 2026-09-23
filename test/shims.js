@@ -9,14 +9,18 @@ Object.defineProperty(HTMLElement.prototype, `clientWidth`, {
   },
 })
 
+// Boxes are sized by the element's text (6px a character, one 12px line), and are empty without text, as in browsers:
+// Highcharts adds the title's box height to the plot top, and with `title: null` its title text is empty.
+const textLength = element => (element.textContent || ``).length
 if (!SVGElement.prototype.getBBox) {
   SVGElement.prototype.getBBox = function getBBox() {
-    return { x: 0, y: 0, width: 10, height: 10 }
+    const length = textLength(this)
+    return { x: 0, y: 0, width: 6 * length, height: length > 0 ? 12 : 0 }
   }
 }
 if (!SVGElement.prototype.getComputedTextLength) {
   SVGElement.prototype.getComputedTextLength = function getComputedTextLength() {
-    return 10
+    return 6 * textLength(this)
   }
 }
 // Highcharts sets H.svg from `!!createElementNS(SVG_NS, 'svg').createSVGRect` when it is first imported.
