@@ -1,0 +1,79 @@
+/*
+ * gramene-atlas-heatmap: the few rules its own markup needs. The controls are react-bootstrap 2, styled by the host
+ * page's Bootstrap 5 CSS, and the Highcharts labels and tooltip are HTML strings with inline styles.
+ *
+ * Everything is scoped under .gxaHeatmapContainer, the component's root element, except the rules for its modals
+ * (rendered in a portal, marked .gxa-heatmap-modal) and the tooltip z-index below. The sheet is injected at the start
+ * of <head>, so host rules of equal specificity win. With injectStyles={false}, import
+ * gramene-atlas-heatmap/dist/gramene-atlas-heatmap.css instead.
+ */
+
+/* As in the EBI stylesheet the iframe loaded: labels may draw outside the chart's box */
+.gxaHeatmapContainer .highcharts-container,
+.gxaHeatmapContainer svg {
+  overflow: visible !important;
+}
+
+/* Bootstrap's reboot underlines links; the widget's never were */
+.gxaHeatmapContainer a {
+  text-decoration: none;
+}
+
+/* Data series legend of multi-experiment heatmaps */
+.gxaHeatmapContainer .gxa-legend {
+  color: #606060;
+  text-align: right;
+}
+
+.gxaHeatmapContainer .gxa-legend-item {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 4px;
+  vertical-align: middle;
+  cursor: default;
+}
+
+.gxaHeatmapContainer .gxa-legend-item--off {
+  color: #ccc;
+}
+
+.gxaHeatmapContainer .gxa-legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  vertical-align: middle;
+}
+
+.gxaHeatmapContainer .gxa-va-middle {
+  vertical-align: middle;
+}
+
+.gxaHeatmapContainer .gxa-info-icon {
+  color: #7e7e7e;
+  font-size: 150%;
+  vertical-align: middle;
+}
+
+/* Filters modal */
+.gxa-heatmap-modal .gxa-filter-option-name {
+  display: inline-block;
+  padding: 0 0 0 5px;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+}
+
+.gxa-heatmap-modal .gxa-filter-option-name::first-letter {
+  text-transform: capitalize;
+}
+
+/*
+ * The one global rule. Highcharts 6.2 appends the tooltip's own container (tooltip.outside) to <body> with no
+ * z-index, so it would show behind a fullscreen host modal (Bootstrap 5 modals are at z-index 1055).
+ */
+body > .highcharts-tooltip-container {
+  z-index: 1100;
+}

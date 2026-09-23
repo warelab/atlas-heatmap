@@ -6,6 +6,7 @@ import ContainerLoader from './layout/ContainerLoader.js'
 import HeatmapErrorBoundary from './layout/HeatmapErrorBoundary.js'
 import {applyResolveUrl} from './layout/links.js'
 import {buildRequest, buildSource, requestKey} from './layout/request.js'
+import {ensureStylesInjected, HEATMAP_CSS, STYLE_ELEMENT_ID, useStyleInjection} from './styles/inject.js'
 
 /**
  * @param {Object}          options
@@ -69,6 +70,7 @@ const ExpressionAtlasHeatmap = props => {
     query, experiment, inProxy, outProxy, showAnatomogram, isWidget, showControlMenu, fail, linkTarget, className, style
   } = options
   const atlasUrl = withTrailingSlash(options.atlasUrl)
+  useStyleInjection(options.injectStyles !== false)
 
   // urlFor(kind, defaultUrl, context) asks the latest resolveUrl, so its own identity never changes and a new
   // resolveUrl function alone does not rebuild the chart
@@ -166,4 +168,12 @@ const render = (options = {}) => {
   }
 }
 
-export {ExpressionAtlasHeatmap as default, ExpressionAtlasHeatmap, render, DEFAULT_OPTIONS}
+export {
+  ExpressionAtlasHeatmap as default,
+  ExpressionAtlasHeatmap,
+  render,
+  DEFAULT_OPTIONS,
+  ensureStylesInjected,
+  STYLE_ELEMENT_ID,
+  HEATMAP_CSS
+}

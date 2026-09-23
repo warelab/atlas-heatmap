@@ -29,6 +29,6 @@ export default defineConfig({
     unstubGlobals: true,
     testTimeout: 30_000,
     // Vitest replaces CSS (including ?inline imports) with '' unless it is listed here.
-    css: { include: [/heatmap\.css$/] },
+    css: { include: [/heatmap\.css(\?|$)/] },
   },
 })
