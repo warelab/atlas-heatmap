@@ -22,7 +22,7 @@ import makeEventCallbacks from './Events.js'
 
 import {manipulate} from './Manipulators.js'
 
-import debounceRender from 'react-debounce-render'
+import debounceRender from './debounceRender.js'
 import _Anatomogram from 'gramene-anatomogram'
 import _HeatmapCanvas from '../show/HeatmapCanvas.js'
 
@@ -125,6 +125,7 @@ const renderFiltersButton = ({
   heatmapConfig.isMultiExperiment &&
   <div style={{display: `inline-block`, padding: `5px`}}>
     <FiltersButton
+      defaultShowModal={false}
       categories={categories}
       categoryCheckboxes={categoryCheckboxes}
       allValues={allGroupedColumns}
@@ -246,7 +247,7 @@ const renderAnatomogramControlsAndCanvas = (args, heatmapDataToPresent, anatomog
       <div style={{display: `inline-block`, width: `30%`}}>
         {args.heatmapConfig.introductoryMessage}
       </div>
-      { args.heatmapConfig.showControlMenu && <div style={{display: `inline-block`, width: `70%`, textAlign: `right`}}>
+      { args.heatmapConfig.showControlMenu && <div className={`gxa-controls`} style={{display: `inline-block`, width: `70%`, textAlign: `right`}}>
         {renderGenomeBrowsersDropdown(args)}
         {renderOrderings(args)}
         {renderFiltersButton(args)}
@@ -317,7 +318,9 @@ class _HeatmapWithControls extends React.Component {
         highlightIds: heatmapData.xAxisCategories.map(e => e.id).filter(id => this.state.highlightIds.includes(id)),
         selectIds: [],
         onMouseOver: this.onTissueIdIsUnderFocus,
-        onMouseOut: this.onTissueIdIsNotUnderFocus
+        onMouseOut: this.onTissueIdIsNotUnderFocus,
+        // The SVG's EBI licence link; a falsy linkTarget leaves it as it is
+        linkTarget: this.props.heatmapConfig.linkTarget || null
       }
       : null
     return renderAnatomogramControlsAndCanvas(args, heatmapData, anatomogramArgs)
