@@ -9,6 +9,7 @@ import geod167101 from '../fixtures/paralogs.E-GEOD-167101.baseline.json'
 // Golden snapshots of src/load/main.js over live Warelab payloads (scripts/capture-fixtures.mjs). They were first
 // written against the pristine upstream 5.7.2 load/ code; every later snapshot change must be an intended one:
 // - rows carry their raw `uri` next to the resolved `url` (urijs replaced node `url`, same URLs);
+// - anatomogramConfig: no asset `atlasUrl`, a normalised `species`, and E-CURD-25's 'Sorghum bicolor' now shows;
 // - heatmapConfig: `linkTarget` and `urlFor`.
 
 const ATLAS_URL = `https://data.sorghumbase.org/auth_testing/gxa/`
@@ -63,6 +64,7 @@ describe(`loadChartData`, () => {
 
     it(`shows the sorghum anatomogram`, () => {
       expect(chartData.anatomogramConfig.show).toBe(true)
+      expect(chartData.anatomogramConfig.species).toBe(`sorghum_bicolor`)
     })
 
     it(`keeps the raw row URI next to the resolved URL, for resolveUrl`, () => {
@@ -103,9 +105,14 @@ describe(`loadChartData`, () => {
         .toBe(`https://www.ebi.ac.uk/gxa/genes/SORBI_3001G000200`)
     })
 
-    it(`hides the anatomogram: the backend sends the display species name 'Sorghum bicolor'`, () => {
+    it(`shows the anatomogram for the display species name 'Sorghum bicolor', normalised`, () => {
       expect(curd25.body.anatomogram.species).toBe(`Sorghum bicolor`)
-      expect(chartData.anatomogramConfig.show).toBe(false)
+      expect(chartData.anatomogramConfig.show).toBe(true)
+      expect(chartData.anatomogramConfig.species).toBe(`sorghum_bicolor`)
+    })
+
+    it(`hides the anatomogram when showAnatomogram is false`, () => {
+      expect(load(curd25, {showAnatomogram: false}).anatomogramConfig.show).toBe(false)
     })
   })
 

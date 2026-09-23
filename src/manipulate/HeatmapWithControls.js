@@ -23,7 +23,7 @@ import makeEventCallbacks from './Events.js'
 import {manipulate} from './Manipulators.js'
 
 import debounceRender from 'react-debounce-render'
-import _Anatomogram from '@ebi-gene-expression-group/anatomogram'
+import _Anatomogram from 'gramene-anatomogram'
 import _HeatmapCanvas from '../show/HeatmapCanvas.js'
 
 const Anatomogram = debounceRender(_Anatomogram, 50)
@@ -306,10 +306,7 @@ class _HeatmapWithControls extends React.Component {
     const heatmapData= heatmapDataToPresent(args)
     const anatomogramArgs = this.props.anatomogramConfig.show
       ? {
-        atlasUrl: process.env.NODE_ENV === `development` ?
-          `` :  // In development mode we load assets from Webpack’s output.publicPath
-          this.props.anatomogramConfig.atlasUrl,
-        species: this.props.anatomogramConfig.anatomogramData.species,
+        species: this.props.anatomogramConfig.species,
         showIds: heatmapData.xAxisCategories.map(e => e.id),
         highlightIds: heatmapData.xAxisCategories.map(e => e.id).filter(id => this.state.highlightIds.includes(id)),
         selectIds: [],

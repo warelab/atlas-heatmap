@@ -26,10 +26,10 @@ exports[`loadChartData > All Studies (json/baseline_experiments) > matches the g
       ],
       "species": "sorghum_bicolor",
     },
-    "atlasUrl": "https://data.sorghumbase.org/auth_testing/gxa/",
     "expressedTissueColour": "red",
     "hoveredTissueColour": "purple",
     "show": true,
+    "species": "sorghum_bicolor",
   },
   "colourAxis": null,
   "columnGroups": {
@@ -1097,10 +1097,10 @@ exports[`loadChartData > Paralogs baseline (E-CURD-25) > matches the golden snap
       ],
       "species": "Sorghum bicolor",
     },
-    "atlasUrl": "https://data.sorghumbase.org/auth_testing/gxa/",
     "expressedTissueColour": "gray",
     "hoveredTissueColour": "red",
-    "show": false,
+    "show": true,
+    "species": "sorghum_bicolor",
   },
   "colourAxis": {
     "dataClasses": [
@@ -1570,10 +1570,10 @@ exports[`loadChartData > Paralogs baseline without an anatomogram (E-GEOD-167101
 {
   "anatomogramConfig": {
     "anatomogramData": undefined,
-    "atlasUrl": "https://data.sorghumbase.org/auth_testing/gxa/",
     "expressedTissueColour": "gray",
     "hoveredTissueColour": "red",
     "show": false,
+    "species": "",
   },
   "colourAxis": {
     "dataClasses": [
@@ -2650,10 +2650,10 @@ exports[`loadChartData > Paralogs differential (E-GEOD-30249) > matches the gold
 {
   "anatomogramConfig": {
     "anatomogramData": undefined,
-    "atlasUrl": "https://data.sorghumbase.org/auth_testing/gxa/",
     "expressedTissueColour": "gray",
     "hoveredTissueColour": "red",
     "show": false,
+    "species": "",
   },
   "colourAxis": {
     "dataClasses": [

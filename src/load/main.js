@@ -1,4 +1,4 @@
-import { anatomogramSpecies } from '@ebi-gene-expression-group/anatomogram'
+import { anatomogramSpecies, normaliseSpecies } from 'gramene-anatomogram'
 
 import getChartConfiguration from './chartConfiguration.js'
 
@@ -20,11 +20,15 @@ export default function({data, inProxy, outProxy, atlasUrl, showAnatomogram, sho
   const heatmapData =
     getHeatmapData(Object.assign({}, data, {allRows,geneQuery: data.config.geneQuery,inProxy,atlasUrl}))
 
+  // The anatomogram knows snake_case species only. The gramene-swagger backend sends that for All Studies
+  // (`sorghum_bicolor`) but the display name for single experiments (`Sorghum bicolor`), which upstream never showed.
+  const species = data.anatomogram ? normaliseSpecies(data.anatomogram.species) : ``
+
   //misses: idsExpressedInExperiment
   //show is extra
   const anatomogramConfig = {
-    atlasUrl: atlasUrl,
-    show: showAnatomogram && !! data.anatomogram && anatomogramSpecies.includes(data.anatomogram.species),
+    show: showAnatomogram && !! data.anatomogram && anatomogramSpecies.includes(species),
+    species,
     anatomogramData: data.anatomogram,
     expressedTissueColour: data.experiment ? `gray` : `red`,
     hoveredTissueColour: data.experiment ? `red` : `purple`,
