@@ -34,7 +34,6 @@ const UPSTREAM_IMPORTS_PENDING_REMOVAL = [
   'react-debounce-render',
   'react-ga',
   'react-highcharts',
-  'react-refetch',
   'styled-components',
 ]
 

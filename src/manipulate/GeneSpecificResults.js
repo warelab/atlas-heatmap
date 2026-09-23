@@ -1,5 +1,6 @@
-import React from 'react'
-import { connect } from 'react-refetch'
+import React, {useMemo} from 'react'
+
+import useAtlasFetch from '../layout/useAtlasFetch.js'
 
 import Boxplot from '../show/BoxplotCanvas.js'
 import Transcripts from '../show/TranscriptsCanvas.js'
@@ -53,17 +54,18 @@ const makeBoxplot = (geneNameOrId, data, config) => (
 
 const getGeneNameOrId = ({name, id}) => name ? name : id
 
+// Upstream rendered the fetch state or the payload object itself (a React error) where these show a message
 const QuietLoader = ({sourceUrlFetch, keepOnlyTheseColumnIds}) => (
   sourceUrlFetch.pending
     ? noData()
     : sourceUrlFetch.rejected
-      ? noData(sourceUrlFetch)
-      : !sourceUrlFetch.fulfilled
-        ? noData(sourceUrlFetch)
+      ? noData(sourceUrlFetch.reason.message)
+      : !sourceUrlFetch.fulfilled || !sourceUrlFetch.value
+        ? noData(`No data`)
         : sourceUrlFetch.value.error
-          ? noData(sourceUrlFetch.value.error)
+          ? noData(String(sourceUrlFetch.value.error))
           : (!sourceUrlFetch.value.geneExpression && !sourceUrlFetch.value.transcriptExpression)
-            ? noData(sourceUrlFetch.value)
+            ? noData(`No gene or transcript expression data`)
             : (
               <div>
                 { sourceUrlFetch.value.geneExpression &&
@@ -87,8 +89,12 @@ const QuietLoader = ({sourceUrlFetch, keepOnlyTheseColumnIds}) => (
             )
 )
 
-export default connect(props => ({
-  sourceUrlFetch: {
-    url: props.url
-  },
-}))(QuietLoader)
+// Replaces react-refetch's connect(): a GET of props.url (react-refetch also sent Content-Type: application/json,
+// which only forces a CORS preflight)
+const GeneSpecificResults = ({url, keepOnlyTheseColumnIds}) => {
+  const request = useMemo(() => ({url, method: `GET`, headers: {Accept: `application/json`}}), [url])
+  const sourceUrlFetch = useAtlasFetch(request)
+  return <QuietLoader sourceUrlFetch={sourceUrlFetch} keepOnlyTheseColumnIds={keepOnlyTheseColumnIds} />
+}
+
+export default GeneSpecificResults

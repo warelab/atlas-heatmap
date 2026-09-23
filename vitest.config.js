@@ -25,6 +25,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['test/setup.js'],
     restoreMocks: true,
+    // vi.stubGlobal (e.g. a mocked fetch) is undone after every test
+    unstubGlobals: true,
     testTimeout: 30_000,
     // Vitest replaces CSS (including ?inline imports) with '' unless it is listed here.
     css: { include: [/heatmap\.css$/] },
