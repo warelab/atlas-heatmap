@@ -304,7 +304,7 @@ HeatmapCanvas.propTypes = {
   }),
   onZoom: PropTypes.func.isRequired,
   withAnatomogram: PropTypes.bool.isRequired,
-  currentGenomeBrowser: PropTypes.string.isRequired
+  currentGenomeBrowser: PropTypes.string   // null when there are no genome browsers
 }
 
 HeatmapCanvas.defaultProps = {

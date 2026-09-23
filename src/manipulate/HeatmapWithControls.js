@@ -320,7 +320,7 @@ class _HeatmapWithControls extends React.Component {
 
 _HeatmapWithControls.propTypes = {
   allGenomeBrowsers: PropTypes.arrayOf(PropTypes.string).isRequired,
-  currentGenomeBrowser: PropTypes.string.isRequired,
+  currentGenomeBrowser: PropTypes.string,   // null when there are no genome browsers
   onChangeCurrentGenomeBrowser: PropTypes.func.isRequired,
   allOrderings: PropTypes.arrayOf(orderingPropTypes),
   currentOrdering: orderingPropTypes,

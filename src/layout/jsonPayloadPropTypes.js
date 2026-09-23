@@ -93,9 +93,9 @@ const differentialProfilesPropTypes = PropTypes.shape({
   rows: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    designElement: PropTypes.string.isRequired,       // Present but empty in RNA-seq differential exps
+    designElement: PropTypes.string,                  // Present but empty in RNA-seq differential exps; absent from Warelab payloads
     expressions: PropTypes.arrayOf(PropTypes.shape({
-      contrastName: PropTypes.string.isRequired,
+      contrastName: PropTypes.string,                 // Absent from Warelab payloads
       color: PropTypes.string,
       foldChange: PropTypes.number,
       pValue: PropTypes.number,
@@ -137,7 +137,7 @@ const dataPropTypes = PropTypes.shape({
     differentialProfilesPropTypes
   ]).isRequired,
 
-  anatomogramData: PropTypes.shape({
+  anatomogram: PropTypes.shape({
     allSvgPathIds: PropTypes.arrayOf(PropTypes.string).isRequired,
     species: PropTypes.string.isRequired
   }),
