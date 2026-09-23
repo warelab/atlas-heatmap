@@ -1,0 +1,36 @@
+gramene-atlas-heatmap
+Copyright 2026 Cold Spring Harbor Laboratory (Gramene modifications)
+
+This product is a fork of @ebi-gene-expression-group/expression-atlas-heatmap-highcharts
+5.7.2 (https://github.com/ebi-gene-expression-group/atlas-heatmap),
+Copyright 2016-2025 EMBL - European Bioinformatics Institute (EMBL-EBI),
+Expression Atlas team. The source code is licensed under the Apache License,
+Version 2.0 (see LICENSE).
+
+It also includes code from two other EMBL-EBI packages, both Apache-2.0:
+- @ebi-gene-expression-group/expression-atlas-number-format 3.2.0
+  (src/manipulate/formatters/ScientificNotationNumber.js, modified)
+- @ebi-gene-expression-group/expression-atlas-disclaimers 1.4.0
+  (src/manipulate/controls/download-button/disclaimers.js, unchanged)
+
+Icons
+-----
+src/manipulate/controls/icons.js contains SVG paths from Bootstrap Icons
+1.13.1 (https://icons.getbootstrap.com), Copyright (c) 2019-2024 The Bootstrap
+Authors, licensed under the MIT License.
+
+Highcharts
+----------
+The heatmap and the gene-specific box plots are drawn with Highcharts 6.2
+(https://www.highcharts.com), a separate dependency that this package does not
+bundle or redistribute. Highcharts is not open source: Highsoft AS licenses it
+free of charge for non-commercial use only (https://www.highcharts.com/license).
+Other uses need a licence from Highsoft.
+
+Expression Atlas content
+------------------------
+This package contains no expression data. Expression Atlas content (its data,
+and the anatomogram images that gramene-anatomogram ships) is licensed under the
+Creative Commons Attribution 4.0 International licence (CC BY 4.0,
+https://www.ebi.ac.uk/gxa/licence.html). Pages that show it should keep the
+heatmap's attribution footer, which links to Expression Atlas.

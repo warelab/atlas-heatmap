@@ -1,0 +1,107 @@
+# Changelog
+
+All notable changes to gramene-atlas-heatmap are recorded here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
+Versions before 6.0.0 are upstream's
+[@ebi-gene-expression-group/expression-atlas-heatmap-highcharts](https://github.com/ebi-gene-expression-group/atlas-heatmap).
+
+## [6.0.0] - 2026-09-23
+
+The first release of the Gramene fork, from expression-atlas-heatmap-highcharts 5.7.2. It is drawn in the host page
+instead of an iframe, so gramene-search can show the Expression Atlas heatmap in its Expression tab.
+
+### Breaking
+
+- Published as `gramene-atlas-heatmap`: ESM (`dist/gramene-atlas-heatmap.js`) and CommonJS
+  (`dist/gramene-atlas-heatmap.cjs`), with hand-written TypeScript declarations. `"type": "module"`.
+- React and ReactDOM `^18.2.0` and react-bootstrap `^2.7.0` are peer dependencies, instead of React 16 and
+  react-bootstrap 0.33 dependencies. The controls are react-bootstrap 2 components: the host page must load
+  Bootstrap 5 CSS. The EBI Bootstrap 3 stylesheet is no longer used and must not be loaded.
+- The anatomogram is [gramene-anatomogram](https://github.com/warelab/anatomogram) 3, which bundles its SVGs.
+  `atlasUrl` is no longer used to fetch images, and nothing is fetched from `resources/`.
+- `render()` uses `createRoot`, keeps one root per target, accepts an element as well as an id, and returns
+  `{unmount}`. Its `render` callback runs once per call.
+- Every link, and every window the heatmap opens, goes to `linkTarget` (default `'_blank'`, a new tab with
+  `rel="noopener noreferrer"`). Upstream's links relied on the iframe's `<base target=_parent>`.
+- Google Analytics is gone. `disableGoogleAnalytics` is accepted and ignored.
+- A global `window.Highcharts` is not used: Highcharts 6.2 is imported, and a second copy on the page (error 16)
+  should be avoided.
+- The CommonJS build `require`s gramene-anatomogram, which is ESM only: Node 20.19 or 22.12 and later, or a bundler.
+  Jest's module loader cannot load it.
+
+### Added
+
+- `linkTarget` prop, default `'_blank'`. It is also passed to the anatomogram's licence link.
+- `resolveUrl(kind, defaultUrl, context)` prop to rewrite (a string), drop (`null`) or keep (`undefined`) each link:
+  `row`, `experiment`, `atlas`, `moreInformation`, `support`, `genomeBrowser` and `download`. `context` has
+  `{query, experiment}` plus kind-specific fields, including the row's raw `uri`. It is read through a ref, so a new
+  function does not redraw the chart.
+- `className` and `style` props for the root `div.gxaHeatmapContainer`.
+- `injectStyles` prop, default `true`: a small scoped stylesheet is injected once per document. With `false`, load
+  `gramene-atlas-heatmap/dist/gramene-atlas-heatmap.css` (also exported as `./style.css`). Exports
+  `ensureStylesInjected`, `STYLE_ELEMENT_ID` and `HEATMAP_CSS`.
+- Named export `ExpressionAtlasHeatmap` (also the default) and a frozen `DEFAULT_OPTIONS`.
+- An error boundary: a rendering error shows an alert and calls `fail`, instead of unmounting the host page's React
+  root.
+- `LICENSE` (Apache-2.0) and `NOTICE`.
+- A Vite playground (`npm run dev`, port 5175, with a mock API), a vitest suite that fails on any React warning and
+  renders real Highcharts in jsdom, CI on Node 20.19 and 24, and release checks (`scripts/check-dist.mjs`,
+  `scripts/check-release.mjs`, publint and attw).
+
+### Changed
+
+- **Colours**: baseline experiments use upstream 5.7.2's five log-range buckets (`Low`, `Low-Medium`, `Medium`,
+  `Medium-High`, `High`). The widget Gramene deployed before was 5.7.1, with three proportional buckets.
+- **The Paralogs anatomogram shows.** The gramene-swagger backend sends the species of a single experiment as its
+  display name (`Sorghum bicolor`), which upstream compared with `sorghum_bicolor` and so never showed the
+  anatomogram. The name is now normalised, so E-CURD-25 shows root, shoot and vascular system.
+- **Row labels highlight tissues.** Hovering an All Studies row label highlights that experiment's tissues in the
+  anatomogram. Upstream matched the label text, which never matched: the T/P badge is part of it. Labels now carry
+  their row index (`data-gxa-y`).
+- **The chart sizes to its own column**, per instance, and follows its container with a `ResizeObserver`. Upstream
+  measured the first heatmap on the page. Fullscreen views and several heatmaps on one page now fit. A width change
+  reflows the chart; one that changes the layout redraws it and keeps the zoom. Only new data resets the zoom, and
+  the controls are then re-enabled.
+- Changing the genome browser no longer redraws the chart or resets the zoom.
+- Data is fetched with `fetch` and an `AbortController` instead of react-refetch. The request is built exactly as
+  upstream built it (`geneQuery=A B C`, never URL-encoded, form Content-Type): the Warelab backend rejects `+`, `%20`
+  and extra parameters. A request that is superseded (a new query, an unmount) is aborted.
+- `fail({url, method, message})` is called once per failed request (and not twice under StrictMode). Upstream called
+  it on every render.
+- Loading shows a react-bootstrap spinner instead of `resources/images/loading.gif`. The error alert is a
+  react-bootstrap `Alert` with new wording, and an empty result shows a "No results" message.
+- The Filters and data-reuse dialogs are react-bootstrap 2 modals (`.gxa-heatmap-modal`) and are no longer
+  translucent. Filter options that open are buttons.
+- The coexpression slider is a `Form.Range`.
+- Icons are Bootstrap Icons SVGs instead of Glyphicons and the EBI font.
+- The outside tooltip gets `z-index: 1100`, above a fullscreen Bootstrap 5 modal, and is placed correctly after a
+  scrolling container (such as a modal body) scrolls.
+- The boxplot and transcripts charts (EBI experiments with gene-specific results) are a lazily loaded chunk, so
+  highcharts-more is not in the host's main bundle.
+
+### Removed
+
+- Dependencies: the three `@ebi-gene-expression-group` packages (expression-atlas-number-format and
+  expression-atlas-disclaimers are inlined), he, node `url`, object-hash, rc-slider, react-debounce-render,
+  react-ga, react-highcharts, react-refetch, sanitize-html and styled-components. Every React 16-only package is
+  gone.
+- The error alert's link to a third-party website about clearing the browser cache.
+- The import-time override of `window.oncontextmenu`: right-click is the page's again.
+- Fixed element ids in the controls, which two heatmaps on a page would share.
+- Function-component `defaultProps`, legacy lifecycles and `ReactDOM.render`, so React 18 logs no deprecation
+  warnings.
+- The webpack/Babel toolchain and the `html/` demo pages.
+
+### Fixed
+
+- Warelab payloads pass the payload propTypes: differential rows have no `designElement` or `contrastName`, and
+  experiments without genome browsers have no current genome browser.
+- The transcripts chart no longer renders a stray `0` when there are no rows.
+- An `undefined` prop (for example `atlasUrl={config.atlasUrl}` when unset) keeps its default.
+
+### Security
+
+- Row labels and tooltips are no longer entity-decoded (he) after rendering: markup in a backend string, such as
+  `<img onerror>` in a row name, shows as text instead of running.
+
+[6.0.0]: https://github.com/warelab/atlas-heatmap/compare/v5.7.2...v6.0.0
