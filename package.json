@@ -31,10 +31,13 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "rm -rf dist && vite build",
+    "build": "rm -rf dist && vite build && node scripts/copy-dts.mjs && node scripts/check-dist.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "fixtures": "node scripts/capture-fixtures.mjs"
+    "fixtures": "node scripts/capture-fixtures.mjs",
+    "lint:pkg": "node scripts/lint-pkg.mjs",
+    "pack:local": "node scripts/check-release.mjs && npm run build && npm pack",
+    "prepublishOnly": "node scripts/check-release.mjs && npm run build && npm test && npm run lint:pkg"
   },
   "peerDependencies": {
     "react": "^18.2.0",
