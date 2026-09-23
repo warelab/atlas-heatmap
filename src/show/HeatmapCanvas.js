@@ -235,7 +235,7 @@ class HeatmapCanvas extends React.Component {
             }
           },
           formatter: function() {
-            return yAxisFormatter(this.value)
+            return yAxisFormatter(this.value, this.pos)
           }
         },
 

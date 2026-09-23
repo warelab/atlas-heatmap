@@ -1,17 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import Glyphicon from 'react-bootstrap/lib/Glyphicon'
 import xor from 'lodash/xor'
 import { uncontrollable } from 'uncontrollable'
-
-const Foo = styled.div`
-  display: inline-block;
-  padding-left: 5px;
-  ::first-letter {
-    text-transform: capitalize;
-  }
-`
 
 const _FilterOption = ({ name, allValues, currentValues, isOpen, onChangeIsOpen, onChangeCurrentValues }) => {
   const allChecked = allValues.every(v => currentValues.includes(v))
@@ -29,9 +20,10 @@ const _FilterOption = ({ name, allValues, currentValues, isOpen, onChangeIsOpen,
         checked={allChecked}
         ref={checkbox => {checkbox ? checkbox.indeterminate = !allChecked && !allUnchecked : null}} />
 
-      <Foo onClick={openable ? onChangeIsOpen.bind(this, !isOpen) : () => {}} href={`#`}>
+      {/* .gxa-filter-option-name: an inline block with its first letter capitalised (src/styles/heatmap.css) */}
+      <div className={`gxa-filter-option-name`} onClick={openable ? onChangeIsOpen.bind(this, !isOpen) : () => {}}>
         {name} {openable && <Glyphicon style={{fontSize: `x-small`, paddingLeft: `5px`}} glyph={isOpen ? `menu-up` : `menu-down`}/>}
-      </Foo>
+      </div>
 
       {openable && isOpen &&
       <div>

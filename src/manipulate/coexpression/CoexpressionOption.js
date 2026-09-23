@@ -1,19 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
 
 import Button from 'react-bootstrap/lib/Button'
 import Glyphicon from 'react-bootstrap/lib/Glyphicon'
 import Slider from 'rc-slider'
-import RcSliderStyle from './RcSliderStyle'
 
-const VerticallyAlignedSpan = styled.span`
-  vertical-align: middle;
-`
 const AddCoexpressedGenesButton = ({showCoexpressionsCallback}) =>
   <Button bsSize={`xsmall`} onClick={() => showCoexpressionsCallback(10)}>
     <Glyphicon glyph={`th`}/>
-    <VerticallyAlignedSpan> Add similarly expressed genes</VerticallyAlignedSpan>
+    <span className={`gxa-va-middle`}> Add similarly expressed genes</span>
   </Button>
 
 AddCoexpressedGenesButton.propTypes = {
@@ -21,16 +16,16 @@ AddCoexpressedGenesButton.propTypes = {
 }
 
 
-const SliderContainer = styled.div`
-  width: 250px;
-  margin: 15px;
-  padding-bottom: 20px;
-`
+const sliderContainerStyle = {
+  width: `250px`,
+  margin: `15px`,
+  paddingBottom: `20px`
+}
 
 const CoexpressedGenesSlider = ({geneName, numCoexpressionsAvailable, numCoexpressionsVisible, showCoexpressionsCallback}) =>
   <div>
     <p style={{fontSize: `0.75rem`}}>Display genes with similar expression to {geneName}:</p>
-    <SliderContainer>
+    <div style={sliderContainerStyle}>
       <Slider
         min={0}
         max={numCoexpressionsAvailable}
@@ -38,7 +33,7 @@ const CoexpressedGenesSlider = ({geneName, numCoexpressionsAvailable, numCoexpre
         marks={{0: `off`, 10: `10`, [numCoexpressionsAvailable]: numCoexpressionsAvailable}}
         included={false}
         defaultValue={numCoexpressionsVisible} />
-    </SliderContainer>
+    </div>
   </div>
 
 CoexpressedGenesSlider.propTypes = {
@@ -55,7 +50,6 @@ const CoexpressionOption = ({geneName, numCoexpressionsVisible, numCoexpressions
       numCoexpressionsAvailable ?
         numCoexpressionsVisible ?
           <div>
-            <RcSliderStyle/>
             <CoexpressedGenesSlider
               geneName={geneName}
               numCoexpressionsVisible={numCoexpressionsVisible}

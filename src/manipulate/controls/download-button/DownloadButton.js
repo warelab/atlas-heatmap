@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { MenuItem, Glyphicon, SplitButton, Button, Modal } from 'react-bootstrap/lib'
 
 import { uncontrollable } from 'uncontrollable'
-import disclaimers from '@ebi-gene-expression-group/expression-atlas-disclaimers'
+import disclaimers from './disclaimers.js'
 import ClientSideDownload from './Download.js'
 import {openUrl} from '../../../layout/links.js'
 

@@ -3,8 +3,13 @@ import ReactDOMServer from 'react-dom/server'
 
 import HeatmapCellTooltip from './HeatmapCellTooltip.js'
 
-import escapedHtmlDecoder from 'he'
-const reactToHtml = component => escapedHtmlDecoder.decode(ReactDOMServer.renderToStaticMarkup(component))
+// Highcharts puts the useHTML tooltip in the page with innerHTML, so escaped text shows as text (upstream decoded the
+// entities again, which let markup in backend strings run).
+const reactToHtml = component => ReactDOMServer.renderToStaticMarkup(component)
+
+// The tooltip lives in its own container in <body> (tooltip.outside), where it would take the host page's font; this
+// is Highcharts' default chart font.
+const TOOLTIP_FONT_FAMILY = `"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif`
 
 export default config => {
   return function(series, point) {
@@ -19,6 +24,6 @@ export default config => {
 
     Object.keys(point.options.info).forEach(key => o[key] = point.options.info[key])
 
-    return reactToHtml(<HeatmapCellTooltip {...o} config={config}/>)
+    return reactToHtml(<div style={{fontFamily: TOOLTIP_FONT_FAMILY}}><HeatmapCellTooltip {...o} config={config}/></div>)
   }
 }

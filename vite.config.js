@@ -26,14 +26,10 @@ const jsxInJs = {
  * packages. Delete each entry in the commit that drops its import; the list must be empty by H9.
  */
 const UPSTREAM_IMPORTS_PENDING_REMOVAL = [
-  '@ebi-gene-expression-group/expression-atlas-disclaimers',
-  '@ebi-gene-expression-group/expression-atlas-number-format',
-  'he',
   'object-hash',
   'rc-slider',
   'react-debounce-render',
   'react-highcharts',
-  'styled-components',
 ]
 
 // Every dependency and peer stays external (react/jsx-runtime, react-dom/client, highcharts/modules/…, lodash/…).

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import ScientificNotationNumber from '@ebi-gene-expression-group/expression-atlas-number-format'
+import ScientificNotationNumber from './ScientificNotationNumber.js'
 
 import trimEllipsify from './trimEllipsify'
 
