@@ -1,72 +1,94 @@
 {
-  "name": "@ebi-gene-expression-group/expression-atlas-heatmap-highcharts",
-  "version": "5.7.2",
-  "description": "Expression Atlas Highcharts heatmap and boxplot of baseline and differential expression experiments from the Expression Atlas project (https://www.ebi.ac.uk/gxa)",
-  "main": "lib/Main.js",
-  "license": "Apache-2.0",
+  "name": "gramene-atlas-heatmap",
+  "version": "6.0.0",
+  "description": "Warelab/Gramene fork of the EMBL-EBI Expression Atlas heatmap (atlas-heatmap 5.7.2): baseline and differential expression heatmaps for React 18 and react-bootstrap 2",
+  "type": "module",
+  "main": "./dist/gramene-atlas-heatmap.cjs",
+  "module": "./dist/gramene-atlas-heatmap.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/gramene-atlas-heatmap.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/gramene-atlas-heatmap.cjs"
+      }
+    },
+    "./style.css": "./dist/gramene-atlas-heatmap.css",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "NOTICE"
+  ],
   "scripts": {
-    "prepare": "rm -rf lib && babel src -d lib --ignore '**/*.less' --copy-files"
+    "dev": "vite",
+    "build": "rm -rf dist && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "color": "^3.2.1",
+    "downloadjs": "^1.4.7",
+    "highcharts": "~6.2.0",
+    "highcharts-custom-events": "~3.0.10",
+    "highcharts-react-official": "^3.2.3",
+    "lodash": "^4.17.21",
+    "prop-types": "^15.8.1",
+    "uncontrollable": "^7.2.1",
+    "urijs": "^1.19.11"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.1",
+    "bootstrap": "^5.3.8",
+    "jsdom": "^27.4.0",
+    "publint": "^0.3.24",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^18.3.1",
+    "vite": "^7.3.6",
+    "vitest": "^4.1.11"
   },
   "author": "Expression Atlas developers <atlas-developers@ebi.ac.uk>",
-  "collaborators": [
+  "contributors": [
     "Monica Jianu <monica@ebi.ac.uk>",
     "Lingyun Zhao <lingyun@ebi.ac.uk>",
     "Alfonso Muñoz-Pomer Fuentes <amunoz@ebi.ac.uk>",
-    "Haider Iqbal <haideri@ebi.ac.uk>"
+    "Haider Iqbal <haideri@ebi.ac.uk>",
+    "Andrew Olson (Gramene fork)"
   ],
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ebi-gene-expression-group/atlas-heatmap.git"
-  },
-  "dependencies": {
-    "@ebi-gene-expression-group/anatomogram": "^2.4.0",
-    "@ebi-gene-expression-group/expression-atlas-disclaimers": "^1.4.0",
-    "@ebi-gene-expression-group/expression-atlas-number-format": "^3.2.0",
-    "color": "^3.1.2",
-    "downloadjs": "^1.4.7",
-    "he": "^1.2.0",
-    "highcharts": "^6.2.0",
-    "highcharts-custom-events": "^3.0.2",
-    "lodash": "^4.17.15",
-    "object-hash": "^2.0.1",
-    "prop-types": "^15.7.2",
-    "rc-slider": "^8.7.1",
-    "react": "^16.12.0",
-    "react-bootstrap": "^0.33.1",
-    "react-debounce-render": "^5.0.0",
-    "react-dom": "^16.12.0",
-    "react-ga": "^2.7.0",
-    "react-highcharts": "^16.1.0",
-    "react-refetch": "^3.0.1",
-    "sanitize-html": "^1.20.1",
-    "styled-components": "^4.4.1",
-    "uncontrollable": "^7.1.1",
-    "urijs": "^1.19.2"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.7.5",
-    "@babel/core": "^7.7.5",
-    "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.7.6",
-    "@babel/preset-react": "^7.7.4",
-    "@ebi-gene-expression-group/eslint-config-gene-expression": "^0.6.0",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "eslint": "^6.7.2",
-    "file-loader": "^4.3.0",
-    "image-webpack-loader": "^6.0.0",
-    "imports-loader": "^0.8.0",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
-    "whatwg-fetch": "^3.0.0"
+    "url": "git+https://github.com/warelab/atlas-heatmap.git"
   },
   "bugs": {
-    "url": "https://github.com/ebi-gene-expression-group/atlas-heatmap/issues"
+    "url": "https://github.com/warelab/atlas-heatmap/issues"
   },
-  "homepage": "https://github.com/ebi-gene-expression-group/atlas-heatmap#readme",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  }
+  "homepage": "https://github.com/warelab/atlas-heatmap#readme",
+  "keywords": [
+    "expression-atlas",
+    "heatmap",
+    "highcharts",
+    "anatomogram",
+    "gramene",
+    "react-component"
+  ]
 }
