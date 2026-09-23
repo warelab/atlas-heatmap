@@ -30,6 +30,7 @@ const Anatomogram = debounceRender(_Anatomogram, 50)
 const HeatmapCanvas = debounceRender(_HeatmapCanvas, 50)
 
 import URI from 'urijs'
+import {keepDefaultUrl} from '../layout/links.js'
 
 import {
   colourAxisPropTypes,
@@ -80,7 +81,9 @@ const renderDownloadButton = ({
     disclaimer,
     experiment,
     atlasUrl,
-    outProxy
+    outProxy,
+    linkTarget,
+    urlFor = keepDefaultUrl
   },
   currentOrdering,
   allNumCoexpressions,
@@ -89,6 +92,8 @@ const renderDownloadButton = ({
   <div style={{display: `inline-block`, padding: `5px`}}>
     <DownloadButton
       disclaimer={disclaimer}
+      linkTarget={linkTarget}
+      isSingleExperiment={Boolean(experiment)}
       currentlyShownContent={{
         name: shortDescription || `download`,
         descriptionLines:
@@ -101,7 +106,8 @@ const renderDownloadButton = ({
       }}
       fullDatasetUrl={
         experiment
-          ? outProxy+URI(experiment.urls.download, atlasUrl).toString()
+          ? urlFor(`download`, new URI(outProxy+URI(experiment.urls.download, atlasUrl).toString())
+            .setSearch({cutoff: `0.0`}).removeSearch(`heatmapMatrixSize`).toString(), {}) || ``
           : ``
       }
     />

@@ -32,7 +32,6 @@ const UPSTREAM_IMPORTS_PENDING_REMOVAL = [
   'object-hash',
   'rc-slider',
   'react-debounce-render',
-  'react-ga',
   'react-highcharts',
   'styled-components',
 ]

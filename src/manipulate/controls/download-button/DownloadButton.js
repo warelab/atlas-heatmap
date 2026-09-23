@@ -5,7 +5,7 @@ import { MenuItem, Glyphicon, SplitButton, Button, Modal } from 'react-bootstrap
 import { uncontrollable } from 'uncontrollable'
 import disclaimers from '@ebi-gene-expression-group/expression-atlas-disclaimers'
 import ClientSideDownload from './Download.js'
-import URI from 'urijs'
+import {openUrl} from '../../../layout/links.js'
 
 import { heatmapDataPropTypes } from '../../../manipulate/chartDataPropTypes.js'
 
@@ -87,19 +87,17 @@ const SplitDownloadButton = ({downloadOptions}) => (
 )
 
 
-const DownloadButton = ({currentlyShownContent, fullDatasetUrl, disclaimer}) => {
+// fullDatasetUrl is final (resolveUrl applied, cutoff set); without one there is no “All data” option
+const DownloadButton = ({currentlyShownContent, fullDatasetUrl, disclaimer, linkTarget, isSingleExperiment = Boolean(fullDatasetUrl)}) => {
   const downloadOptions = [].concat(
     fullDatasetUrl ?
       [{
-        onClick: () =>
-          window.open(
-            new URI(fullDatasetUrl).setSearch({cutoff: `0.0`}).removeSearch(`heatmapMatrixSize`).toString(),
-            `Download`),
+        onClick: () => openUrl(fullDatasetUrl, linkTarget),
         description: `All data`
       }] :
       [],
     [{
-      onClick: () => ClientSideDownload({...currentlyShownContent, isSingleExperiment: Boolean(fullDatasetUrl)}),
+      onClick: () => ClientSideDownload({...currentlyShownContent, isSingleExperiment}),
       description : `Table content`
     }]
   )
@@ -120,7 +118,9 @@ DownloadButton.propTypes = {
     heatmapData: heatmapDataPropTypes,
   }).isRequired,
   fullDatasetUrl: PropTypes.string.isRequired,
-  disclaimer: PropTypes.string.isRequired
+  disclaimer: PropTypes.string.isRequired,
+  linkTarget: PropTypes.string,
+  isSingleExperiment: PropTypes.bool
 }
 
 export default DownloadButton

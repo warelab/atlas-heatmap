@@ -160,6 +160,8 @@ const heatmapConfigPropTypes = PropTypes.shape({
   inProxy: PropTypes.string.isRequired,
   outProxy: PropTypes.string.isRequired,
   atlasUrl: PropTypes.string.isRequired,
+  linkTarget: PropTypes.string,
+  urlFor: PropTypes.func,
   description: PropTypes.arrayOf(PropTypes.string).isRequired,
   genomeBrowsers: PropTypes.arrayOf(PropTypes.string).isRequired,
   introductoryMessage: PropTypes.string.isRequired,
