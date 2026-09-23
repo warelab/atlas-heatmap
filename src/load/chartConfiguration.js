@@ -1,5 +1,6 @@
 import {isMultiExperiment, isBaseline, isDifferential} from './experimentTypeUtils.js'
 import {capitalizeFirstLetter, numberWithCommas} from '../utils'
+import {keepDefaultUrl} from '../layout/links.js'
 
 // Message on top of the chart: “Showing 3 experiments:”, “Showing 12 genes of 432 found:”, “Showing 32 genes:”...
 const introductoryMessage = (experiment, profiles) => {
@@ -45,7 +46,8 @@ const singleExperimentQueryDescription = ({geneQuery, experiment:{description, a
   )
 }
 
-const getChartConfiguration = (data, inProxy, outProxy, atlasUrl, isWidget, showControlMenu) => {
+const getChartConfiguration = (data, inProxy, outProxy, atlasUrl, isWidget, showControlMenu,
+  {linkTarget = `_blank`, urlFor = keepDefaultUrl} = {}) => {
   const {experiment, profiles} = data
   const {species, disclaimer, columnType} = data.config
 
@@ -69,6 +71,8 @@ const getChartConfiguration = (data, inProxy, outProxy, atlasUrl, isWidget, show
     inProxy,
     outProxy,
     atlasUrl,
+    linkTarget,
+    urlFor,
     experiment,
     isWidget,
     showControlMenu,

@@ -9,9 +9,7 @@ import getColourAxisFromDataSeries from './heatmapColourAxis.js'
 import columnsWithGroupings from './heatmapFilters.js'
 import URI from 'urijs'
 
-export default function({data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget}) {
-  const pathToResources = inProxy + URI(`resources/js-bundles/`, atlasUrl).toString()
-
+export default function({data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget, linkTarget, urlFor}) {
   // This ensures that adding or removing coexpressed genes doesn’t change the colours in the heat map. Colours are
   // computed upfront and then we just add/remove rows with the coexpression slider.
   // coexpressions is an array because at first it was envisioned that the JSON payload could carry coexpressions of
@@ -20,7 +18,7 @@ export default function({data, inProxy, outProxy, atlasUrl, showAnatomogram, sho
     data.coexpressions ? data.profiles.rows.concat(data.coexpressions[0].jsonProfiles.rows) : data.profiles.rows
 
   const heatmapData =
-    getHeatmapData(Object.assign({}, data, {allRows,geneQuery: data.config.geneQuery,inProxy,atlasUrl,pathToResources}))
+    getHeatmapData(Object.assign({}, data, {allRows,geneQuery: data.config.geneQuery,inProxy,atlasUrl}))
 
   //misses: idsExpressedInExperiment
   //show is extra
@@ -46,7 +44,7 @@ export default function({data, inProxy, outProxy, atlasUrl, showAnatomogram, sho
     anatomogramConfig,
     heatmapData,
     geneSpecificResults,
-    heatmapConfig: getChartConfiguration(data, inProxy, outProxy, atlasUrl, isWidget, showControlMenu),
+    heatmapConfig: getChartConfiguration(data, inProxy, outProxy, atlasUrl, isWidget, showControlMenu, {linkTarget, urlFor}),
     colourAxis : getColourAxisFromDataSeries(data.experiment, heatmapData.dataSeries),
     orderings: createOrderingsForData(data.experiment, allRows, data.columnHeaders),
     columnGroups: columnsWithGroupings({heatmapData, columnGroupings: data.columnGroupings})

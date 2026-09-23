@@ -7,7 +7,9 @@ import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
 import geod167101 from '../fixtures/paralogs.E-GEOD-167101.baseline.json'
 
 // Golden snapshots of src/load/main.js over live Warelab payloads (scripts/capture-fixtures.mjs). They were first
-// written against the pristine upstream 5.7.2 load/ code; every later snapshot change must be an intended one.
+// written against the pristine upstream 5.7.2 load/ code; every later snapshot change must be an intended one:
+// - rows carry their raw `uri` next to the resolved `url` (urijs replaced node `url`, same URLs);
+// - heatmapConfig: `linkTarget` and `urlFor`.
 
 const ATLAS_URL = `https://data.sorghumbase.org/auth_testing/gxa/`
 
@@ -62,6 +64,20 @@ describe(`loadChartData`, () => {
     it(`shows the sorghum anatomogram`, () => {
       expect(chartData.anatomogramConfig.show).toBe(true)
     })
+
+    it(`keeps the raw row URI next to the resolved URL, for resolveUrl`, () => {
+      expect(chartData.heatmapData.yAxisCategories.map(category => category.info.uri))
+        .toEqual(allStudies.body.profiles.rows.map(row => row.uri))
+    })
+
+    it(`defaults the link target and URL resolver of the chart configuration`, () => {
+      expect(chartData.heatmapConfig.linkTarget).toBe(`_blank`)
+      expect(chartData.heatmapConfig.urlFor(`row`, `https://example.org/`, {})).toBe(`https://example.org/`)
+      const urlFor = () => null
+      const configured = load(allStudies, {linkTarget: `_self`, urlFor}).heatmapConfig
+      expect(configured.linkTarget).toBe(`_self`)
+      expect(configured.urlFor).toBe(urlFor)
+    })
   })
 
   describe(`Paralogs baseline (E-CURD-25)`, () => {
@@ -82,6 +98,9 @@ describe(`loadChartData`, () => {
     it(`resolves the relative row URIs against the atlas URL`, () => {
       expect(chartData.heatmapData.yAxisCategories[0].info.url)
         .toBe(`https://data.sorghumbase.org/auth_testing/gxa/genes/SORBI_3001G000200`)
+      expect(chartData.heatmapData.yAxisCategories[0].info.uri).toBe(`genes/SORBI_3001G000200`)
+      expect(load(curd25, {atlasUrl: `https://www.ebi.ac.uk/gxa/`, inProxy: ``}).heatmapData.yAxisCategories[0].info.url)
+        .toBe(`https://www.ebi.ac.uk/gxa/genes/SORBI_3001G000200`)
     })
 
     it(`hides the anatomogram: the backend sends the display species name 'Sorghum bicolor'`, () => {

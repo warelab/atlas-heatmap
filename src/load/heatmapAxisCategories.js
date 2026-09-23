@@ -1,4 +1,4 @@
-import Url from 'url'
+import URI from 'urijs'
 
 import {isMultiExperiment, isDifferential} from './experimentTypeUtils.js'
 
@@ -46,7 +46,8 @@ const getHeatmapYAxisCategories = ({rows, inProxy, atlasUrl}) =>
       info: {
         trackId: profile.id,
         designElement: profile.designElement || ``,
-        url: Url.resolve(inProxy + atlasUrl, profile.uri),
+        url: URI(profile.uri, inProxy + atlasUrl).toString(),
+        uri: profile.uri,
         experimentType: profile.experimentType
       }
     })

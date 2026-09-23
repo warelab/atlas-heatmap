@@ -36,9 +36,7 @@ const UPSTREAM_IMPORTS_PENDING_REMOVAL = [
   'react-ga',
   'react-highcharts',
   'react-refetch',
-  'sanitize-html',
   'styled-components',
-  'url',
 ]
 
 // Every dependency and peer stays external (react/jsx-runtime, react-dom/client, highcharts/modules/…, lodash/…).

@@ -17,10 +17,8 @@ export default defineConfig({
     alias: {
       // Until gramene-anatomogram is published and installed (plan step H10), tests use a stub that records its props.
       'gramene-anatomogram': ANATOMOGRAM_STUB,
-      // Temporary, for the golden snapshots of the pristine upstream src/load/ (test/load/loadChartData.test.js):
-      // the upstream anatomogram import, and node `url` as the npm polyfill webpack 4 bundled in production.
+      // Temporary: the upstream anatomogram import in src/load/main.js, for the golden snapshots.
       '@ebi-gene-expression-group/anatomogram': ANATOMOGRAM_STUB,
-      url: resolve(root, 'node_modules/url/url.js'),
     },
   },
   test: {
