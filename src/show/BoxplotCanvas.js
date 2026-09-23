@@ -1,15 +1,14 @@
 import React from 'react'
-import ReactHighcharts from 'react-highcharts'
-import HighchartsMore from 'highcharts/highcharts-more'
+import HighchartsReact from 'highcharts-react-official'
 import {boxplotData as boxplotDataProps} from '../manipulate/chartDataPropTypes.js'
-HighchartsMore(ReactHighcharts.Highcharts)
 
-import allowNegativeLog from './HighchartsAllowNegativeLog'
-allowNegativeLog(ReactHighcharts.Highcharts)
+// Highcharts with highcharts-more and negative logarithmic axes, set up on first use
+import getBoxplotHighcharts from './boxplotHighcharts.js'
 
 const BoxplotCanvas = ({titleSuffix, xAxisCategories, boxplotSeries, loosePointsSeries, unit, config:{cutoff}}) => {
+  const Highcharts = getBoxplotHighcharts()
   //see also: transcripts colors
-  const color = ReactHighcharts.Highcharts.getOptions().colors[0]
+  const color = Highcharts.getOptions().colors[0]
   const series = []
   boxplotSeries.length && series.push(
     {
@@ -114,7 +113,7 @@ const BoxplotCanvas = ({titleSuffix, xAxisCategories, boxplotSeries, loosePoints
     series: series
   }
 
-  return <ReactHighcharts config={config} />
+  return <HighchartsReact highcharts={Highcharts} options={config} immutable={true} />
 }
 
 BoxplotCanvas.propTypes = boxplotDataProps

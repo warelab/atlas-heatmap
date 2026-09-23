@@ -20,23 +20,12 @@ const jsxInJs = {
   exclude: [],
 }
 
-/**
- * Temporary: bare imports of upstream packages that the port removes step by step (H3-H7 in the plan).
- * Treating them as external lets `vite build` run on the half-ported tree without installing React 16
- * packages. Delete each entry in the commit that drops its import; the list must be empty by H9.
- */
-const UPSTREAM_IMPORTS_PENDING_REMOVAL = [
-  'object-hash',
-  'react-highcharts',
-]
-
 // Every dependency and peer stays external (react/jsx-runtime, react-dom/client, highcharts/modules/…, lodash/…).
 // gramene-anatomogram is named explicitly: it only joins `dependencies` once it is published (plan step H10).
 const EXTERNAL_PACKAGES = [
   'gramene-anatomogram',
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
-  ...UPSTREAM_IMPORTS_PENDING_REMOVAL,
 ]
 const isExternal = id => EXTERNAL_PACKAGES.some(name => id === name || id.startsWith(`${name}/`))
 

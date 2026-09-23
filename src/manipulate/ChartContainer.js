@@ -1,8 +1,11 @@
-import React from 'react'
+import React, {Suspense} from 'react'
 
 import Heatmap from './HeatmapWithControls.js'
-import GeneSpecificResults from './GeneSpecificResults.js'
 import {chartDataPropTypes} from './chartDataPropTypes.js'
+
+// Loaded only for payloads with gene-specific results (EBI single-experiment pages, not the Gramene backend), so the
+// boxplot charts and highcharts-more stay out of the main bundle
+const GeneSpecificResults = React.lazy(() => import('./GeneSpecificResults.js'))
 
 class ChartContainer extends React.Component {
   constructor(props) {
@@ -37,7 +40,9 @@ class ChartContainer extends React.Component {
         </div>
         { this.props.chartData.geneSpecificResults &&
         <div style={{display: this.state.chartType === `boxplot and transcripts` ? `block` : `none`, width: `100%`}} >
-          <GeneSpecificResults {...this.props.chartData.geneSpecificResults} />
+          <Suspense fallback={null}>
+            <GeneSpecificResults {...this.props.chartData.geneSpecificResults} />
+          </Suspense>
         </div>
         }
       </div>

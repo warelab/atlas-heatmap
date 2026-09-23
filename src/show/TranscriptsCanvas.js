@@ -1,7 +1,5 @@
 import React from 'react'
-import ReactHighcharts from 'react-highcharts'
-import HighchartsMore from 'highcharts/highcharts-more'
-HighchartsMore(ReactHighcharts.Highcharts)
+import HighchartsReact from 'highcharts-react-official'
 
 import {sortBy, sum, meanBy} from 'lodash'
 import {groupIntoPairs} from '../utils.js'
@@ -12,8 +10,8 @@ import Legend from '../manipulate/heatmap-legend/DataSeriesHeatmapLegend'
 // scatter points and other for boxplots
 const SUFFIX = ` individual`
 
-import allowNegativeLog from './HighchartsAllowNegativeLog'
-allowNegativeLog(ReactHighcharts.Highcharts)
+// Highcharts with highcharts-more and negative logarithmic axes, set up on first use
+import getBoxplotHighcharts from './boxplotHighcharts.js'
 
 const expressionPlotConfig = ({titleSuffix, xAxisCategories, config: {cutoff}, dataSeries}) => ({
   chart: {
@@ -139,7 +137,7 @@ const expressionPlotConfig = ({titleSuffix, xAxisCategories, config: {cutoff}, d
     otherwise use different colors (tries to be less misleading)
     */
 const colorForSeries =
-    (rowIndex, total) => ReactHighcharts.Highcharts.getOptions().colors[total < 2 ? 0 : rowIndex + 1]
+    (rowIndex, total) => getBoxplotHighcharts().getOptions().colors[total < 2 ? 0 : rowIndex + 1]
 
 const boxPlotDataSeries = ({rows}) =>
   rows.map(
@@ -185,9 +183,11 @@ const scatterDataSeries = ({rows}) =>
 
 const ExpressionChart = ({rows, xAxisCategories, config, titleSuffix}) =>
   <div key={`chart`}>
-    {rows.length &&
-        <ReactHighcharts
-          config={
+    {rows.length > 0 &&
+        <HighchartsReact
+          highcharts={getBoxplotHighcharts()}
+          immutable={true}
+          options={
             expressionPlotConfig({
               titleSuffix,
               config,
@@ -394,7 +394,7 @@ const DominantTranscriptsChart = ({titleSuffix, rows, xAxisCategories}) => {
   return (
     <div>
       {
-        <ReactHighcharts config={dominanceHeatmapConfig({
+        <HighchartsReact highcharts={getBoxplotHighcharts()} immutable={true} options={dominanceHeatmapConfig({
           titleSuffix,
           xAxisCategories,
           yAxisCategories,
