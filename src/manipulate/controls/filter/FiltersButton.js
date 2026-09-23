@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Button, Glyphicon, Nav, NavItem } from 'react-bootstrap/lib'
+import { Button, Col, Modal, Nav, Row } from 'react-bootstrap'
 
 import { groupedColumnPropTypes,columnCategoryPropTypes } from '../../chartDataPropTypes.js'
 
@@ -10,6 +10,7 @@ import { sortBy } from 'lodash'
 import CategoryCheckboxes from './CategoryCheckboxes.js'
 
 import { groupIntoPairs } from '../../../utils.js'
+import { Sliders } from '../icons.js'
 
 import { uncontrollable } from 'uncontrollable'
 
@@ -19,32 +20,26 @@ const buttonUnsetStyles = {
   height: `unset`
 }
 
-const navTabs = (className) => (
-  ({allTabs, disabledTabs=[], currentTab, onChangeCurrentTab}) => {
-    // Beware: we’re using a custom nav class, it’s just the same as Bootstrap’s but renamed to avoid clashes with
-    // other environments where nav is also used
-    const _style = className === `pills` ? {fontSize: `medium`, float: `right`} : {fontSize: `medium`}
-    const classStyle = className === `pills` ? `columns small-2 gxa-nav` : `gxa-nav`
-    return (
-      <Nav
-        bsClass={classStyle}
-        bsStyle={className}
-        activeKey={currentTab}
-        onSelect={onChangeCurrentTab}
-        style={_style}>
-        {
-          allTabs.map((tab) => (
-            <NavItem eventKey={tab}
-              key={tab}
-              disabled={disabledTabs.includes(tab)}>
+// Bootstrap 5 nav tabs (the grouping tabs in the header) and vertical pills (the categories)
+const navTabs = (variant) => (
+  ({allTabs, disabledTabs=[], currentTab, onChangeCurrentTab}) => (
+    <Nav
+      variant={variant}
+      className={variant === `pills` ? `flex-column` : undefined}
+      activeKey={currentTab}
+      onSelect={onChangeCurrentTab}
+      style={{fontSize: `medium`}}>
+      {
+        allTabs.map((tab) => (
+          <Nav.Item key={tab}>
+            <Nav.Link eventKey={tab} disabled={disabledTabs.includes(tab)}>
               {tab}
-            </NavItem>
-          ))
-        }
-      </Nav>
-
-    )
-  }
+            </Nav.Link>
+          </Nav.Item>
+        ))
+      }
+    </Nav>
+  )
 )
 
 const topRibbonTabs = navTabs(`tabs`)
@@ -62,42 +57,47 @@ const _FiltersModal = ({
   allValues,
   onChangeCurrentValues
 }) => (
+  // Rendered in a portal outside .gxaHeatmapContainer: .gxa-heatmap-modal scopes its styles (src/styles/heatmap.css)
   <Modal show={showModal}
     onHide={onCloseModal}
-    bsSize={`large`}
-    style={{opacity: 0.95}} >
+    size={`lg`}
+    className={`gxa-heatmap-modal`} >
     <Modal.Header closeButton>
       {allTopTabs.length > 1
         ? topRibbonTabs({allTabs: allTopTabs, currentTab: currentTopTab, onChangeCurrentTab: onChangeCurrentTopTab})
-        : <h4 className={`modal-title`}> Filters </h4>
+        : <Modal.Title> Filters </Modal.Title>
       }
     </Modal.Header>
 
     <Modal.Body >
-      <div className={`row`}>
-        <CategoryCheckboxes categories={categoryCheckboxes}
-          allValues={allValues}
-          currentValues={currentValues}
-          currentTab={(categories.find(category => allValues.every(value=> (
-            currentValues.some(currentValue => currentValue.value === value.value) === value.categories.includes(category.name)
-          )) && !category.disabled) || {name: ``}).name}
-          onChangeCurrentValues={onChangeCurrentValues}
-        />
-
-        {
-          categoryTabs({
-            allTabs: categories.map(c => c.name),
-            disabledTabs: categories.filter(c => c.disabled).map(c => c.name),
-            currentTab:(categories.find(category => allValues.every(value=> (
+      <Row>
+        <Col sm={9}>
+          <CategoryCheckboxes categories={categoryCheckboxes}
+            allValues={allValues}
+            currentValues={currentValues}
+            currentTab={(categories.find(category => allValues.every(value=> (
               currentValues.some(currentValue => currentValue.value === value.value) === value.categories.includes(category.name)
-            )) && !category.disabled) || {name: ``}).name,
-            onChangeCurrentTab: (categoryName) => onChangeCurrentValues(
-              allValues
-                .filter(e=>e.categories.includes(categoryName))
-            )
-          })
-        }
-      </div>
+            )) && !category.disabled) || {name: ``}).name}
+            onChangeCurrentValues={onChangeCurrentValues}
+          />
+        </Col>
+
+        <Col sm={3}>
+          {
+            categoryTabs({
+              allTabs: categories.map(c => c.name),
+              disabledTabs: categories.filter(c => c.disabled).map(c => c.name),
+              currentTab:(categories.find(category => allValues.every(value=> (
+                currentValues.some(currentValue => currentValue.value === value.value) === value.categories.includes(category.name)
+              )) && !category.disabled) || {name: ``}).name,
+              onChangeCurrentTab: (categoryName) => onChangeCurrentValues(
+                allValues
+                  .filter(e=>e.categories.includes(categoryName))
+              )
+            })
+          }
+        </Col>
+      </Row>
       <div style={{marginLeft: `20px`, columnCount: `2`}}>
         {
           sortBy(
@@ -116,6 +116,7 @@ const _FiltersModal = ({
           ).map(a => (
             <FilterOption
               key={a[0]}
+              defaultIsOpen={false}
               name={a[0]}
               allValues={a[1]}
               currentValues={a[1].filter(v => currentValues.some(c=> c.value === v))}
@@ -133,7 +134,8 @@ const _FiltersModal = ({
     </Modal.Body>
 
     <Modal.Footer>
-      <Button onClick={onCloseModal}
+      <Button variant={`secondary`}
+        onClick={onCloseModal}
         style={buttonUnsetStyles}>
         Close
       </Button>
@@ -145,24 +147,27 @@ const FiltersModal = uncontrollable(_FiltersModal, {
   currentTopTab : `onChangeCurrentTopTab`
 })
 
+// The title sits on a wrapper: a disabled button shows no tooltip
 const FiltersButton = ({disabled,onClickButton}) => (
-  <Button bsSize={`small`}
-    onClick={onClickButton}
-    disabled={disabled}
-    title={disabled ? `Reset zoom to enable filters` : ``}
-    style={buttonUnsetStyles}>
-    <Glyphicon glyph={`equalizer`}/><span style={{verticalAlign: `middle`}}> Filters</span>
-  </Button>
+  <span title={disabled ? `Reset zoom to enable filters` : undefined}>
+    <Button size={`sm`}
+      variant={`outline-secondary`}
+      onClick={onClickButton}
+      disabled={disabled}
+      style={buttonUnsetStyles}>
+      <Sliders/><span style={{verticalAlign: `middle`}}> Filters</span>
+    </Button>
+  </span>
 )
 
 const _Main = props => (
   <div>
     <FiltersButton
-      {...props}
-      onClickButton={props.onChangeShowModal.bind(this, true)}/>
+      disabled={props.disabled}
+      onClickButton={() => props.onChangeShowModal(true)}/>
     <FiltersModal
       {...props}
-      onCloseModal={props.onChangeShowModal.bind(this, false)}
+      onCloseModal={() => props.onChangeShowModal(false)}
       defaultCurrentTopTab={props.tabNames[0] || ``}
       defaultCurrentCategory={props.categories.find(c => !c.disabled)}
     />
@@ -181,12 +186,9 @@ _Main.propTypes = {
   showModal: PropTypes.bool.isRequired,
 }
 
+// Callers pass defaultShowModal={false} (no defaultProps)
 const Main = uncontrollable(_Main, {
   showModal: `onChangeShowModal`,
 })
-
-Main.defaultProps = {
-  defaultShowModal: false
-}
 
 export default Main

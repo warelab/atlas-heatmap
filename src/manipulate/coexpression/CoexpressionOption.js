@@ -1,13 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
-import Button from 'react-bootstrap/lib/Button'
-import Glyphicon from 'react-bootstrap/lib/Glyphicon'
-import Slider from 'rc-slider'
+import { Button, Form } from 'react-bootstrap'
+import { Grid } from '../controls/icons.js'
 
 const AddCoexpressedGenesButton = ({showCoexpressionsCallback}) =>
-  <Button bsSize={`xsmall`} onClick={() => showCoexpressionsCallback(10)}>
-    <Glyphicon glyph={`th`}/>
+  <Button size={`sm`} variant={`outline-secondary`} onClick={() => showCoexpressionsCallback(10)}>
+    <Grid/>
     <span className={`gxa-va-middle`}> Add similarly expressed genes</span>
   </Button>
 
@@ -22,19 +21,46 @@ const sliderContainerStyle = {
   paddingBottom: `20px`
 }
 
-const CoexpressedGenesSlider = ({geneName, numCoexpressionsAvailable, numCoexpressionsVisible, showCoexpressionsCallback}) =>
-  <div>
-    <p style={{fontSize: `0.75rem`}}>Display genes with similar expression to {geneName}:</p>
-    <div style={sliderContainerStyle}>
-      <Slider
-        min={0}
-        max={numCoexpressionsAvailable}
-        onAfterChange={showCoexpressionsCallback}
-        marks={{0: `off`, 10: `10`, [numCoexpressionsAvailable]: numCoexpressionsAvailable}}
-        included={false}
-        defaultValue={numCoexpressionsVisible} />
-    </div>
+// Marks as rc-slider drew them: off, 10 and the maximum
+const RangeMarks = ({max}) =>
+  <div className={`gxa-range-marks`} aria-hidden={`true`}>
+    {[[0, `off`], ...(max > 10 ? [[10, `10`]] : []), ...(max > 0 ? [[max, String(max)]] : [])].map(([value, label]) =>
+      <span key={value} className={`gxa-range-mark`} style={{left: `${max > 0 ? 100 * value / max : 0}%`}}>{label}</span>
+    )}
   </div>
+
+RangeMarks.propTypes = {
+  max: PropTypes.number.isRequired
+}
+
+// A Bootstrap range input in place of rc-slider. Like rc-slider's onAfterChange, the number of genes is committed when
+// the thumb is released (mouse, touch or key), not on every step of a drag.
+const CoexpressedGenesSlider = ({geneName, numCoexpressionsAvailable, numCoexpressionsVisible, showCoexpressionsCallback}) => {
+  const [value, setValue] = useState(numCoexpressionsVisible)
+  const commit = () => {
+    value !== numCoexpressionsVisible && showCoexpressionsCallback(value)
+  }
+
+  return (
+    <div>
+      <p style={{fontSize: `0.75rem`}}>Display genes with similar expression to {geneName}:</p>
+      <div style={sliderContainerStyle}>
+        <Form.Range
+          min={0}
+          max={numCoexpressionsAvailable}
+          step={1}
+          value={value}
+          aria-label={`Genes with similar expression to ${geneName}`}
+          aria-valuetext={value ? String(value) : `off`}
+          onChange={event => setValue(Number(event.target.value))}
+          onMouseUp={commit}
+          onTouchEnd={commit}
+          onKeyUp={commit} />
+        <RangeMarks max={numCoexpressionsAvailable} />
+      </div>
+    </div>
+  )
+}
 
 CoexpressedGenesSlider.propTypes = {
   geneName: PropTypes.string.isRequired,

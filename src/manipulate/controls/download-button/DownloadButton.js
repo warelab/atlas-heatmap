@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { MenuItem, Glyphicon, SplitButton, Button, Modal } from 'react-bootstrap/lib'
+import { Button, Dropdown, Modal, SplitButton } from 'react-bootstrap'
 
 import { uncontrollable } from 'uncontrollable'
 import disclaimers from './disclaimers.js'
 import ClientSideDownload from './Download.js'
+import {Download as DownloadIcon} from '../icons.js'
 import {openUrl} from '../../../layout/links.js'
 
 import { heatmapDataPropTypes } from '../../../manipulate/chartDataPropTypes.js'
@@ -15,17 +16,19 @@ const buttonUnsetStyles = {
   height: `unset`
 }
 
+// The modal renders in a portal outside .gxaHeatmapContainer; .gxa-heatmap-modal scopes its styles
 const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadOptions}) => (
   <div>
     <Button
-      bsSize={`small`}
-      onClick={onChangeShowModal.bind(this, true)}
+      size={`sm`}
+      variant={`outline-secondary`}
+      onClick={() => onChangeShowModal(true)}
       title={`Download`}
       style={buttonUnsetStyles}>
-      <Glyphicon glyph={`download`} /> Download
+      <DownloadIcon /> Download
     </Button>
 
-    <Modal show={showModal} onHide={onChangeShowModal.bind(this, false)}>
+    <Modal show={showModal} onHide={() => onChangeShowModal(false)} className={`gxa-heatmap-modal`}>
       <Modal.Header closeButton>
         <Modal.Title>
           Data Reuse Licence Agreement
@@ -37,14 +40,14 @@ const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadO
       </Modal.Body>
 
       <Modal.Footer>
-        <Button onClick={onChangeShowModal.bind(this, false)}>
+        <Button variant={`secondary`} onClick={() => onChangeShowModal(false)}>
           Close
         </Button>
         {
           downloadOptions.map(o => (
             <Button
               key={o.description}
-              bsStyle={`primary`}
+              variant={`primary`}
               onClick={() => {
                 o.onClick()
                 onChangeShowModal(false)
@@ -60,27 +63,24 @@ const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadO
 
 const DownloadWithModal = uncontrollable(_DownloadWithModal, { showModal: `onChangeShowModal` })
 
-DownloadWithModal.defaultProps = {
-  defaultShowModal : false
-}
-
+// The main button runs the first option (react-bootstrap 2's SplitButton hands onClick to it, not to the toggle)
 const SplitDownloadButton = ({downloadOptions}) => (
   <SplitButton
-    id={`download-button`}
-    style={buttonUnsetStyles}
-    bsSize={`small`}
+    size={`sm`}
+    variant={`outline-secondary`}
     onClick={downloadOptions[0].onClick}
-    title={`Download`}>
+    title={<><DownloadIcon /> Download</>}
+    toggleLabel={`More download options`}>
     {
       downloadOptions.map((o,ix) => (
-        <MenuItem
-          key={ix}
-          eventKey={ix}
-          id={o.description}
-          onClick={o.onClick}
-          style={buttonUnsetStyles}>
-          <Glyphicon glyph={`download-alt`}/> {o.description}
-        </MenuItem>
+        <Dropdown.Item
+          as={`button`}
+          type={`button`}
+          key={o.description}
+          eventKey={String(ix)}
+          onClick={o.onClick}>
+          <DownloadIcon /> {o.description}
+        </Dropdown.Item>
       ))
     }
   </SplitButton>
@@ -105,6 +105,7 @@ const DownloadButton = ({currentlyShownContent, fullDatasetUrl, disclaimer, link
   return (
     disclaimers[disclaimer] ?
       <DownloadWithModal
+        defaultShowModal={false}
         Disclaimer={disclaimers[disclaimer]}
         downloadOptions={downloadOptions} /> :
       <SplitDownloadButton downloadOptions={downloadOptions}/>

@@ -1,4 +1,4 @@
-import _range from 'lodash/range'
+import _range from 'lodash/range.js'
 import download from 'downloadjs'
 
 const heatmapDataIntoLinesOfData = (heatmapData, placeholder) => {
@@ -35,4 +35,5 @@ const CommenceDownload = ({name, descriptionLines, heatmapData, isSingleExperime
   )
 }
 
+export {heatmapDataIntoLinesOfData}
 export default CommenceDownload

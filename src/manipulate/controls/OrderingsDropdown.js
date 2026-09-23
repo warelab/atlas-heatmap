@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dropdown from 'react-bootstrap/lib/Dropdown'
-import MenuItem from 'react-bootstrap/lib/MenuItem'
-import Glyphicon from 'react-bootstrap/lib/Glyphicon'
+import { Dropdown } from 'react-bootstrap'
+import { SortAlpha, SortDown, SortNumeric } from './icons.js'
 
 const buttonUnsetStyles = {
   textTransform: `unset`,
@@ -10,51 +9,48 @@ const buttonUnsetStyles = {
   height: `unset`
 }
 
-const callWithEventTargetText = (f) => (
-  (eventKey, event) => {
-    event.preventDefault()
-    return f(event.target.text)
-  }
-)
-
 const orderingIcon = (ordering) => {
   switch (ordering) {
   case `Alphabetical order`:
-    return `sort-by-alphabet`
+    return SortAlpha
   case `Expression rank`:
-    return `sort-by-attributes-alt`
+    return SortDown
   case `By experiment type`:
-    return `sort-by-order`
+    return SortNumeric
   default:
-    return `sort-by-order`
+    return SortNumeric
   }
 }
 
-const OrderingsDropdown = ({allOptions,currentOption,onChangeCurrentOption,title,disabled}) => (
-  <div>
-    <Dropdown
-      id="orderings-dropdown"
-      onSelect={callWithEventTargetText(onChangeCurrentOption)}
-      {...{title,disabled}}>
+// Items are buttons whose eventKey is the ordering name. Upstream read the name back from event.target.text, which
+// only <a> elements have.
+// The title sits on a wrapper: a disabled button shows no tooltip.
+const OrderingsDropdown = ({allOptions,currentOption,onChangeCurrentOption,title,disabled}) => {
+  const OrderingIcon = orderingIcon(currentOption)
+  return (
+    <div title={title || undefined}>
+      <Dropdown onSelect={(eventKey) => onChangeCurrentOption(eventKey)}>
 
-      <Dropdown.Toggle
-        bsSize="small"
-        style={buttonUnsetStyles}>
-        <Glyphicon glyph={orderingIcon(currentOption)} />
-        {currentOption}
-      </Dropdown.Toggle>
+        <Dropdown.Toggle
+          size={`sm`}
+          variant={`outline-secondary`}
+          disabled={disabled}
+          style={buttonUnsetStyles}>
+          <OrderingIcon /> {currentOption}
+        </Dropdown.Toggle>
 
-      <Dropdown.Menu bsSize="small">
-        {allOptions.map(option =>
-          <MenuItem style={{listStyleImage: `none`}} key={option} href="#" active={option===currentOption}>
-            {option}
-          </MenuItem>
-        )}
-      </Dropdown.Menu>
+        <Dropdown.Menu>
+          {allOptions.map(option =>
+            <Dropdown.Item as={`button`} type={`button`} key={option} eventKey={option} active={option===currentOption}>
+              {option}
+            </Dropdown.Item>
+          )}
+        </Dropdown.Menu>
 
-    </Dropdown>
-  </div>
-)
+      </Dropdown>
+    </div>
+  )
+}
 
 OrderingsDropdown.propTypes = {
   allOptions: PropTypes.arrayOf(PropTypes.string).isRequired,

@@ -31,25 +31,28 @@ class Checkbox extends Component {
   }
 
   render() {
-    const { label, actualValue, indeterminate } = this.props
+    const { id, label, actualValue, indeterminate } = this.props
 
     return (
-      <div className="checkbox" style={{float: `left`}}>
+      <div className={`form-check form-check-inline`}>
         <input
+          className={`form-check-input`}
           type={`checkbox`}
+          id={id}
           value={label}
           checked={actualValue}
           onChange={this.toggleCheckboxChange.bind(this)}
           ref={checkbox => {checkbox ? checkbox.indeterminate = indeterminate : null}}
         />
 
-        <label>{label}</label>
+        <label className={`form-check-label`} htmlFor={id}>{label}</label>
       </div>
     )
   }
 }
 
 Checkbox.propTypes = {
+  id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.bool.isRequired,
   actualValue: PropTypes.bool.isRequired,
@@ -57,6 +60,9 @@ Checkbox.propTypes = {
   handleCheckboxChange: PropTypes.func.isRequired,
 }
 
+
+// Labels may hold spaces, so checkbox ids are numbered, per instance (two heatmaps can share a page)
+let instanceCount = 0
 
 class CategoryCheckboxes extends React.Component {
 
@@ -67,10 +73,9 @@ class CategoryCheckboxes extends React.Component {
       unselected: [],
       indeterminate: []
     }
-  }
-
-  componentWillMount() {
+    // Upstream set this in componentWillMount, a legacy lifecycle method
     this.selectedCheckboxes = new Set()
+    this.idPrefix = `gxa-category-checkbox-${++instanceCount}`
   }
 
   componentDidMount() {
@@ -195,7 +200,7 @@ class CategoryCheckboxes extends React.Component {
     return indeterminateCategories
   }
 
-  createCheckbox(label) {
+  createCheckbox(label, index) {
     const {selected} = this.state
     const {currentTab} = this.props
     const {categories, allValues, currentValues} = this.props
@@ -208,6 +213,7 @@ class CategoryCheckboxes extends React.Component {
     return (
       <Checkbox
         key={label}
+        id={`${this.idPrefix}-${index}`}
         label={label}
         value={value}
         actualValue={value}
@@ -228,7 +234,7 @@ class CategoryCheckboxes extends React.Component {
 
   render() {
     return (
-      <div className={`columns small-9`}>
+      <div>
         {this.createCheckboxes()}
       </div>
     )

@@ -56,18 +56,42 @@
   vertical-align: middle;
 }
 
-/* Filters modal */
+/* Filters modal: an option's name is a button that shows or hides its values */
 .gxa-heatmap-modal .gxa-filter-option-name {
   display: inline-block;
   padding: 0 0 0 5px;
   background: none;
   border: 0;
   color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.gxa-heatmap-modal button.gxa-filter-option-name {
   cursor: pointer;
 }
 
-.gxa-heatmap-modal .gxa-filter-option-name::first-letter {
+/* In a span: buttons take no ::first-letter */
+.gxa-heatmap-modal .gxa-filter-option-label {
+  display: inline-block;
+}
+
+.gxa-heatmap-modal .gxa-filter-option-label::first-letter {
   text-transform: capitalize;
+}
+
+/* The coexpression slider's marks */
+.gxaHeatmapContainer .gxa-range-marks {
+  position: relative;
+  height: 1.5em;
+  font-size: 0.75rem;
+  color: #606060;
+}
+
+.gxaHeatmapContainer .gxa-range-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
 }
 
 /*

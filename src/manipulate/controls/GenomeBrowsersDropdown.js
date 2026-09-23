@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dropdown from 'react-bootstrap/lib/Dropdown'
-import MenuItem from 'react-bootstrap/lib/MenuItem'
-import Glyphicon from 'react-bootstrap/lib/Glyphicon'
+import { Dropdown } from 'react-bootstrap'
+import { Eye, EyeSlash } from './icons.js'
 
 const buttonUnsetStyles = {
   textTransform: `unset`,
@@ -10,53 +9,43 @@ const buttonUnsetStyles = {
   height: `unset`
 }
 
-class GenomeBrowsersDropdown extends React.Component {
-  constructor(props) {
-    super(props)
+const genomeBrowserIcon = (genomeBrowser) => {
+  switch (genomeBrowser) {
+  case `none`:
+    return EyeSlash
+  default:
+    return Eye
   }
+}
 
-  handleChange(eventKey, event) {
-    event.preventDefault()
-    this.props.onSelect(eventKey)
-  }
+const GenomeBrowsersDropdown = ({genomeBrowsers: genomeBrowserNames, selected, onSelect}) => {
+  const genomeBrowsers = genomeBrowserNames.map(genomeBrowserName => ({
+    id: genomeBrowserName.replace(/\s+/g, ``).toLowerCase(),
+    label: `${genomeBrowserName} genome browser`
+  }))
+  // Upstream threw when `selected` was not one of the genome browsers
+  const current = genomeBrowsers.find(gb => selected === gb.id)
+  const GenomeBrowserIcon = genomeBrowserIcon(selected)
 
-  _genomeBrowserIcon(genomeBrowser) {
-    switch (genomeBrowser) {
-    case `none`:
-      return `eye-close`
-    default:
-      return `eye-open`
-    }
-  }
+  return (
+    <div title={`Choose genome browser`}>
+      <Dropdown onSelect={(eventKey) => onSelect && onSelect(eventKey)}>
 
-  render() {
-    const genomeBrowsers = this.props.genomeBrowsers.map(genomeBrowserName => ({
-      id: genomeBrowserName.replace(/\s+/g, ``).toLowerCase(),
-      label: `${genomeBrowserName} genome browser`
-    }))
+        <Dropdown.Toggle size={`sm`} variant={`outline-secondary`} style={buttonUnsetStyles}>
+          <GenomeBrowserIcon/>
+          &nbsp;{current ? current.label : `Choose genome browser`}
+        </Dropdown.Toggle>
 
-    return (
-      <div>
-        <Dropdown id="genome-browsers-dropdown"
-          onSelect={(key, e) => this.handleChange(key, e)}
-          title={`Choose genome browser`}>
-
-          <Dropdown.Toggle bsSize="small" style={buttonUnsetStyles}>
-            <Glyphicon glyph={this._genomeBrowserIcon(this.props.selected)}/>
-            &nbsp;{genomeBrowsers.find(gb => this.props.selected === gb.id).label}
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu bsSize="small">
-            {genomeBrowsers.map(gb =>
-              <MenuItem style={{listStyleImage: `none`}} key={gb.id} eventKey={gb.id} href="#">
-                {gb.label}
-              </MenuItem>
-            )}
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-    )
-  }
+        <Dropdown.Menu>
+          {genomeBrowsers.map(gb =>
+            <Dropdown.Item as={`button`} type={`button`} key={gb.id} eventKey={gb.id} active={gb.id === selected}>
+              {gb.label}
+            </Dropdown.Item>
+          )}
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
+  )
 }
 
 GenomeBrowsersDropdown.propTypes = {

@@ -1,0 +1,320 @@
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+import download from 'downloadjs'
+import OrderingsDropdown from '../../src/manipulate/controls/OrderingsDropdown.js'
+import GenomeBrowsersDropdown from '../../src/manipulate/controls/GenomeBrowsersDropdown.js'
+import DownloadButton from '../../src/manipulate/controls/download-button/DownloadButton.js'
+import { heatmapDataIntoLinesOfData } from '../../src/manipulate/controls/download-button/Download.js'
+import FiltersButton from '../../src/manipulate/controls/filter/FiltersButton.js'
+import CategoryCheckboxes from '../../src/manipulate/controls/filter/CategoryCheckboxes.js'
+import CoexpressionOption from '../../src/manipulate/coexpression/CoexpressionOption.js'
+import loadChartData from '../../src/load/main.js'
+import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
+
+vi.mock(`downloadjs`, () => ({default: vi.fn()}))
+
+const ORDERINGS = [`By experiment type`, `Alphabetical order`, `Expression rank`]
+
+const chartData = () => loadChartData({
+  data: allStudies.body, inProxy: ``, outProxy: ``, atlasUrl: `https://data.sorghumbase.org/auth_testing/gxa/`,
+  showAnatomogram: true, showControlMenu: true, isWidget: true
+})
+
+beforeEach(() => {
+  download.mockClear()
+})
+
+describe(`OrderingsDropdown`, () => {
+  it(`lists the orderings as buttons and selects one by its eventKey`, async () => {
+    const user = userEvent.setup()
+    const onChangeCurrentOption = vi.fn()
+    render(
+      <OrderingsDropdown allOptions={ORDERINGS} currentOption={ORDERINGS[0]} onChangeCurrentOption={onChangeCurrentOption}
+        title={``} disabled={false} />)
+
+    const toggle = screen.getByRole(`button`, {name: /By experiment type/})
+    expect(toggle).toHaveClass(`btn-outline-secondary`, `btn-sm`, `dropdown-toggle`)
+    expect(toggle.querySelector(`svg.gxa-icon-sort-numeric-down`)).not.toBeNull()
+    expect(toggle.closest(`[title]`)).toBeNull()
+
+    await user.click(toggle)
+    const items = screen.getAllByRole(`button`).filter(b => b.classList.contains(`dropdown-item`))
+    expect(items.map(item => item.textContent)).toEqual(ORDERINGS)
+    expect(items.every(item => item.tagName === `BUTTON` && item.type === `button`)).toBe(true)
+    expect(items[0]).toHaveClass(`active`)
+
+    await user.click(screen.getByRole(`button`, {name: `Alphabetical order`}))
+    expect(onChangeCurrentOption).toHaveBeenCalledTimes(1)
+    expect(onChangeCurrentOption).toHaveBeenCalledWith(`Alphabetical order`)
+  })
+
+  it(`is disabled while zoomed, with its title on a wrapper`, () => {
+    render(
+      <OrderingsDropdown allOptions={ORDERINGS} currentOption={`Alphabetical order`} onChangeCurrentOption={vi.fn()}
+        title={`Reset zoom to enable sorting options`} disabled={true} />)
+    const toggle = screen.getByRole(`button`, {name: /Alphabetical order/})
+    expect(toggle).toBeDisabled()
+    expect(toggle.closest(`[title]`)).toHaveAttribute(`title`, `Reset zoom to enable sorting options`)
+    expect(toggle.querySelector(`svg.gxa-icon-sort-alpha-down`)).not.toBeNull()
+  })
+})
+
+describe(`GenomeBrowsersDropdown`, () => {
+  it(`shows the selected genome browser and selects another by id`, async () => {
+    const user = userEvent.setup()
+    const onSelect = vi.fn()
+    render(<GenomeBrowsersDropdown genomeBrowsers={[`Ensembl Genomes`, `none`]} selected={`ensemblgenomes`} onSelect={onSelect} />)
+
+    const toggle = screen.getByRole(`button`, {name: /Ensembl Genomes genome browser/})
+    expect(toggle.querySelector(`svg.gxa-icon-eye`)).not.toBeNull()
+    await user.click(toggle)
+    await user.click(screen.getByRole(`button`, {name: `none genome browser`}))
+    expect(onSelect).toHaveBeenCalledWith(`none`)
+  })
+
+  it(`does not throw when the selection is not one of the genome browsers`, () => {
+    render(<GenomeBrowsersDropdown genomeBrowsers={[`Ensembl Genomes`]} selected={null} />)
+    expect(screen.getByRole(`button`, {name: /Choose genome browser/})).toBeInTheDocument()
+  })
+})
+
+describe(`DownloadButton`, () => {
+  const content = () => {
+    const {heatmapData, heatmapConfig} = chartData()
+    return {name: heatmapConfig.shortDescription, descriptionLines: [`Ordering: By experiment type`], heatmapData}
+  }
+
+  it(`is a split button: the main button opens "All data" in linkTarget, the menu has both options`, async () => {
+    const user = userEvent.setup()
+    render(
+      <DownloadButton currentlyShownContent={content()} disclaimer={``} linkTarget={`_blank`} isSingleExperiment={true}
+        fullDatasetUrl={`https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?cutoff=0.0`} />)
+
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    expect(window.open).toHaveBeenCalledWith(
+      `https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?cutoff=0.0`,
+      `_blank`, `noopener,noreferrer`)
+
+    await user.click(screen.getByRole(`button`, {name: `More download options`}))
+    const items = screen.getAllByRole(`button`).filter(b => b.classList.contains(`dropdown-item`))
+    expect(items.map(item => item.textContent.trim())).toEqual([`All data`, `Table content`])
+
+    await user.click(items[1])
+    expect(download).toHaveBeenCalledTimes(1)
+    const [blob, fileName, mimeType] = download.mock.calls[0]
+    expect(blob).toBeInstanceOf(Blob)
+    expect(fileName).toBe(`expression_atlas-sorghum_bicolor.tsv`)
+    expect(mimeType).toBe(`text/tsv`)
+  })
+
+  it(`downloads the table content from the main button when there is no full dataset`, async () => {
+    const user = userEvent.setup()
+    render(<DownloadButton currentlyShownContent={content()} disclaimer={``} fullDatasetUrl={``} />)
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    expect(download).toHaveBeenCalledTimes(1)
+    expect(window.open).not.toHaveBeenCalled()
+  })
+
+  it(`asks for the data reuse agreement first when there is a disclaimer`, async () => {
+    const user = userEvent.setup()
+    render(
+      <DownloadButton currentlyShownContent={content()} disclaimer={`blueprint`} fullDatasetUrl={`https://example.org/all.tsv`}
+        linkTarget={`_self`} />)
+
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    const dialog = await screen.findByRole(`dialog`)
+    expect(dialog).toHaveClass(`gxa-heatmap-modal`)
+    expect(within(dialog).getByText(`Data Reuse Licence Agreement`)).toBeInTheDocument()
+    expect(within(dialog).getByText(`The Blueprint Project Data Reuse Statement`)).toBeInTheDocument()
+
+    await user.click(within(dialog).getByRole(`button`, {name: `Download: All data`}))
+    expect(window.open).toHaveBeenCalledWith(`https://example.org/all.tsv`, `_self`, undefined)
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+  })
+
+  it(`writes the table with NA for missing values in multi-experiment heatmaps`, () => {
+    const {heatmapData} = chartData()
+    const lines = heatmapDataIntoLinesOfData(heatmapData, `NA`)
+    expect(lines).toHaveLength(heatmapData.yAxisCategories.length + 1)
+    expect(lines[0].split(`\t`)).toEqual([``, ...heatmapData.xAxisCategories.map(x => x.label)])
+    expect(lines[1].split(`\t`)[0]).toBe(heatmapData.yAxisCategories[0].label)
+  })
+})
+
+// Warelab payloads have no column groupings; this is the shape of an EBI experiment's
+const groupedColumns = [
+  {value: `leaf`, categories: [`All`, `Medium`], groupings: [
+    {name: `Anatomical systems`, memberName: `organ`, values: [{id: `PO_1`, label: `shoot system`}]},
+    {name: `Organs`, memberName: `organ`, values: [{id: `PO_2`, label: `leaf`}]}]},
+  {value: `root`, categories: [`All`, `Low`], groupings: [
+    {name: `Anatomical systems`, memberName: `organ`, values: [{id: `PO_3`, label: `root system`}]},
+    {name: `Organs`, memberName: `organ`, values: [{id: `PO_4`, label: `root`}]}]},
+  {value: `stem`, categories: [`All`, `Low`], groupings: [
+    {name: `Anatomical systems`, memberName: `organ`, values: [{id: `PO_1`, label: `shoot system`}]},
+    {name: `Organs`, memberName: `organ`, values: [{id: `PO_5`, label: `stem`}]}]}
+]
+
+const filtersProps = (overrides = {}) => ({
+  defaultShowModal: false,
+  categories: [{name: `All`, disabled: false}, {name: `None`, disabled: false}],
+  categoryCheckboxes: [{name: `Medium`, disabled: false}, {name: `Low`, disabled: false}],
+  allValues: groupedColumns,
+  currentValues: groupedColumns,
+  disabled: false,
+  onChangeCurrentValues: vi.fn(),
+  tabNames: [`Anatomical systems`, `Organs`],
+  ...overrides
+})
+
+describe(`FiltersButton`, () => {
+  it(`opens a scoped modal with grouping tabs, category pills and filter options, and closes it`, async () => {
+    const user = userEvent.setup()
+    const props = filtersProps()
+    render(<FiltersButton {...props} />)
+
+    const button = screen.getByRole(`button`, {name: `Filters`})
+    expect(button).toHaveClass(`btn-sm`, `btn-outline-secondary`)
+    expect(button.querySelector(`svg.gxa-icon-sliders`)).not.toBeNull()
+    await user.click(button)
+
+    const dialog = await screen.findByRole(`dialog`)
+    expect(dialog).toHaveClass(`gxa-heatmap-modal`)
+    expect(dialog.querySelector(`.modal-dialog`)).toHaveClass(`modal-lg`)
+
+    const tabs = dialog.querySelector(`.modal-header .nav-tabs`)
+    expect([...tabs.querySelectorAll(`.nav-link`)].map(a => a.textContent)).toEqual([`Anatomical systems`, `Organs`])
+    expect(tabs.querySelector(`.nav-link.active`)).toHaveTextContent(`Anatomical systems`)
+    const pills = dialog.querySelector(`.nav-pills.flex-column`)
+    expect(pills.querySelector(`.nav-link.active`)).toHaveTextContent(`All`)
+
+    // options of the current grouping, capitalised by CSS through a span (buttons take no ::first-letter)
+    const names = [...dialog.querySelectorAll(`.gxa-filter-option-name`)]
+    expect(names.map(n => n.textContent.trim())).toEqual([`root system`, `shoot system`])
+    expect(names.every(n => n.tagName === `BUTTON`)).toBe(true)
+    expect(names[0].querySelector(`.gxa-filter-option-label`)).toHaveTextContent(`root system`)
+
+    // a pill selects that category's columns
+    await user.click(within(pills).getByText(`None`))
+    expect(props.onChangeCurrentValues).toHaveBeenLastCalledWith([])
+
+    // the other grouping
+    await user.click(within(tabs).getByText(`Organs`))
+    expect([...dialog.querySelectorAll(`.gxa-filter-option-name`)].map(n => n.textContent.trim()))
+      .toEqual([`leaf`, `root`, `stem`])
+
+    // options that are a single column of the same name do not open
+    expect([...dialog.querySelectorAll(`.gxa-filter-option-name`)].every(n => n.tagName === `SPAN`)).toBe(true)
+
+    await user.click(within(dialog.querySelector(`.modal-footer`)).getByRole(`button`, {name: `Close`}))
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+  })
+
+  it(`opens a filter option to (un)check its columns`, async () => {
+    const user = userEvent.setup()
+    const props = filtersProps()
+    render(<FiltersButton {...props} />)
+    await user.click(screen.getByRole(`button`, {name: `Filters`}))
+    const dialog = await screen.findByRole(`dialog`)
+
+    const shoot = within(dialog).getByRole(`button`, {name: /shoot system/})
+    expect(shoot).toHaveAttribute(`aria-expanded`, `false`)
+    expect(shoot.querySelector(`svg.gxa-icon-chevron-down`)).not.toBeNull()
+    await user.click(shoot)
+    expect(shoot).toHaveAttribute(`aria-expanded`, `true`)
+
+    await user.click(within(dialog).getByRole(`checkbox`, {name: `stem`}))
+    expect(props.onChangeCurrentValues).toHaveBeenLastCalledWith([groupedColumns[0], groupedColumns[1]])
+
+    await user.click(within(dialog).getByRole(`checkbox`, {name: `shoot system`}))
+    expect(props.onChangeCurrentValues).toHaveBeenLastCalledWith([groupedColumns[1]])
+  })
+
+  it(`is disabled while zoomed, with its title on a wrapper`, () => {
+    render(<FiltersButton {...filtersProps({disabled: true})} />)
+    const button = screen.getByRole(`button`, {name: `Filters`})
+    expect(button).toBeDisabled()
+    expect(button.parentElement).toHaveAttribute(`title`, `Reset zoom to enable filters`)
+  })
+
+  it(`titles the modal "Filters" when there is one grouping or none`, async () => {
+    const user = userEvent.setup()
+    render(<FiltersButton {...filtersProps({tabNames: [], allValues: [], currentValues: []})} />)
+    await user.click(screen.getByRole(`button`, {name: `Filters`}))
+    const dialog = await screen.findByRole(`dialog`)
+    expect(dialog.querySelector(`.modal-title`)).toHaveTextContent(`Filters`)
+    expect(dialog.querySelector(`.nav-tabs`)).toBeNull()
+  })
+})
+
+describe(`CategoryCheckboxes`, () => {
+  it(`renders Bootstrap 5 checkboxes whose labels are tied to them`, async () => {
+    const user = userEvent.setup()
+    const onChangeCurrentValues = vi.fn()
+    const {columnGroups} = chartData()
+    const {container} = render(
+      <>
+        <CategoryCheckboxes categories={columnGroups.categoryCheckboxes} allValues={columnGroups.data}
+          currentValues={columnGroups.data} currentTab={`All`} onChangeCurrentValues={onChangeCurrentValues} />
+        <CategoryCheckboxes categories={columnGroups.categoryCheckboxes} allValues={columnGroups.data}
+          currentValues={columnGroups.data} currentTab={`All`} onChangeCurrentValues={vi.fn()} />
+      </>)
+
+    const checks = container.querySelectorAll(`.form-check.form-check-inline`)
+    expect(checks).toHaveLength(8)
+    const ids = [...container.querySelectorAll(`input.form-check-input`)].map(input => input.id)
+    expect(new Set(ids).size).toBe(8)
+    expect(ids.every(id => /^\S+$/.test(id))).toBe(true)
+
+    const [medium] = screen.getAllByLabelText(`Medium`)
+    expect(medium).toBeChecked()
+    await user.click(medium)
+    expect(onChangeCurrentValues).toHaveBeenCalledTimes(1)
+    expect(onChangeCurrentValues.mock.calls[0][0].every(column => column.categories.includes(`Medium`))).toBe(true)
+  })
+})
+
+describe(`CoexpressionOption`, () => {
+  it(`offers similarly expressed genes, then a range that commits when released`, async () => {
+    const user = userEvent.setup()
+    const showCoexpressionsCallback = vi.fn()
+    const props = {geneName: `SORBI_3001G000200`, numCoexpressionsAvailable: 50, showCoexpressionsCallback}
+    const {rerender} = render(<CoexpressionOption {...props} numCoexpressionsVisible={0} />)
+
+    const button = screen.getByRole(`button`, {name: /Add similarly expressed genes/})
+    expect(button.querySelector(`svg.gxa-icon-grid-3x3-gap`)).not.toBeNull()
+    await user.click(button)
+    expect(showCoexpressionsCallback).toHaveBeenLastCalledWith(10)
+
+    rerender(<CoexpressionOption {...props} numCoexpressionsVisible={10} />)
+    const range = screen.getByRole(`slider`, {name: `Genes with similar expression to SORBI_3001G000200`})
+    expect(range).toHaveClass(`form-range`)
+    expect(range).toHaveAttribute(`max`, `50`)
+    expect(range).toHaveValue(`10`)
+    expect([...document.querySelectorAll(`.gxa-range-mark`)].map(mark => [mark.textContent, mark.style.left]))
+      .toEqual([[`off`, `0%`], [`10`, `20%`], [`50`, `100%`]])
+
+    // dragging only moves the thumb; releasing it commits (rc-slider's onAfterChange)
+    fireEvent.change(range, {target: {value: `11`}})
+    fireEvent.change(range, {target: {value: `12`}})
+    expect(range).toHaveValue(`12`)
+    expect(showCoexpressionsCallback).toHaveBeenCalledTimes(1)
+    fireEvent.mouseUp(range)
+    expect(showCoexpressionsCallback).toHaveBeenCalledTimes(2)
+    expect(showCoexpressionsCallback).toHaveBeenLastCalledWith(12)
+
+    rerender(<CoexpressionOption {...props} numCoexpressionsVisible={12} />)
+    fireEvent.keyUp(range, {key: `Tab`})    // nothing changed
+    expect(showCoexpressionsCallback).toHaveBeenCalledTimes(2)
+    fireEvent.change(range, {target: {value: `0`}})
+    fireEvent.keyUp(range, {key: `Home`})
+    expect(showCoexpressionsCallback).toHaveBeenLastCalledWith(0)
+  })
+
+  it(`says so when there are no similarly expressed genes`, () => {
+    render(<CoexpressionOption geneName={`G`} numCoexpressionsAvailable={0} numCoexpressionsVisible={0}
+      showCoexpressionsCallback={vi.fn()} />)
+    expect(screen.getByText(`No genes with similar expression to G could be found`)).toBeInTheDocument()
+  })
+})
