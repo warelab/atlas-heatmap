@@ -1,0 +1,241 @@
+{
+  "captured_at": "2026-09-23T21:10:05.693Z",
+  "base": "https://data.sorghumbase.org/auth_testing/gxa/",
+  "method": "POST",
+  "path": "json/experiments/E-GEOD-30249",
+  "body_sent": "geneQuery=SORBI_3001G000200 SORBI_3001G000400 SORBI_3001G000100",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "experiment": {
+      "accession": "E-GEOD-30249",
+      "type": "rnaseq_mrna_differential",
+      "urls": {
+        "main_page": "https://www.ebi.ac.uk/gxa/experiments/E-GEOD-30249?geneQuery=%255B%255D",
+        "genome_browsers": "https://www.ebi.ac.uk/gxa/experiments/E-GEOD-30249/redirect/genome-browsers",
+        "download": "https://www.ebi.ac.uk/gxa/experiments-content/E-GEOD-30249/download/RNASEQ_MRNA_DIFFERENTIAL?geneQuery=%5B%5D&unit=FOLD_CHANGE&cutoff=0.05&heatmapMatrixSize=50&selectedColumnIds=&type=RNASEQ_MRNA_DIFFERENTIAL"
+      },
+      "description": "RNA-Seq of Sorghum bicolor 9d seedlings in response to osmotic stress and abscisic acid",
+      "species": "Sorghum bicolor"
+    },
+    "config": {
+      "geneQuery": "%5B%5D",
+      "species": "Sorghum bicolor",
+      "genomeBrowsers": [
+        "Ensembl Genomes"
+      ],
+      "disclaimer": "",
+      "columnType": "",
+      "conditionQuery": ""
+    },
+    "columnGroupings": [],
+    "columnHeaders": [
+      {
+        "id": "g5_g1",
+        "displayName": "compound: sodium hydroxide 0.2 molar vs abscisic acid 20 micromolar in organism part: root",
+        "referenceAssayGroup": {
+          "id": "g5",
+          "assayAccessions": [
+            "a",
+            "b",
+            "c"
+          ],
+          "replicates": 3
+        },
+        "testAssayGroup": {
+          "id": "g1",
+          "assayAccessions": [
+            "a",
+            "b",
+            "c"
+          ],
+          "replicates": 3
+        },
+        "contrastSummary": {
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "BTx623"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "Sorghum bicolor"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "root"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "9 day",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "9 day"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "seedling"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "root"
+            },
+            {
+              "propertyName": "compound",
+              "testValue": "abscisic acid 20 micromolar",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "sodium hydroxide 0.2 molar"
+            }
+          ],
+          "experimentDescription": "RNA-Seq of Sorghum bicolor 9d seedlings in response to osmotic stress and abscisic acid",
+          "contrastDescription": "compound: sodium hydroxide 0.2 molar vs abscisic acid 20 micromolar in organism part: root",
+          "testReplicates": 3,
+          "referenceReplicates": 3
+        },
+        "resources": [
+          {
+            "type": "gsea_go",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g5_g1/gsea_go.png"
+          },
+          {
+            "type": "gsea_interpro",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g5_g1/gsea_interpro.png"
+          },
+          {
+            "type": "ma-plot",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g5_g1/ma-plot.png"
+          }
+        ]
+      },
+      {
+        "id": "g7_g3",
+        "displayName": "compound: water vs polyethylene glycol 20 percent in organism part: root",
+        "referenceAssayGroup": {
+          "id": "g7",
+          "assayAccessions": [
+            "a",
+            "b",
+            "c"
+          ],
+          "replicates": 3
+        },
+        "testAssayGroup": {
+          "id": "g3",
+          "assayAccessions": [
+            "a",
+            "b",
+            "c"
+          ],
+          "replicates": 3
+        },
+        "contrastSummary": {
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "BTx623"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "Sorghum bicolor"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "root"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "9 day",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "9 day"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling",
+              "contrastPropertyType": "SAMPLE",
+              "referenceValue": "seedling"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "root"
+            },
+            {
+              "propertyName": "compound",
+              "testValue": "polyethylene glycol 20 percent",
+              "contrastPropertyType": "FACTOR",
+              "referenceValue": "water"
+            }
+          ],
+          "experimentDescription": "RNA-Seq of Sorghum bicolor 9d seedlings in response to osmotic stress and abscisic acid",
+          "contrastDescription": "compound: water vs polyethylene glycol 20 percent in organism part: root",
+          "testReplicates": 3,
+          "referenceReplicates": 3
+        },
+        "resources": [
+          {
+            "type": "gsea_go",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g7_g3/gsea_go.png"
+          },
+          {
+            "type": "gsea_interpro",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g7_g3/gsea_interpro.png"
+          },
+          {
+            "type": "ma-plot",
+            "uri": "https://www.ebi.ac.uk/gxa/external-resources/E-GEOD-30249/g7_g3/ma-plot.png"
+          }
+        ]
+      }
+    ],
+    "profiles": {
+      "searchResultTotal": 2,
+      "rows": [
+        {
+          "id": "SORBI_3001G000200",
+          "name": "SORBI_3001G000200",
+          "uri": "https://www.ebi.ac.uk/gxa/genes/SORBI_3001G000200",
+          "expressionUnit": "Log2 fold change",
+          "expressions": [
+            {
+              "pValue": 0.023848945245277,
+              "foldChange": -0.3
+            },
+            {}
+          ]
+        },
+        {
+          "id": "SORBI_3001G000400",
+          "name": "SORBI_3001G000400",
+          "uri": "https://www.ebi.ac.uk/gxa/genes/SORBI_3001G000400",
+          "expressionUnit": "Log2 fold change",
+          "expressions": [
+            {
+              "pValue": 1.48769027960814e-26,
+              "foldChange": -1.7
+            },
+            {
+              "pValue": 0.00251968357307113,
+              "foldChange": 0.3
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

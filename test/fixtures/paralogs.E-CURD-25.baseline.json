@@ -1,0 +1,302 @@
+{
+  "captured_at": "2026-09-23T21:10:05.665Z",
+  "base": "https://data.sorghumbase.org/auth_testing/gxa/",
+  "method": "POST",
+  "path": "json/experiments/E-CURD-25",
+  "body_sent": "geneQuery=SORBI_3001G000200 SORBI_3001G000400 SORBI_3001G000100",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "Sorghum bicolor",
+      "allSvgPathIds": [
+        "PO_0009006",
+        "PO_0009005",
+        "PO_0000034"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "g1",
+        "factorValue": "nonvascular system",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "nonvascular system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "3 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        }
+      },
+      {
+        "assayGroupId": "g2",
+        "factorValue": "root",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "3 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "shoot",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "3 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "g4",
+        "factorValue": "vascular system",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "vascular system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "3 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0000034"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3001G000200",
+          "name": "SORBI_3001G000200",
+          "uri": "genes/SORBI_3001G000200",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 45,
+              "quartiles": {
+                "min": 45,
+                "lower": 45,
+                "median": 45,
+                "upper": 45,
+                "max": 45
+              }
+            },
+            {
+              "value": 74,
+              "quartiles": {
+                "min": 74,
+                "lower": 74,
+                "median": 74,
+                "upper": 74,
+                "max": 74
+              }
+            },
+            {
+              "value": 63,
+              "quartiles": {
+                "min": 63,
+                "lower": 63,
+                "median": 63,
+                "upper": 63,
+                "max": 63
+              }
+            },
+            {
+              "value": 30,
+              "quartiles": {
+                "min": 30,
+                "lower": 30,
+                "median": 30,
+                "upper": 30,
+                "max": 30
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G000400",
+          "name": "SORBI_3001G000400",
+          "uri": "genes/SORBI_3001G000400",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            },
+            {
+              "value": 25,
+              "quartiles": {
+                "min": 25,
+                "lower": 25,
+                "median": 25,
+                "upper": 25,
+                "max": 25
+              }
+            },
+            {
+              "value": 19,
+              "quartiles": {
+                "min": 19,
+                "lower": 19,
+                "median": 19,
+                "upper": 19,
+                "max": 19
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G000100",
+          "name": "SORBI_3001G000100",
+          "uri": "genes/SORBI_3001G000100",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {
+              "value": 0.7,
+              "quartiles": {
+                "min": 0.7,
+                "lower": 0.7,
+                "median": 0.7,
+                "upper": 0.7,
+                "max": 0.7
+              }
+            },
+            {},
+            {}
+          ]
+        }
+      ],
+      "searchResultTotal": "3"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%2Cnull%2Cnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "E-CURD-25",
+      "description": "Gene Expression Regulation Associated with Vascularization in Sorghum bicolor",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?unit=TPM&cutoff=0.5&heatmapMatrixSize=50&selectedColumnIds=&type=RNASEQ_MRNA_BASELINE&geneQuery=%5Bnull%2Cnull%2Cnull%5D",
+        "genome_browsers": "https://www.ebi.ac.uk/gxa/experiments/E-CURD-25/redirect/genome-browsers",
+        "main_page": "https://www.ebi.ac.uk/gxa/experiments/E-CURD-25?geneQuery=%5Bnull%2Cnull%2Cnull%5D"
+      }
+    }
+  }
+}

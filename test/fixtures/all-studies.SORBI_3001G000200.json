@@ -1,0 +1,536 @@
+{
+  "captured_at": "2026-09-23T21:10:05.593Z",
+  "base": "https://data.sorghumbase.org/auth_testing/gxa/",
+  "method": "POST",
+  "path": "json/baseline_experiments",
+  "body_sent": "geneQuery=SORBI_3001G000200",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "sorghum_bicolor",
+      "allSvgPathIds": [
+        "PO_0009089",
+        "PO_0009084",
+        "PO_0009009",
+        "PO_0025281",
+        "PO_0009049",
+        "PO_0025034",
+        "PO_0009005",
+        "PO_0009006",
+        "UBERON_0000468",
+        "PO_0020103",
+        "PO_0000034",
+        "PO_0000229",
+        "PO_0009046",
+        "PO_0009010",
+        "PO_0009051",
+        "PO_0009047",
+        "PO_0009030",
+        "PO_0009066"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "anther",
+        "factorValue": "anther",
+        "factorValueOntologyTermId": "PO_0009066"
+      },
+      {
+        "assayGroupId": "early inflorescence",
+        "factorValue": "early inflorescence",
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "emerging inflorescence",
+        "factorValue": "emerging inflorescence",
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "endosperm",
+        "factorValue": "endosperm",
+        "factorValueOntologyTermId": "PO_0009089"
+      },
+      {
+        "assayGroupId": "flag leaf",
+        "factorValue": "flag leaf",
+        "factorValueOntologyTermId": "PO_0020103"
+      },
+      {
+        "assayGroupId": "floral meristem",
+        "factorValue": "floral meristem",
+        "factorValueOntologyTermId": "PO_0000229"
+      },
+      {
+        "assayGroupId": "flower",
+        "factorValue": "flower",
+        "factorValueOntologyTermId": "PO_0009046"
+      },
+      {
+        "assayGroupId": "inflorescence",
+        "factorValue": "inflorescence",
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "leaf",
+        "factorValue": "leaf",
+        "factorValueOntologyTermId": "PO_0025034"
+      },
+      {
+        "assayGroupId": "nonvascular system",
+        "factorValue": "nonvascular system"
+      },
+      {
+        "assayGroupId": "pericarp",
+        "factorValue": "pericarp",
+        "factorValueOntologyTermId": "PO_0009084"
+      },
+      {
+        "assayGroupId": "pistil",
+        "factorValue": "pistil",
+        "factorValueOntologyTermId": "PO_0009030"
+      },
+      {
+        "assayGroupId": "plant embryo",
+        "factorValue": "plant embryo",
+        "factorValueOntologyTermId": "PO_0009009"
+      },
+      {
+        "assayGroupId": "pollen",
+        "factorValue": "pollen",
+        "factorValueOntologyTermId": "PO_0025281"
+      },
+      {
+        "assayGroupId": "root",
+        "factorValue": "root",
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "seed",
+        "factorValue": "seed",
+        "factorValueOntologyTermId": "PO_0009010"
+      },
+      {
+        "assayGroupId": "seed 10 days after pollination",
+        "factorValue": "seed 10 days after pollination",
+        "factorValueOntologyTermId": "PO_0009010"
+      },
+      {
+        "assayGroupId": "seed 5 days after pollination",
+        "factorValue": "seed 5 days after pollination",
+        "factorValueOntologyTermId": "PO_0009010"
+      },
+      {
+        "assayGroupId": "shoot",
+        "factorValue": "shoot",
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "spikelet",
+        "factorValue": "spikelet",
+        "factorValueOntologyTermId": "PO_0009051"
+      },
+      {
+        "assayGroupId": "stem",
+        "factorValue": "stem",
+        "factorValueOntologyTermId": "PO_0009047"
+      },
+      {
+        "assayGroupId": "vascular system",
+        "factorValue": "vascular system",
+        "factorValueOntologyTermId": "PO_0000034"
+      },
+      {
+        "assayGroupId": "vegetative meristem",
+        "factorValue": "vegetative meristem"
+      },
+      {
+        "assayGroupId": "whole organism",
+        "factorValue": "whole organism",
+        "factorValueOntologyTermId": "UBERON_0000468"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "E-CURD-25",
+          "name": "Turco et al 2017 - Organism Part",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 45
+            },
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 74
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 63
+            },
+            {},
+            {},
+            {
+              "value": 30
+            },
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-CURD-25?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "E-MTAB-3839",
+          "name": "Tissues - Olson et al",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 51
+            },
+            {
+              "value": 39
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 26
+            },
+            {},
+            {
+              "value": 66
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 29
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 51
+            },
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-3839?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "E-MTAB-4203",
+          "name": "Thurber et al., 2015 - Organism part",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 39
+            },
+            {},
+            {},
+            {
+              "value": 57
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-4203?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "E-MTAB-4273",
+          "name": "Tissues - 3 Makita et al.",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 22
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 36
+            },
+            {
+              "value": 59
+            },
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-4273?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "E-MTAB-4400",
+          "name": "Tissues - Davidson et al",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 12
+            },
+            {
+              "value": 48
+            },
+            {
+              "value": 55
+            },
+            {
+              "value": 11
+            },
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 24
+            },
+            {},
+            {},
+            {
+              "value": 44
+            },
+            {
+              "value": 29
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 11
+            },
+            {
+              "value": 41
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-4400?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "E-MTAB-5956",
+          "name": "Wang et al., 2018 - Organism part",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {
+              "value": 9
+            },
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 54
+            },
+            {},
+            {
+              "value": 53
+            },
+            {},
+            {
+              "value": 38
+            },
+            {
+              "value": 1
+            },
+            {
+              "value": 76
+            },
+            {},
+            {},
+            {},
+            {
+              "value": 38
+            },
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 47
+            }
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "Wang et al., 2018 - Organism part - inflorescence size 1 to 10 millimeter",
+          "name": "Wang et al., 2018 - Organism part - inflorescence size 1 to 10 millimeter",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 39
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "Wang et al., 2018 - Organism part - inflorescence size 1 to 2 centimeter",
+          "name": "Wang et al., 2018 - Organism part - inflorescence size 1 to 2 centimeter",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 35
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        },
+        {
+          "id": "Wang et al., 2018 - Organism part - inflorescence size 1 to 5 millimeter",
+          "name": "Wang et al., 2018 - Organism part - inflorescence size 1 to 5 millimeter",
+          "experimentType": "RNASEQ_MRNA_BASELINE",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 35
+            },
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          "uri": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956?geneQuery=%5B%7B%22value%22%3A%22SORBI_3001G000200%22%7D%5D"
+        }
+      ],
+      "searchResultTotal": "9"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "%5B%5D",
+      "disclaimer": "",
+      "expressionUnit": "",
+      "geneQuery": "%5Bnull%5D",
+      "genomeBrowsers": [],
+      "species": "sorghum bicolor"
+    }
+  }
+}

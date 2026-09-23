@@ -1,0 +1,857 @@
+{
+  "captured_at": "2026-09-23T21:10:05.726Z",
+  "base": "https://data.sorghumbase.org/auth_testing/gxa/",
+  "method": "POST",
+  "path": "json/experiments/E-GEOD-167101",
+  "body_sent": "geneQuery=SORBI_3001G000200 SORBI_3001G193300 SORBI_3002G272600 SORBI_3002G323000 SORBI_3003G110000 SORBI_3003G395300 SORBI_3004G264400 SORBI_3004G339000 SORBI_3004G339100 SORBI_3004G345700 SORBI_3005G114400 SORBI_3006G050000 SORBI_3007G179800 SORBI_3K044407",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "columnHeaders": [
+      {
+        "assayGroupId": "g2",
+        "factorValue": "Shanqui Red; 28 day",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "disease",
+              "testValue": "normal",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Shanqui Red",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root system",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "28 day",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        }
+      },
+      {
+        "assayGroupId": "g4",
+        "factorValue": "Shanqui Red; 35 day",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "disease",
+              "testValue": "normal",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Shanqui Red",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root system",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "35 day",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        }
+      },
+      {
+        "assayGroupId": "g1",
+        "factorValue": "SRN39; 28 day",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "disease",
+              "testValue": "normal",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "SRN39",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root system",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "28 day",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        }
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "SRN39; 35 day",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "disease",
+              "testValue": "normal",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "SRN39",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root system",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "35 day",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        }
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3001G000200",
+          "name": "SORBI_3001G000200",
+          "uri": "genes/SORBI_3001G000200",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G193300",
+          "name": "SORBI_3001G193300",
+          "uri": "genes/SORBI_3001G193300",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 21,
+              "quartiles": {
+                "min": 21,
+                "lower": 21,
+                "median": 21,
+                "upper": 21,
+                "max": 21
+              }
+            },
+            {
+              "value": 18,
+              "quartiles": {
+                "min": 18,
+                "lower": 18,
+                "median": 18,
+                "upper": 18,
+                "max": 18
+              }
+            },
+            {
+              "value": 18,
+              "quartiles": {
+                "min": 18,
+                "lower": 18,
+                "median": 18,
+                "upper": 18,
+                "max": 18
+              }
+            },
+            {
+              "value": 21,
+              "quartiles": {
+                "min": 21,
+                "lower": 21,
+                "median": 21,
+                "upper": 21,
+                "max": 21
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3002G272600",
+          "name": "SORBI_3002G272600",
+          "uri": "genes/SORBI_3002G272600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 23,
+              "quartiles": {
+                "min": 23,
+                "lower": 23,
+                "median": 23,
+                "upper": 23,
+                "max": 23
+              }
+            },
+            {
+              "value": 18,
+              "quartiles": {
+                "min": 18,
+                "lower": 18,
+                "median": 18,
+                "upper": 18,
+                "max": 18
+              }
+            },
+            {
+              "value": 20,
+              "quartiles": {
+                "min": 20,
+                "lower": 20,
+                "median": 20,
+                "upper": 20,
+                "max": 20
+              }
+            },
+            {
+              "value": 20,
+              "quartiles": {
+                "min": 20,
+                "lower": 20,
+                "median": 20,
+                "upper": 20,
+                "max": 20
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3002G323000",
+          "name": "SORBI_3002G323000",
+          "uri": "genes/SORBI_3002G323000",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {
+              "value": 0.9,
+              "quartiles": {
+                "min": 0.9,
+                "lower": 0.9,
+                "median": 0.9,
+                "upper": 0.9,
+                "max": 0.9
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3003G110000",
+          "name": "SORBI_3003G110000",
+          "uri": "genes/SORBI_3003G110000",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 8,
+              "quartiles": {
+                "min": 8,
+                "lower": 8,
+                "median": 8,
+                "upper": 8,
+                "max": 8
+              }
+            },
+            {
+              "value": 11,
+              "quartiles": {
+                "min": 11,
+                "lower": 11,
+                "median": 11,
+                "upper": 11,
+                "max": 11
+              }
+            },
+            {
+              "value": 11,
+              "quartiles": {
+                "min": 11,
+                "lower": 11,
+                "median": 11,
+                "upper": 11,
+                "max": 11
+              }
+            },
+            {
+              "value": 14,
+              "quartiles": {
+                "min": 14,
+                "lower": 14,
+                "median": 14,
+                "upper": 14,
+                "max": 14
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3003G395300",
+          "name": "SORBI_3003G395300",
+          "uri": "genes/SORBI_3003G395300",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            },
+            {
+              "value": 3,
+              "quartiles": {
+                "min": 3,
+                "lower": 3,
+                "median": 3,
+                "upper": 3,
+                "max": 3
+              }
+            },
+            {
+              "value": 3,
+              "quartiles": {
+                "min": 3,
+                "lower": 3,
+                "median": 3,
+                "upper": 3,
+                "max": 3
+              }
+            },
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3004G264400",
+          "name": "SORBI_3004G264400",
+          "uri": "genes/SORBI_3004G264400",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 48,
+              "quartiles": {
+                "min": 48,
+                "lower": 48,
+                "median": 48,
+                "upper": 48,
+                "max": 48
+              }
+            },
+            {
+              "value": 42,
+              "quartiles": {
+                "min": 42,
+                "lower": 42,
+                "median": 42,
+                "upper": 42,
+                "max": 42
+              }
+            },
+            {
+              "value": 46,
+              "quartiles": {
+                "min": 46,
+                "lower": 46,
+                "median": 46,
+                "upper": 46,
+                "max": 46
+              }
+            },
+            {
+              "value": 73,
+              "quartiles": {
+                "min": 73,
+                "lower": 73,
+                "median": 73,
+                "upper": 73,
+                "max": 73
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3004G339000",
+          "name": "SORBI_3004G339000",
+          "uri": "genes/SORBI_3004G339000",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3004G339100",
+          "name": "SORBI_3004G339100",
+          "uri": "genes/SORBI_3004G339100",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 13,
+              "quartiles": {
+                "min": 13,
+                "lower": 13,
+                "median": 13,
+                "upper": 13,
+                "max": 13
+              }
+            },
+            {
+              "value": 15,
+              "quartiles": {
+                "min": 15,
+                "lower": 15,
+                "median": 15,
+                "upper": 15,
+                "max": 15
+              }
+            },
+            {
+              "value": 13,
+              "quartiles": {
+                "min": 13,
+                "lower": 13,
+                "median": 13,
+                "upper": 13,
+                "max": 13
+              }
+            },
+            {
+              "value": 13,
+              "quartiles": {
+                "min": 13,
+                "lower": 13,
+                "median": 13,
+                "upper": 13,
+                "max": 13
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3004G345700",
+          "name": "SORBI_3004G345700",
+          "uri": "genes/SORBI_3004G345700",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            },
+            {
+              "value": 6,
+              "quartiles": {
+                "min": 6,
+                "lower": 6,
+                "median": 6,
+                "upper": 6,
+                "max": 6
+              }
+            },
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            },
+            {
+              "value": 6,
+              "quartiles": {
+                "min": 6,
+                "lower": 6,
+                "median": 6,
+                "upper": 6,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3005G114400",
+          "name": "SORBI_3005G114400",
+          "uri": "genes/SORBI_3005G114400",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 7,
+              "quartiles": {
+                "min": 7,
+                "lower": 7,
+                "median": 7,
+                "upper": 7,
+                "max": 7
+              }
+            },
+            {
+              "value": 8,
+              "quartiles": {
+                "min": 8,
+                "lower": 8,
+                "median": 8,
+                "upper": 8,
+                "max": 8
+              }
+            },
+            {
+              "value": 6,
+              "quartiles": {
+                "min": 6,
+                "lower": 6,
+                "median": 6,
+                "upper": 6,
+                "max": 6
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3006G050000",
+          "name": "SORBI_3006G050000",
+          "uri": "genes/SORBI_3006G050000",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 12,
+              "quartiles": {
+                "min": 12,
+                "lower": 12,
+                "median": 12,
+                "upper": 12,
+                "max": 12
+              }
+            },
+            {
+              "value": 11,
+              "quartiles": {
+                "min": 11,
+                "lower": 11,
+                "median": 11,
+                "upper": 11,
+                "max": 11
+              }
+            },
+            {
+              "value": 10,
+              "quartiles": {
+                "min": 10,
+                "lower": 10,
+                "median": 10,
+                "upper": 10,
+                "max": 10
+              }
+            },
+            {
+              "value": 11,
+              "quartiles": {
+                "min": 11,
+                "lower": 11,
+                "median": 11,
+                "upper": 11,
+                "max": 11
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3007G179800",
+          "name": "SORBI_3007G179800",
+          "uri": "genes/SORBI_3007G179800",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 13,
+              "quartiles": {
+                "min": 13,
+                "lower": 13,
+                "median": 13,
+                "upper": 13,
+                "max": 13
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            },
+            {
+              "value": 19,
+              "quartiles": {
+                "min": 19,
+                "lower": 19,
+                "median": 19,
+                "upper": 19,
+                "max": 19
+              }
+            },
+            {
+              "value": 14,
+              "quartiles": {
+                "min": 14,
+                "lower": 14,
+                "median": 14,
+                "upper": 14,
+                "max": 14
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3K044407",
+          "name": "SORBI_3K044407",
+          "uri": "genes/SORBI_3K044407",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 0.8,
+              "quartiles": {
+                "min": 0.8,
+                "lower": 0.8,
+                "median": 0.8,
+                "upper": 0.8,
+                "max": 0.8
+              }
+            },
+            {
+              "value": 0.7,
+              "quartiles": {
+                "min": 0.7,
+                "lower": 0.7,
+                "median": 0.7,
+                "upper": 0.7,
+                "max": 0.7
+              }
+            },
+            {
+              "value": 0.7,
+              "quartiles": {
+                "min": 0.7,
+                "lower": 0.7,
+                "median": 0.7,
+                "upper": 0.7,
+                "max": 0.7
+              }
+            },
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            }
+          ]
+        }
+      ],
+      "searchResultTotal": "14"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "E-GEOD-167101",
+      "description": "Characterization of growth and development of sorghum genotypes with differential susceptibility to Striga hermonthica",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://www.ebi.ac.uk/gxa/experiments-content/E-GEOD-167101/download/RNASEQ_MRNA_BASELINE?unit=TPM&cutoff=0.5&heatmapMatrixSize=50&selectedColumnIds=&type=RNASEQ_MRNA_BASELINE&geneQuery=%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D",
+        "genome_browsers": "https://www.ebi.ac.uk/gxa/experiments/E-GEOD-167101/redirect/genome-browsers",
+        "main_page": "https://www.ebi.ac.uk/gxa/experiments/E-GEOD-167101?geneQuery=%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D"
+      }
+    }
+  }
+}
