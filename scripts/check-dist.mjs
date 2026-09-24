@@ -47,11 +47,6 @@ const BANNED = [
 // Subpaths that React publishes in its package.json "exports", so they need no extension.
 const EXPORTED_SUBPATHS = new Set(['react/jsx-runtime', 'react-dom/client', 'react-dom/server']);
 const DECLARED_PACKAGES = new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]);
-// gramene-anatomogram joins `dependencies` once it is published (plan step H10). Until then its import passes with a
-// warning, and check-release refuses to pack or publish. Once it is declared this does nothing; H10 removes it, and the
-// matching entry in vite.config.js.
-const PENDING_DEPENDENCIES = new Set(['gramene-anatomogram']);
-const pendingImports = new Set();
 
 const packageOf = (specifier) => specifier.split('/').slice(0, specifier.startsWith('@') ? 2 : 1).join('/');
 const SPECIFIER = /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)"((?:@[a-z0-9~][\w.~-]*\/)?[a-z0-9~][\w.~-]*(?:\/[\w.@~-]+)*)"/g;
@@ -70,9 +65,7 @@ for (const name of bundles) {
     if (code.includes(text)) problems.push(`dist/${name} contains "${text}" (${why})`);
   }
   for (const specifier of importsOf(code)) {
-    const declared = DECLARED_PACKAGES.has(packageOf(specifier));
-    if (!declared && PENDING_DEPENDENCIES.has(packageOf(specifier))) pendingImports.add(packageOf(specifier));
-    if (!declared && !PENDING_DEPENDENCIES.has(packageOf(specifier))) {
+    if (!DECLARED_PACKAGES.has(packageOf(specifier))) {
       problems.push(`dist/${name} imports ${specifier}, which is not a dependency or peer`);
     } else if (specifier !== packageOf(specifier) && !EXPORTED_SUBPATHS.has(specifier) && !/\.c?js$/.test(specifier)) {
       problems.push(`dist/${name} imports ${specifier} without its file extension`);
@@ -156,10 +149,6 @@ if (notInstalled.length === 0 && problems.length === 0) {
 if (problems.length > 0) {
   console.error(`check-dist: ${problems.length} problem(s)\n  ${problems.join('\n  ')}`);
   process.exit(1);
-}
-for (const name of pendingImports) {
-  console.warn(`check-dist: warning: the bundles import ${name}, which package.json does not declare yet (plan step H10); ` +
-    'check-release refuses to pack or publish until it does');
 }
 const nodeLoad = loadedInNode ? 'loaded in Node' : `not loaded in Node: ${notInstalled.join(', ')} not installed`;
 console.log(`check-dist: ok (${bundles.length} bundles, ${REQUIRED.length} entry files; ${nodeLoad})`);

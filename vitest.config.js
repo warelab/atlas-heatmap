@@ -15,7 +15,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // Until gramene-anatomogram is published and installed (plan step H10), tests use a stub that records its props.
+      // Unit tests use a stub of gramene-anatomogram that records its props and draws nothing.
+      // test/anatomogram.integration.test.js mocks it with the installed package instead.
       'gramene-anatomogram': ANATOMOGRAM_STUB,
       // As in the dev server: the playground (test/playground.test.js) imports the package by name
       'gramene-atlas-heatmap': resolve(root, 'src/Main.js'),

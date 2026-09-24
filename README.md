@@ -178,17 +178,20 @@ npm run fixtures       # recapture test/fixtures from the live backend (read-onl
 
 - **Tests** draw real Highcharts 6.2 in jsdom, with the layout shims in `test/shims.js`, from the backend responses
   captured in `test/fixtures/`. They use `test/stubs/anatomogram.js` for gramene-anatomogram: a stub that records its
-  props. The exception is `test/anatomogram.integration.test.js`, which draws the heatmap with the real package whenever
-  it is installed and is skipped otherwise. `test/load/` holds golden snapshots of upstream's `src/load/` output.
+  props. The exception is `test/anatomogram.integration.test.js`, which draws the heatmap with the installed package:
+  the injected sorghum SVG, tissue and column highlighting both ways, and `normaliseSpecies`. `test/load/` holds golden
+  snapshots of upstream's `src/load/` output.
 - **The playground** has an `atlasUrl` choice (auth_testing, sorghum_v11, EBI), genes, experiment, the boolean props,
   `linkTarget`, a demo `resolveUrl`, and a switch that logs `window.open` instead of opening. Its panels show All
   Studies and Paralogs side by side, a resizable container, gramene-search's fullscreen modal and the `render()` API,
   with an event log of `fail` calls. URL parameters: `?api=mock` (answers from `test/fixtures`, offline),
   `?strict=1` (StrictMode) and `?panel=side-by-side|resizable|fullscreen|render-api`. From a workstation:
   `ssh -L 5175:localhost:5175 <host>`.
-- The dev server uses gramene-anatomogram from `node_modules` when it is installed, and the stub otherwise. Until
-  gramene-anatomogram 3.0.0 is on npm, install its tarball without saving it:
-  `npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz` (repeat it after every plain `npm install`).
+- Until gramene-anatomogram 3.0.0 is on npm, `package-lock.json` cannot record it, so `npm ci` and a plain
+  `npm install` fail with E404. Install with its tarball instead, without saving it:
+  `npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz` (this also installs everything else from the
+  lockfile). Once it is published, run `npm install` once and commit the lockfile it writes.
+- The dev server uses gramene-anatomogram from `node_modules`, and the stub only when it is not installed.
 
 ### Trying a build in gramene-search
 

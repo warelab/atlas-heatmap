@@ -47,6 +47,7 @@
   "dependencies": {
     "color": "^3.2.1",
     "downloadjs": "^1.4.7",
+    "gramene-anatomogram": "^3.0.0",
     "highcharts": "~6.2.0",
     "highcharts-custom-events": "~3.0.10",
     "highcharts-react-official": "^3.2.3",

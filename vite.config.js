@@ -21,9 +21,7 @@ const jsxInJs = {
 }
 
 // Every dependency and peer stays external (react/jsx-runtime, react-dom/client, highcharts/modules/…, lodash/…).
-// gramene-anatomogram is named explicitly: it only joins `dependencies` once it is published (plan step H10).
 const EXTERNAL_PACKAGES = [
-  'gramene-anatomogram',
   ...Object.keys(pkg.dependencies || {}),
   ...Object.keys(pkg.peerDependencies || {}),
 ]
@@ -47,7 +45,7 @@ function emitStylesheet() {
 /**
  * - `npm run build` -> library build into ./dist (ESM + CJS + css), every dependency external.
  * - `npm run dev`   -> playground (examples/playground) on :5175; `gramene-atlas-heatmap` resolves to src/,
- *                      and `gramene-anatomogram` to the test stub until the real package is installed.
+ *                      and `gramene-anatomogram` to node_modules (to the test stub only when it is not installed).
  */
 export default defineConfig(({ command }) => {
   if (command === 'build') {
