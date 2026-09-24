@@ -19,6 +19,8 @@ describe(`HEATMAP_CSS`, () => {
     expect(HEATMAP_CSS).toContain(`.gxaHeatmapContainer .gxa-legend-item`)
     expect(HEATMAP_CSS).toContain(`.gxaHeatmapContainer a {`)
     expect(HEATMAP_CSS).toMatch(/body > \.highcharts-tooltip-container \{\s*z-index: 1100;/)
+    // the factor grid's cells draw no borders from the host page's table rules
+    expect(HEATMAP_CSS).toMatch(/\.gxa-grid-table :where\(th\),\s*\.gxaHeatmapContainer \.gxa-grid-table :where\(td\) \{\s*border: 0;/)
 
     // every selector is scoped, except the tooltip container's
     const selectors = HEATMAP_CSS.replace(/\/\*[\s\S]*?\*\//g, ``).match(/[^{}]+(?=\{)/g)

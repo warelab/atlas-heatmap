@@ -165,6 +165,15 @@
   border-spacing: 2px;
 }
 
+/*
+ * No borders from the host page's table rules: gramene-mdview's copy of Bootstrap's reboot, for one, gives every th
+ * and td a 2px border. :where() keeps these at the specificity of the axis rules below, which draw their own border.
+ */
+.gxaHeatmapContainer .gxa-grid-table :where(th),
+.gxaHeatmapContainer .gxa-grid-table :where(td) {
+  border: 0;
+}
+
 .gxaHeatmapContainer .gxa-grid-table caption {
   caption-side: top;
   padding: 0 2px 0.25rem;
