@@ -5,10 +5,12 @@
 //   port dropped);
 // - every import of another package names a dependency or peer, and deep imports are fully specified (`lodash/range.js`),
 //   which webpack 5 and Node require of a "type": "module" package;
-// - highcharts-more (boxplot) is imported only by the lazily loaded GeneSpecificResults chunk.
+// - highcharts-more (boxplot) is imported only by the lazily loaded GeneSpecificResults chunk;
+// - Node's own loaders accept the bundles (see NAMED_IMPORT below).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -89,8 +91,68 @@ if (!css.includes('.gxaHeatmapContainer') || !css.includes('body > .highcharts-t
   problems.push('dist/gramene-atlas-heatmap.css is not src/styles/heatmap.css');
 }
 
+// Node's ESM loader (Node itself, Vite SSR, a consumer's vitest) links a named import from a CommonJS package only when
+// cjs-module-lexer finds that name among the package's exports, while bundlers accept any name: `import { sortBy } from
+// 'lodash'` builds, then throws a SyntaxError in Node. So every named import in the ESM bundles is checked against the
+// namespace Node gives that package. Packages resolve from scripts/ as they would from dist/: both sit next to
+// node_modules.
+const NAMED_IMPORT = /\bimport\s*(?:[\w$]+\s*,\s*)?\{([^}]*)\}\s*from\s*"([^"]+)"/g;
+const PUBLIC_EXPORTS = [
+  'default', 'ExpressionAtlasHeatmap', 'render', 'DEFAULT_OPTIONS', 'ensureStylesInjected', 'STYLE_ELEMENT_ID', 'HEATMAP_CSS',
+];
+const resolves = (specifier) => {
+  try {
+    import.meta.resolve(specifier);
+    return true;
+  } catch {
+    return false;
+  }
+};
+const codeOf = (name) => readFileSync(join(dist, name), 'utf8');
+const notInstalled = [
+  ...new Set(bundles.flatMap((name) => importsOf(codeOf(name))).filter((specifier) => !resolves(specifier)).map(packageOf)),
+];
+const namespaces = new Map();
+for (const name of bundles.filter((name) => name.endsWith('.js'))) {
+  for (const [, bindings, specifier] of codeOf(name).matchAll(NAMED_IMPORT)) {
+    if (specifier.startsWith('.') || notInstalled.includes(packageOf(specifier))) continue;
+    if (!namespaces.has(specifier)) {
+      namespaces.set(specifier, await import(specifier).catch((error) => {
+        problems.push(`Node cannot load ${specifier}: ${error.message}`);
+        return {};
+      }));
+    }
+    for (const binding of bindings.split(',')) {
+      const imported = binding.trim().split(/\s+as\s+/)[0];
+      if (imported && !(imported in namespaces.get(specifier))) {
+        problems.push(
+          `dist/${name} imports { ${imported} } from "${specifier}", which Node's ESM loader cannot link; ` +
+          'use its default export or a fully specified deep import instead (lodash/<name>.js)');
+      }
+    }
+  }
+}
+
+// With every imported package installed, load each bundle as a consumer's Node would: ESM with import(), CommonJS with
+// require() (which loads the ESM-only gramene-anatomogram on Node >= 20.19).
+let loadedInNode = false;
+if (notInstalled.length === 0 && problems.length === 0) {
+  const require = createRequire(import.meta.url);
+  for (const name of bundles) {
+    try {
+      const module = name.endsWith('.cjs') ? require(join(dist, name)) : await import(pathToFileURL(join(dist, name)).href);
+      const missing = name.startsWith('gramene-atlas-heatmap.') ? PUBLIC_EXPORTS.filter((key) => !(key in module)) : [];
+      if (missing.length > 0) problems.push(`dist/${name} does not export ${missing.join(', ')}`);
+    } catch (error) {
+      problems.push(`Node cannot load dist/${name}: ${error.message}`);
+    }
+  }
+  loadedInNode = true;
+}
+
 if (problems.length > 0) {
   console.error(`check-dist: ${problems.length} problem(s)\n  ${problems.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`check-dist: ok (${bundles.length} bundles, ${REQUIRED.length} entry files)`);
+const nodeLoad = loadedInNode ? 'loaded in Node' : `not loaded in Node: ${notInstalled.join(', ')} not installed`;
+console.log(`check-dist: ok (${bundles.length} bundles, ${REQUIRED.length} entry files; ${nodeLoad})`);
