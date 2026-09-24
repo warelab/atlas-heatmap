@@ -4,8 +4,12 @@ import {Button, Form} from 'react-bootstrap'
 
 import loadChartData from '../load/main.js'
 import {GradientLegend as SingleExperimentLegend} from '../manipulate/heatmap-legend/Main.js'
+import disclaimers from '../manipulate/controls/download-button/disclaimers.js'
+import {DownloadDialogButton} from '../manipulate/controls/download-button/DownloadDialog.js'
+import {downloadContext} from '../manipulate/controls/download-button/downloadFile.js'
 import {assayGroupColours} from './colours.js'
 import {analyseFactors, chooseAxis, layoutFactorGrid, LABEL_SEPARATOR, MISSING, swapAxes} from './factorGrid.js'
+import {gridFileName, gridJson, gridSummary, gridTsv} from './gridDownload.js'
 
 // ExpressionFactorGrid's grid, drawn as a plain table (no Highcharts): the model is grid/factorGrid.js, the colours
 // grid/colours.js, and the styles the .gxa-grid rules of styles/heatmap.css. (Not FactorGrid.js: on a case-insensitive
@@ -84,7 +88,10 @@ Tooltip.propTypes = {
   unit: PropTypes.string
 }
 
-const FactorGridView = ({payload, gene, inProxy, atlasUrl, linkTarget, urlFor, rowFactor, columnFactor, onChangeFactors}) => {
+const FactorGridView = ({
+  payload, gene, experiment, inProxy, atlasUrl, linkTarget, urlFor, rowFactor, columnFactor, onChangeFactors,
+  downloadFileName, showDownload = true
+}) => {
   const ids = useId()
   const wrapperRef = useRef(null)
   const tooltipRef = useRef(null)
@@ -177,11 +184,20 @@ const FactorGridView = ({payload, gene, inProxy, atlasUrl, linkTarget, urlFor, r
   const noData = cells.some(cellsOfRow => cellsOfRow.some(cell => cell.length === 0 || cell.some(s => !colours[s.index])))
   const rowTitle = grid.rowFactor === null ? `` : [grid.rowFactor, ...foldedFactors].join(LABEL_SEPARATOR)
   const accession = payload.experiment ? payload.experiment.accession : ``
+  // The download has every sample, whatever the axes (and, like the heatmap's, asks for agreement to the payload's
+  // data reuse disclaimer if it has one)
+  const downloadAccession = accession || experiment || ``
+  const buildDownload = format => {
+    const context = downloadContext()
+    return format === `json` ?
+      gridJson(grid, {experiment: payload.experiment, accession: downloadAccession, ...context}) :
+      gridTsv(grid, {accession: downloadAccession})
+  }
 
   return (
     <div ref={wrapperRef} className={`gxa-grid`}>
       <div className={`gxa-grid-toolbar`}>
-        {varyingFactors.length >= 2 &&
+        {(varyingFactors.length >= 2 || showDownload) &&
           <div className={`gxa-grid-controls`}>
             {varyingFactors.length > 2 &&
               <Fragment>
@@ -192,7 +208,15 @@ const FactorGridView = ({payload, gene, inProxy, atlasUrl, linkTarget, urlFor, r
                   id={`${ids}-columns`} label={`Columns`} value={grid.columnFactor} factors={varyingFactors}
                   onChange={factor => change(chooseAxis(axes, `column`, factor))} />
               </Fragment>}
-            <SwapButton onClick={() => change(swapAxes(axes))} />
+            {varyingFactors.length >= 2 && <SwapButton onClick={() => change(swapAxes(axes))} />}
+            {showDownload &&
+              <DownloadDialogButton
+                className={`gxa-grid-download`}
+                defaultFileName={downloadFileName || gridFileName({gene: gene || grid.gene.id, accession: downloadAccession})}
+                summary={gridSummary(grid, {accession: downloadAccession})}
+                buildContent={buildDownload}
+                disclaimer={disclaimers[payload.config && payload.config.disclaimer]}
+                linkTarget={linkTarget} />}
           </div>}
         <div className={`gxa-grid-legend`}>
           {chartData.colourAxis &&
@@ -304,13 +328,16 @@ FactorGridView.propTypes = {
     experiment: PropTypes.object
   }).isRequired,
   gene: PropTypes.string.isRequired,
+  experiment: PropTypes.string,
   inProxy: PropTypes.string.isRequired,
   atlasUrl: PropTypes.string.isRequired,
   linkTarget: PropTypes.string,
   urlFor: PropTypes.func.isRequired,
   rowFactor: PropTypes.string,
   columnFactor: PropTypes.string,
-  onChangeFactors: PropTypes.func
+  onChangeFactors: PropTypes.func,
+  downloadFileName: PropTypes.string,
+  showDownload: PropTypes.bool
 }
 
 export default FactorGridView

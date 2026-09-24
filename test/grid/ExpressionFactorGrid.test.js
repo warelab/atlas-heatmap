@@ -2,12 +2,14 @@ import { StrictMode } from 'react'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Highcharts from 'highcharts'
-import { describe, expect, it, vi } from 'vitest'
+import download from 'downloadjs'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ExpressionAtlasHeatmap, ExpressionFactorGrid } from '../../src/Main.js'
 import { allowConsole } from '../consoleGuard.js'
 import { assayGroupColours } from '../../src/grid/colours.js'
 import { chartDataOf } from '../helpers/canvas.js'
+import { lastDownload } from '../helpers/download.js'
 import { mockFetch } from '../helpers/fetch.js'
 import sb1 from '../fixtures/grid.JGI-SB-1.msd2.json'
 import sb2 from '../fixtures/grid.JGI-SB-2.msd2.json'
@@ -20,6 +22,11 @@ import unknownGene from '../fixtures/error.unknown-gene.json'
 // ExpressionFactorGrid from fetch to table, on the captured JGI studies of msd2. The console guard fails a test on any
 // React warning.
 vi.mock(`gramene-anatomogram`, () => import(`../stubs/anatomogram.js`))
+vi.mock(`downloadjs`, () => ({default: vi.fn()}))
+
+beforeEach(() => {
+  download.mockClear()
+})
 
 const SORGHUM_V11 = `https://data.sorghumbase.org/sorghum_v11/gxa/`
 const MSD2 = `SORBI_3006G095600`
@@ -92,7 +99,8 @@ describe(`ExpressionFactorGrid`, () => {
     expect(screen.queryByRole(`combobox`)).toBeNull()
 
     expect(liveCharts()).toHaveLength(0)
-    expect(container.querySelector(`.highcharts-container, svg`)).toBeNull()
+    // (the Download button's icon is the only svg)
+    expect(container.querySelector(`.highcharts-container, svg:not(.gxa-icon-download)`)).toBeNull()
   })
 
   it(`splits a cell into one band per sample, ordered by sample id, coloured as the flat heatmap colours them`, async () => {
@@ -164,9 +172,11 @@ describe(`ExpressionFactorGrid`, () => {
     await user.unhover(upper)
     expect(screen.queryByRole(`tooltip`)).toBeNull()
 
-    // keyboard: the bands follow the swap button in the tab order
+    // keyboard: the bands follow the swap and download buttons in the tab order
     await user.tab()
     expect(document.activeElement).toBe(screen.getByRole(`button`, {name: `Swap rows and columns`}))
+    await user.tab()
+    expect(document.activeElement).toBe(screen.getByRole(`button`, {name: `Download`}))
     await user.tab()
     expect(document.activeElement).toBe(lower)
     expect(screen.getByRole(`tooltip`)).toHaveTextContent(`leaf_lower_growing.floral_initiation`)
@@ -304,6 +314,85 @@ describe(`ExpressionFactorGrid`, () => {
     const values = curd25.body.profiles.rows[1].expressions.map(expression => `${expression.value} TPM`)
     expect(bands(container).map(band => band.getAttribute(`aria-label`).split(`, `).pop()).sort())
       .toEqual([...values].sort())
+  })
+
+  it(`downloads every sample of the study for the gene, whatever the axes, as tab-delimited text by default`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const {container} = render(grid())
+    const table = await findTable()
+    await user.click(screen.getByRole(`button`, {name: `Swap rows and columns`}))
+    expect(rowLabels(table)).toHaveLength(8)
+
+    const button = screen.getByRole(`button`, {name: `Download`})
+    expect(button.closest(`.gxa-grid-toolbar`)).not.toBeNull()
+    expect(button).toHaveClass(`gxa-grid-download`, `btn-sm`, `btn-outline-secondary`)
+    await user.click(button)
+    const dialog = await screen.findByRole(`dialog`)
+    expect(dialog).toHaveTextContent(`31 samples of JGI-SB-1 for ${MSD2}`)
+    const name = within(dialog).getByRole(`textbox`, {name: `File name`})
+    expect(name).toHaveValue(`${MSD2}-JGI-SB-1`)
+    expect(name).toHaveFocus()
+    expect(within(dialog).getByRole(`radio`, {name: `Tab-delimited text (.tsv)`})).toBeChecked()
+    expect(within(dialog).queryByRole(`button`, {name: /Full experiment data/})).toBeNull()
+    await user.keyboard(`{Enter}`)
+
+    const tsv = await lastDownload()
+    expect([tsv.fileName, tsv.mimeType]).toEqual([`${MSD2}-JGI-SB-1.tsv`, `text/tab-separated-values`])
+    const lines = tsv.content.trimEnd().split(`\n`)
+    expect(lines[0]).toBe(`gene\tstudy\torganism part\tdevelopmental stage\tsample id\treplicates\texpression (TPM)`)
+    expect(lines).toHaveLength(1 + bands(container).length)
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+    await waitFor(() => expect(button).toHaveFocus())
+
+    // JSON, with the axes shown
+    await user.click(button)
+    const again = await screen.findByRole(`dialog`)
+    await user.click(within(again).getByRole(`radio`, {name: `JSON (.json)`}))
+    await user.click(within(again).getByRole(`button`, {name: `Download`}))
+    const json = await lastDownload()
+    expect([json.fileName, json.mimeType]).toEqual([`${MSD2}-JGI-SB-1.json`, `application/json`])
+    expect(JSON.parse(json.content)).toMatchObject({
+      gene: MSD2, study: {accession: `JGI-SB-1`}, rowFactor: `organism part`, columnFactor: `developmental stage`, unit: `TPM`
+    })
+    expect(JSON.parse(json.content).samples).toHaveLength(31)
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it(`asks for agreement to the payload's data reuse disclaimer before downloading`, async () => {
+    const user = userEvent.setup()
+    mockFetch(() => ({...sb1, body: {...sb1.body, config: {...sb1.body.config, disclaimer: `lauderdale`}}}))
+    render(grid())
+    await findTable()
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    const dialog = await screen.findByRole(`dialog`)
+    expect(within(dialog).getByRole(`region`, {name: `Data reuse statement`})).toHaveTextContent(`Fort Lauderdale`)
+    const save = within(dialog).getByRole(`button`, {name: `Download`})
+    expect(save).toBeDisabled()
+    await user.click(within(dialog).getByRole(`checkbox`, {name: `I agree to the data reuse statement above`}))
+    await user.click(save)
+    expect((await lastDownload()).fileName).toBe(`${MSD2}-JGI-SB-1.tsv`)
+  })
+
+  it(`suggests downloadFileName, and has no Download button with showDownload={false}`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const {unmount} = render(grid({downloadFileName: `msd2-mullet-developmental-stages`}))
+    await findTable()
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    expect(within(await screen.findByRole(`dialog`)).getByRole(`textbox`, {name: `File name`}))
+      .toHaveValue(`msd2-mullet-developmental-stages`)
+    unmount()
+
+    const {container} = render(grid({showDownload: false}))
+    await findTable()
+    expect(screen.queryByRole(`button`, {name: `Download`})).toBeNull()
+    expect(screen.getByRole(`button`, {name: `Swap rows and columns`})).toBeInTheDocument()
+
+    // one factor and no download: no controls at all
+    render(grid({experiment: `E-CURD-25`, gene: `SORBI_3001G000400`, showDownload: false}))
+    await waitFor(() => expect(document.querySelectorAll(`table`)).toHaveLength(2))
+    expect(container.parentElement.querySelectorAll(`.gxa-grid-controls`)).toHaveLength(1)
   })
 
   describe.each([

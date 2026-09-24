@@ -24,6 +24,9 @@ import FactorGridView from './FactorGridView.js'
  * @param {string}   props.rowFactor, props.columnFactor - The factors on the rows and the columns; ignored unless the
  *                       experiment's assay groups have more than one value of them. Otherwise the grid's own choice
  * @param {function} props.onChangeFactors - ({rowFactor, columnFactor}) => void, when the reader swaps or chooses axes
+ * @param {string}   props.downloadFileName - The file name (without extension) the Download dialog suggests; default
+ *                       <gene>-<experiment>
+ * @param {boolean}  props.showDownload - Show the Download button (default true)
  * @param {string}   props.inProxy, props.linkTarget, props.resolveUrl, props.fail, props.className, props.style,
  *                       props.injectStyles - As ExpressionAtlasHeatmap's
  */
@@ -31,7 +34,8 @@ const GRID_DEFAULTS = Object.freeze({
   atlasUrl: DEFAULT_ATLAS_URL,
   inProxy: ``,
   linkTarget: `_blank`,
-  injectStyles: true
+  injectStyles: true,
+  showDownload: true
 })
 
 const NOT_BASELINE = `The factor grid shows baseline experiments only.`
@@ -81,7 +85,10 @@ FactorGridLoader.propTypes = {
 
 const ExpressionFactorGrid = props => {
   const options = withDefaults(GRID_DEFAULTS, props)
-  const {experiment, gene, inProxy, fail, linkTarget, className, style, rowFactor, columnFactor, onChangeFactors} = options
+  const {
+    experiment, gene, inProxy, fail, linkTarget, className, style, rowFactor, columnFactor, onChangeFactors,
+    downloadFileName, showDownload
+  } = options
   const atlasUrl = withTrailingSlash(options.atlasUrl)
   useStyleInjection(options.injectStyles !== false)
 
@@ -103,6 +110,7 @@ const ExpressionFactorGrid = props => {
           <FactorGridLoader
             request={request}
             gene={gene}
+            experiment={experiment}
             inProxy={inProxy}
             atlasUrl={atlasUrl}
             fail={fail}
@@ -110,7 +118,9 @@ const ExpressionFactorGrid = props => {
             urlFor={urlFor}
             rowFactor={rowFactor}
             columnFactor={columnFactor}
-            onChangeFactors={onChangeFactors} />
+            onChangeFactors={onChangeFactors}
+            downloadFileName={downloadFileName}
+            showDownload={showDownload} />
         </HeatmapErrorBoundary>}
     </div>
   )
@@ -123,6 +133,8 @@ ExpressionFactorGrid.propTypes = {
   rowFactor: PropTypes.string,
   columnFactor: PropTypes.string,
   onChangeFactors: PropTypes.func,
+  downloadFileName: PropTypes.string,
+  showDownload: PropTypes.bool,
   inProxy: PropTypes.string,
   linkTarget: PropTypes.string,
   resolveUrl: PropTypes.func,

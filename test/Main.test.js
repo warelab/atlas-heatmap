@@ -55,7 +55,8 @@ describe(`ExpressionAtlasHeatmap`, () => {
   it(`exports ExpressionFactorGrid, whose defaults are the heatmap's`, () => {
     expect(ExpressionFactorGrid).toBe(GridComponent)
     expect(GRID_DEFAULTS).toEqual({
-      atlasUrl: DEFAULT_OPTIONS.atlasUrl, inProxy: ``, linkTarget: DEFAULT_OPTIONS.linkTarget, injectStyles: true
+      atlasUrl: DEFAULT_OPTIONS.atlasUrl, inProxy: ``, linkTarget: DEFAULT_OPTIONS.linkTarget, injectStyles: true,
+      showDownload: true
     })
     expect(Object.isFrozen(GRID_DEFAULTS)).toBe(true)
   })
