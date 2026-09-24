@@ -3,9 +3,10 @@
 Gramene's fork of EMBL-EBI's [Expression Atlas heatmap](https://github.com/ebi-gene-expression-group/atlas-heatmap)
 (`@ebi-gene-expression-group/expression-atlas-heatmap-highcharts` 5.7.2), published on npm as
 **`gramene-atlas-heatmap`**. gramene-search uses it to draw the baseline and differential expression heatmaps of its
-Expression tab (All Studies and Paralogs) in the page, with the anatomogram of
-[gramene-anatomogram](https://github.com/warelab/anatomogram). The data comes from the Warelab gramene-swagger
-`/gxa/` API (`https://data.sorghumbase.org/<db>/gxa/`), or from Expression Atlas itself.
+Expression tab (EBI Studies and Paralogs) in the page, with the anatomogram of
+[gramene-anatomogram](https://github.com/warelab/anatomogram), and the factor grid of its JGI Studies tab
+([ExpressionFactorGrid](#expressionfactorgrid)). The data comes from the Warelab gramene-swagger `/gxa/` API
+(`https://data.sorghumbase.org/<db>/gxa/`), or from Expression Atlas itself.
 
 What is different from 5.7.2 (details in [CHANGELOG.md](CHANGELOG.md)):
 
@@ -17,6 +18,8 @@ What is different from 5.7.2 (details in [CHANGELOG.md](CHANGELOG.md)):
 - **The anatomogram shows for the Paralogs tab**: species names such as `Sorghum bicolor` are normalised. Hovering
   an All Studies row label highlights its tissues.
 - Baseline colours are upstream 5.7.2's five log-range buckets.
+- New: `ExpressionFactorGrid` draws one gene in one study by the study's factors, and `filterRows` leaves rows of
+  the payload out.
 - react-refetch, react-highcharts, styled-components, react-ga and every other React 16-only package are gone.
   Highcharts stays at 6.2.
 - ESM and CommonJS builds with TypeScript declarations. The code keeps upstream's module layout; see
@@ -71,6 +74,22 @@ import { ExpressionAtlasHeatmap } from 'gramene-atlas-heatmap'
 A new `query`, `experiment` or `atlasUrl` fetches again and starts afresh (ordering, filters, zoom). A new `query`
 object with the same content does not refetch. gramene-search also keys each heatmap on its query.
 
+Leaving rows out of the payload, e.g. the JGI studies of All Studies (their rows have the accession as `id`, or the
+study name, possibly followed by ` - <value>`, as `id` and `name`):
+
+```jsx
+const jgiNames = jgiStudies.map(study => study.name)
+const isJgiRow = row => jgiStudies.some(study => study._id === row.id) ||
+  jgiNames.some(name => [row.id, row.name].some(label => label === name || label.startsWith(`${name} - `)))
+const filterRows = useCallback(row => !isJgiRow(row), [jgiStudies])
+
+<ExpressionAtlasHeatmap atlasUrl={atlasUrl} query={{gene}} experiment={false} filterRows={filterRows} />
+```
+
+The columns no remaining row has a value in go too, and with no row left the "no results" message shows. It works on
+the fetched payload: a new `filterRows` filters again without a new request, and keeps the chart as it is (zoom,
+ordering, filters) when it keeps the same rows. Memoize it all the same.
+
 Without React in the page (upstream's widget API):
 
 ```js
@@ -99,10 +118,11 @@ handle.unmount()
 | `resolveUrl` | `(kind, defaultUrl, context) => string \| null \| undefined` | | Rewrites links; see below |
 | `className`, `style` | | | On the root `div.gxaHeatmapContainer` |
 | `injectStyles` | boolean | `true` | See [Styles](#styles) |
+| `filterRows` | `(row) => boolean` | | Keeps the payload's `profiles.rows` it returns true for, and the columns they have values in (above) |
 | `disableGoogleAnalytics` | | | **Ignored**: there is no Google Analytics any more |
 
-Exports: `ExpressionAtlasHeatmap` (also the default), `render`, `DEFAULT_OPTIONS`, `ensureStylesInjected`,
-`STYLE_ELEMENT_ID` and `HEATMAP_CSS`. Types are in `dist/index.d.ts`.
+Exports: `ExpressionAtlasHeatmap` (also the default), `ExpressionFactorGrid`, `render`, `DEFAULT_OPTIONS`,
+`ensureStylesInjected`, `STYLE_ELEMENT_ID` and `HEATMAP_CSS`. Types are in `dist/index.d.ts`.
 
 ### resolveUrl
 
@@ -164,6 +184,64 @@ const resolveUrl = (kind, url, {query, experiment, row}) => {
   experiments that have gene-specific results. EBI experiments do; the Warelab backend sends none.
 - `dist/gramene-atlas-heatmap.css`, `dist/index.d.ts` and `dist/index.d.cts`, and source maps.
 
+## ExpressionFactorGrid
+
+One gene's expression in one baseline experiment, drawn as a grid of the experiment's factors: for studies with
+several factors, such as the JGI studies of sorghum_v11 (JGI-SB-1 is organism part × developmental stage). It is a
+plain HTML table, without Highcharts or the anatomogram.
+
+```jsx
+import { ExpressionFactorGrid } from 'gramene-atlas-heatmap'
+
+<ExpressionFactorGrid
+  atlasUrl="https://data.sorghumbase.org/sorghum_v11/gxa/"
+  experiment="JGI-SB-1"
+  gene="SORBI_3006G095600"
+  rowFactor={axes.rowFactor}
+  columnFactor={axes.columnFactor}
+  onChangeFactors={setAxes} />
+```
+
+It sends the request the heatmap sends for one experiment: `POST <atlasUrl>json/experiments/<experiment>` with the body
+`geneQuery=<gene>`. It shows the same spinner, error alert (calling `fail` once per failed request) and "no results"
+message. A differential experiment gets a message instead of a grid.
+
+- **Factors.** Each assay group of the payload is a sample; its factor values are its `FACTOR` properties, and a group
+  that lacks one of the study's factors has `—` for it. A factor with more than one value varies. Factors that do not
+  vary are shown above the grid (`organism part: stem internode`).
+- **Axes.** By default `organism part` goes on the columns when it varies. Otherwise the columns get the factor with
+  the most values, and the rows the factor with the most values among the others. Values a group lacks do not count,
+  and ties go to the factor the study lists first. Any other varying factors are folded into the rows: each
+  combination of values that some sample has is its own row, labelled `TX08001 · outer core`. Rows and columns are
+  in natural order (S1, S2, …, S10, then `—`).
+  - Two varying factors: a *Swap rows and columns* button.
+  - More than two: *Rows* and *Columns* selects as well. Choosing the other axis's factor swaps the axes; choosing a
+    folded factor folds the one it replaces.
+  - One: a single row, labelled with the gene id. None: a single cell.
+- **Cells.** A cell holds every sample with its row's and column's values. Several samples (groups that share every
+  factor value and differ by the `sample id` SAMPLE property) split the cell into equal bands, ordered by sample id.
+  Each band has exactly the colour the flat heatmap gives that assay group for the same payload: the grid computes
+  the heatmap's colour axis and applies it as Highcharts does, without drawing a chart. Cells with nothing measured,
+  and samples with no value, are hatched. The legend is the Paralogs heatmap's gradient legend, in the payload's unit
+  (TPM), with a key for the hatching.
+- **Tooltip.** Hovering or focusing a band shows its factor values, sample id (else the assay group id), replicates,
+  and value with its unit. Every band is in the tab order and has an `aria-label`; Escape hides the tooltip.
+- **Labels.** Column labels longer than 8 characters are drawn vertically, cut short at 12rem with an ellipsis, and
+  hovering one shows the whole label. Row labels are cut at 20rem. The table scrolls sideways when it is wider than
+  its container.
+
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `experiment` | string | | The accession (required). Nothing is fetched without it |
+| `gene` | string | | One gene id, sent as `geneQuery` (required); the payload row with that id or name is drawn |
+| `atlasUrl` | string | `'https://www.ebi.ac.uk/gxa/'` | As ExpressionAtlasHeatmap's |
+| `rowFactor`, `columnFactor` | string | | The factors on the rows and the columns. Each is used when it names a factor that varies, and otherwise ignored; `columnFactor` wins when both name the same one. Without them the grid keeps its own choice |
+| `onChangeFactors` | `({rowFactor, columnFactor}) => void` | | When the reader swaps or chooses the axes (not for the defaults). Store the axes and pass them back to keep them |
+| `inProxy`, `linkTarget`, `resolveUrl`, `fail`, `className`, `style`, `injectStyles` | | | As ExpressionAtlasHeatmap's. `resolveUrl` gets `{query: {gene}, experiment}`; the only link is the error alert's support link. The root is `div.gxaHeatmapContainer.gxaFactorGrid` |
+
+A new `experiment`, `gene` or `atlasUrl` fetches again, and the grid's own choice of axes starts afresh. gramene-search
+also keys the grid on them, and keeps the axes per study in its saved view.
+
 ## Development
 
 ```bash
@@ -171,7 +249,7 @@ npm install
 npm test               # vitest + jsdom; any console.error/warn fails the test unless it calls allowConsole()
 npm run build          # dist/, then scripts/copy-dts.mjs and scripts/check-dist.mjs
 npm run lint:pkg       # publint, then attw on a packed tarball
-npm run pack:local     # scripts/check-release.mjs, build, then gramene-atlas-heatmap-6.0.0.tgz
+npm run pack:local     # scripts/check-release.mjs, build, then gramene-atlas-heatmap-<version>.tgz
 npm run dev            # playground (examples/playground) on http://localhost:5175
 npm run fixtures       # recapture test/fixtures from the live backend (read-only POSTs)
 ```
@@ -180,13 +258,15 @@ npm run fixtures       # recapture test/fixtures from the live backend (read-onl
   captured in `test/fixtures/`. They use `test/stubs/anatomogram.js` for gramene-anatomogram: a stub that records its
   props. The exception is `test/anatomogram.integration.test.js`, which draws the heatmap with the installed package:
   the injected sorghum SVG, tissue and column highlighting both ways, and `normaliseSpecies`. `test/load/` holds golden
-  snapshots of upstream's `src/load/` output.
+  snapshots of upstream's `src/load/` output. `test/grid/` tests ExpressionFactorGrid's model on the four JGI
+  studies, and its colours against those Highcharts itself gives the points of the same payload's heatmap.
 - **The playground** has an `atlasUrl` choice (auth_testing, sorghum_v11, EBI), genes, experiment, the boolean props,
   `linkTarget`, a demo `resolveUrl`, and a switch that logs `window.open` instead of opening. Its panels show All
-  Studies and Paralogs side by side, a resizable container, gramene-search's fullscreen modal and the `render()` API,
-  with an event log of `fail` calls. URL parameters: `?api=mock` (answers from `test/fixtures`, offline),
-  `?strict=1` (StrictMode) and `?panel=side-by-side|resizable|fullscreen|render-api`. From a workstation:
-  `ssh -L 5175:localhost:5175 <host>`.
+  Studies and Paralogs side by side, a resizable container, gramene-search's fullscreen modal, the `render()` API
+  and ExpressionFactorGrid (a study select, JGI-SB-1 to 4 and two EBI studies, and a gene field; the axes are kept
+  per study), with an event log of `fail` and `onChangeFactors` calls. URL parameters: `?api=mock` (answers from
+  `test/fixtures`, offline), `?strict=1` (StrictMode) and `?panel=side-by-side|resizable|fullscreen|render-api|grid`
+  (`grid` starts on sorghum_v11, where the JGI studies are). From a workstation: `ssh -L 5175:localhost:5175 <host>`.
 - To try unreleased gramene-anatomogram changes, install its packed tarball over the registry version, without
   saving it: `npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz`. The next `npm install` puts the
   registry version back.
@@ -198,9 +278,9 @@ Install tarballs rather than `npm link` (a symlink would load a second React), a
 spec (`check-release` refuses to pack one):
 
 ```bash
-npm run pack:local                       # gramene-atlas-heatmap-6.0.0.tgz
+npm run pack:local                       # gramene-atlas-heatmap-6.2.0.tgz
 cd ../gramene-search
-npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz ../atlas-heatmap/gramene-atlas-heatmap-6.0.0.tgz
+npm install --no-save ../atlas-heatmap/gramene-atlas-heatmap-6.2.0.tgz
 rm -rf .parcel-cache*
 ```
 

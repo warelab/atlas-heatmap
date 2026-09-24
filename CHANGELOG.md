@@ -5,6 +5,45 @@ All notable changes to gramene-atlas-heatmap are recorded here. The format follo
 Versions before 6.0.0 are upstream's
 [@ebi-gene-expression-group/expression-atlas-heatmap-highcharts](https://github.com/ebi-gene-expression-group/atlas-heatmap).
 
+## [6.2.0] - 2026-09-24
+
+### Added
+
+- **`ExpressionFactorGrid`**, a new named export: one gene's expression in one baseline experiment, drawn as a grid of
+  the experiment's factors, for studies with several (the JGI studies of sorghum_v11, such as JGI-SB-1's organism
+  part × developmental stage). It is a plain HTML table, without Highcharts.
+  - It fetches `json/experiments/<experiment>` with `geneQuery=<gene>`, as the heatmap does for one experiment. It
+    shows the same spinner and error alert, and calls `fail` once per failed request.
+  - A factor varies when the study's assay groups have more than one value of it. A group that lacks a factor has
+    the value "—" for it. Factors that do not vary are shown above the grid, e.g. "organism part: stem internode".
+  - By default, `organism part` goes on the columns when it varies. Otherwise the columns get the factor with the most
+    values, and the rows get the factor with the most values among the others. Any other factors are folded into
+    the rows: each combination is a row of its own, labelled e.g. "TX08001 · outer core". Values are in natural
+    order (S1, S2, …, S10).
+  - A study with two factors gets a "Swap rows and columns" button. A study with more gets "Rows" and "Columns"
+    selects as well; choosing the other axis's factor swaps them. A study with one factor is drawn as a single row,
+    labelled with the gene id.
+  - The axes can be controlled with the `rowFactor` and `columnFactor` props, which are ignored unless they name a
+    factor that varies. `onChangeFactors({rowFactor, columnFactor})` is called when the reader changes them.
+  - A cell that holds several assay groups (groups that share every factor value and differ by `sample id`) is
+    split into one band per sample, ordered by sample id. Each band has its own colour.
+  - Every band has exactly the colour that ExpressionAtlasHeatmap gives that assay group for the same payload: the
+    same colour axis, checked against Highcharts' own `colorAxis.toColor` in the tests. The legend is the
+    single-experiment gradient legend of the Paralogs heatmap. Cells where nothing was measured are hatched.
+  - Hovering or focusing a band (every band is in the tab order, with an `aria-label`) shows a tooltip. It lists
+    the sample's factor values, sample id, replicates, and value with its unit. Escape hides it.
+  - Long column labels are drawn vertically and cut short with an ellipsis; hovering one shows the whole label.
+  - Props: `experiment` and `gene` (both required), `atlasUrl`, `rowFactor`, `columnFactor`, `onChangeFactors`, and
+    the heatmap's `inProxy`, `linkTarget`, `resolveUrl`, `fail`, `className`, `style` and `injectStyles`.
+- **`filterRows` prop** of ExpressionAtlasHeatmap: `(row) => boolean` over the payload's `profiles.rows`. It filters
+  the payload after it is fetched, so a new function filters again without a new request.
+  - Columns that no remaining row has a value in are dropped, and `searchResultTotal` loses the removed rows.
+  - With no row left, the "no results" message shows.
+  - A new function that keeps the same rows keeps the chart (zoom, ordering and filters) as it is.
+  - gramene-search uses it to leave the JGI studies out of its EBI Studies tab.
+- Fixtures `grid.JGI-SB-1.msd2` to `grid.JGI-SB-4.msd2` (sorghum_v11, `SORBI_3006G095600`), and a playground panel
+  `?panel=grid` with a study select and a gene field.
+
 ## [6.1.0] - 2026-09-24
 
 ### Changed
