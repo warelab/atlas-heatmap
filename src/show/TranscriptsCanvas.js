@@ -1,7 +1,9 @@
 import React from 'react'
 import HighchartsReact from 'highcharts-react-official'
 
-import {sortBy, sum, meanBy} from 'lodash'
+import sortBy from 'lodash/sortBy.js'
+import sum from 'lodash/sum.js'
+import meanBy from 'lodash/meanBy.js'
 import {groupIntoPairs} from '../utils.js'
 
 import Legend from '../manipulate/heatmap-legend/DataSeriesHeatmapLegend'

@@ -5,7 +5,7 @@ import { Button, Col, Modal, Nav, Row } from 'react-bootstrap'
 import { groupedColumnPropTypes,columnCategoryPropTypes } from '../../chartDataPropTypes.js'
 
 import FilterOption from './FilterOption.js'
-import { sortBy } from 'lodash'
+import sortBy from 'lodash/sortBy.js'
 
 import CategoryCheckboxes from './CategoryCheckboxes.js'
 

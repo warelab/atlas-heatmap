@@ -1,4 +1,4 @@
-import { groupBy } from 'lodash'
+import groupBy from 'lodash/groupBy.js'
 
 const groupIntoPairs = (arr, f) => Object.entries(groupBy(arr, f))
 
