@@ -44,6 +44,8 @@ const MSD2_PARALOGS = [
   `SORBI_3008G191000`,
 ]
 
+const MSD2 = `SORBI_3006G095600`
+
 // name -> the heatmap props that produce the request, plus the status the capture expects
 const FIXTURES = {
   'all-studies.SORBI_3001G000200': {query: {gene: `SORBI_3001G000200`}, experiment: false, expect: 200},
@@ -57,6 +59,12 @@ const FIXTURES = {
   'paralogs.E-MTAB-5956.sorghum_v11': {query: {gene: MSD2_PARALOGS.join(` `)}, experiment: `E-MTAB-5956`, expect: 200, base: SORGHUM_V11},
   // Differential, 49 contrasts whose names run to 146 characters and all begin with the same 50.
   'paralogs.E-GEOD-128441.differential.sorghum_v11': {query: {gene: MSD2_PARALOGS.join(` `)}, experiment: `E-GEOD-128441`, expect: 200, base: SORGHUM_V11},
+  // The four JGI studies for msd2 alone, as ExpressionFactorGrid asks for them: several factors per study, factors that
+  // some assay groups lack (JGI-SB-2), and assay groups that share every factor value (they differ by sample id).
+  'grid.JGI-SB-1.msd2': {query: {gene: MSD2}, experiment: `JGI-SB-1`, expect: 200, base: SORGHUM_V11},
+  'grid.JGI-SB-2.msd2': {query: {gene: MSD2}, experiment: `JGI-SB-2`, expect: 200, base: SORGHUM_V11},
+  'grid.JGI-SB-3.msd2': {query: {gene: MSD2}, experiment: `JGI-SB-3`, expect: 200, base: SORGHUM_V11},
+  'grid.JGI-SB-4.msd2': {query: {gene: MSD2}, experiment: `JGI-SB-4`, expect: 200, base: SORGHUM_V11},
 }
 
 mkdirSync(OUT, { recursive: true })

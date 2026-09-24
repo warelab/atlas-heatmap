@@ -1,0 +1,631 @@
+{
+  "captured_at": "2026-09-24T19:47:47.367Z",
+  "base": "https://data.sorghumbase.org/sorghum_v11/gxa/",
+  "method": "POST",
+  "path": "json/experiments/JGI-SB-4",
+  "body_sent": "geneQuery=SORBI_3006G095600",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "Sorghum bicolor",
+      "allSvgPathIds": [
+        "PO_0009010",
+        "PO_0007010",
+        "PO_0009047",
+        "PO_0007134",
+        "PO_0007131",
+        "PO_0020142",
+        "PO_0007016",
+        "PO_0025034",
+        "PO_0001054",
+        "PO_0020104"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "g4",
+        "factorValue": "leaf sheath; TX08001; expanded",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf sheath",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.sheath.expanded",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "expanded",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020104"
+      },
+      {
+        "assayGroupId": "g5",
+        "factorValue": "leaf sheath; TX08001; vascular leaf senescent stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf sheath",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.sheath.senesced",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "vascular leaf senescent stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0001054"
+      },
+      {
+        "assayGroupId": "g6",
+        "factorValue": "leaf sheath; TX08001; young",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf sheath",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.sheath.young",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "young",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020104"
+      },
+      {
+        "assayGroupId": "g1",
+        "factorValue": "leaf; TX08001; expanded",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.leaf.expanded",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "expanded",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0025034"
+      },
+      {
+        "assayGroupId": "g2",
+        "factorValue": "leaf; TX08001; vascular leaf senescent stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.leaf.senesced",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "vascular leaf senescent stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0001054"
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "leaf; TX08001; young",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.leaf.young",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "young",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0025034"
+      },
+      {
+        "assayGroupId": "g7",
+        "factorValue": "seed; BTx623; whole plant fruit ripening stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "seed",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "seed_dry.grain_maturity",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant fruit ripening stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007010"
+      },
+      {
+        "assayGroupId": "g8",
+        "factorValue": "seed; BTx623; whole plant fruit ripening stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "seed",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "seed_imbibed.grain_maturity",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant fruit ripening stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007010"
+      },
+      {
+        "assayGroupId": "g11",
+        "factorValue": "stem internode; BTx623; whole plant flowering stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "stem_mid_internode.anthesis",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant flowering stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007016"
+      },
+      {
+        "assayGroupId": "g12",
+        "factorValue": "stem internode; BTx623; whole plant fruit ripening stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "stem_mid_internode.grain_maturity",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant fruit ripening stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007010"
+      },
+      {
+        "assayGroupId": "g10",
+        "factorValue": "stem; BTx623; seedling development stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "stem_2mm.juvenile",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling development stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007131"
+      },
+      {
+        "assayGroupId": "g9",
+        "factorValue": "stem; BTx623; sporophyte vegetative stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "stem_1cm.vegetative",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "sporophyte vegetative stage",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007134"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3006G095600",
+          "name": "SORBI_3006G095600",
+          "uri": "genes/SORBI_3006G095600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 1.995,
+              "quartiles": {
+                "min": 1.995,
+                "lower": 1.995,
+                "median": 1.995,
+                "upper": 1.995,
+                "max": 1.995
+              }
+            },
+            {
+              "value": 2.68,
+              "quartiles": {
+                "min": 2.68,
+                "lower": 2.68,
+                "median": 2.68,
+                "upper": 2.68,
+                "max": 2.68
+              }
+            },
+            {
+              "value": 2.041,
+              "quartiles": {
+                "min": 2.041,
+                "lower": 2.041,
+                "median": 2.041,
+                "upper": 2.041,
+                "max": 2.041
+              }
+            },
+            {
+              "value": 5.287,
+              "quartiles": {
+                "min": 5.287,
+                "lower": 5.287,
+                "median": 5.287,
+                "upper": 5.287,
+                "max": 5.287
+              }
+            },
+            {
+              "value": 5.432,
+              "quartiles": {
+                "min": 5.432,
+                "lower": 5.432,
+                "median": 5.432,
+                "upper": 5.432,
+                "max": 5.432
+              }
+            },
+            {
+              "value": 12.604,
+              "quartiles": {
+                "min": 12.604,
+                "lower": 12.604,
+                "median": 12.604,
+                "upper": 12.604,
+                "max": 12.604
+              }
+            },
+            {
+              "value": 1.865,
+              "quartiles": {
+                "min": 1.865,
+                "lower": 1.865,
+                "median": 1.865,
+                "upper": 1.865,
+                "max": 1.865
+              }
+            },
+            {
+              "value": 4.921,
+              "quartiles": {
+                "min": 4.921,
+                "lower": 4.921,
+                "median": 4.921,
+                "upper": 4.921,
+                "max": 4.921
+              }
+            },
+            {
+              "value": 8.443,
+              "quartiles": {
+                "min": 8.443,
+                "lower": 8.443,
+                "median": 8.443,
+                "upper": 8.443,
+                "max": 8.443
+              }
+            },
+            {
+              "value": 5.734,
+              "quartiles": {
+                "min": 5.734,
+                "lower": 5.734,
+                "median": 5.734,
+                "upper": 5.734,
+                "max": 5.734
+              }
+            },
+            {
+              "value": 14.379,
+              "quartiles": {
+                "min": 14.379,
+                "lower": 14.379,
+                "median": 14.379,
+                "upper": 14.379,
+                "max": 14.379
+              }
+            },
+            {
+              "value": 23.455,
+              "quartiles": {
+                "min": 23.455,
+                "lower": 23.455,
+                "median": 23.455,
+                "upper": 23.455,
+                "max": 23.455
+              }
+            }
+          ]
+        }
+      ],
+      "searchResultTotal": "1"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "JGI-SB-4",
+      "description": "Sorghum bicolor standard tissue: 12 sample groups from 34 RNA-seq libraries (Phytozome Sbicolor v3.1.1). PI John Mullet, Texas A&M. Submitted via JGI; awaiting citation.",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "genome_browsers": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "main_page": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1"
+      }
+    }
+  }
+}

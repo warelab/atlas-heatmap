@@ -1,0 +1,503 @@
+{
+  "captured_at": "2026-09-24T19:47:47.083Z",
+  "base": "https://data.sorghumbase.org/sorghum_v11/gxa/",
+  "method": "POST",
+  "path": "json/experiments/JGI-SB-3",
+  "body_sent": "geneQuery=SORBI_3006G095600",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "Sorghum bicolor",
+      "allSvgPathIds": [
+        "PO_0009005",
+        "PO_0009006"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "g1",
+        "factorValue": "root; ammonium sulfate (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "root.ammonium",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "ammonium sulfate (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "root; no nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "root.control_water",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "no nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g4",
+        "factorValue": "root; potassium and sodium nitrate (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "root.nitrate",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "potassium and sodium nitrate (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g2",
+        "factorValue": "root; standard fertilized conditions",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "root.control_fertilized",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "standard fertilized conditions",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g5",
+        "factorValue": "root; urea (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "root.urea",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "urea (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009005"
+      },
+      {
+        "assayGroupId": "g6",
+        "factorValue": "shoot system; ammonium sulfate (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "shoot.ammonium",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "ammonium sulfate (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "g8",
+        "factorValue": "shoot system; no nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "shoot.control_water",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "no nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "g9",
+        "factorValue": "shoot system; potassium and sodium nitrate (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "shoot.nitrate",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "potassium and sodium nitrate (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "g7",
+        "factorValue": "shoot system; standard fertilized conditions",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "shoot.control_fertilized",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "standard fertilized conditions",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      },
+      {
+        "assayGroupId": "g10",
+        "factorValue": "shoot system; urea (5 mM) as sole nitrogen source",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot system",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTx623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "shoot.urea",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "urea (5 mM) as sole nitrogen source",
+              "contrastPropertyType": "FACTOR"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009006"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3006G095600",
+          "name": "SORBI_3006G095600",
+          "uri": "genes/SORBI_3006G095600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 4.271,
+              "quartiles": {
+                "min": 4.271,
+                "lower": 4.271,
+                "median": 4.271,
+                "upper": 4.271,
+                "max": 4.271
+              }
+            },
+            {
+              "value": 5.644,
+              "quartiles": {
+                "min": 5.644,
+                "lower": 5.644,
+                "median": 5.644,
+                "upper": 5.644,
+                "max": 5.644
+              }
+            },
+            {
+              "value": 4.035,
+              "quartiles": {
+                "min": 4.035,
+                "lower": 4.035,
+                "median": 4.035,
+                "upper": 4.035,
+                "max": 4.035
+              }
+            },
+            {
+              "value": 4.817,
+              "quartiles": {
+                "min": 4.817,
+                "lower": 4.817,
+                "median": 4.817,
+                "upper": 4.817,
+                "max": 4.817
+              }
+            },
+            {
+              "value": 4.809,
+              "quartiles": {
+                "min": 4.809,
+                "lower": 4.809,
+                "median": 4.809,
+                "upper": 4.809,
+                "max": 4.809
+              }
+            },
+            {
+              "value": 5.408,
+              "quartiles": {
+                "min": 5.408,
+                "lower": 5.408,
+                "median": 5.408,
+                "upper": 5.408,
+                "max": 5.408
+              }
+            },
+            {
+              "value": 3.503,
+              "quartiles": {
+                "min": 3.503,
+                "lower": 3.503,
+                "median": 3.503,
+                "upper": 3.503,
+                "max": 3.503
+              }
+            },
+            {
+              "value": 3.949,
+              "quartiles": {
+                "min": 3.949,
+                "lower": 3.949,
+                "median": 3.949,
+                "upper": 3.949,
+                "max": 3.949
+              }
+            },
+            {
+              "value": 2.256,
+              "quartiles": {
+                "min": 2.256,
+                "lower": 2.256,
+                "median": 2.256,
+                "upper": 2.256,
+                "max": 2.256
+              }
+            },
+            {
+              "value": 6.386,
+              "quartiles": {
+                "min": 6.386,
+                "lower": 6.386,
+                "median": 6.386,
+                "upper": 6.386,
+                "max": 6.386
+              }
+            }
+          ]
+        }
+      ],
+      "searchResultTotal": "1"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "JGI-SB-3",
+      "description": "Sorghum bicolor nitrogen: 10 sample groups from 30 RNA-seq libraries (Phytozome Sbicolor v3.1.1). PI John Mullet, Texas A&M. Submitted via JGI; awaiting citation.",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "genome_browsers": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "main_page": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1"
+      }
+    }
+  }
+}

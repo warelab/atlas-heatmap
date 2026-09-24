@@ -1,0 +1,2352 @@
+{
+  "captured_at": "2026-09-24T19:47:46.844Z",
+  "base": "https://data.sorghumbase.org/sorghum_v11/gxa/",
+  "method": "POST",
+  "path": "json/experiments/JGI-SB-2",
+  "body_sent": "geneQuery=SORBI_3006G095600",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "Sorghum bicolor",
+      "allSvgPathIds": [
+        "PO_0020142"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "g1",
+        "factorValue": "stem internode; DDYM; S1",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S1",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S1",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g2",
+        "factorValue": "stem internode; DDYM; S10",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S10",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S10",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "stem internode; DDYM; S11",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S11",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S11",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g4",
+        "factorValue": "stem internode; DDYM; S2",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S2",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S2",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g5",
+        "factorValue": "stem internode; DDYM; S3",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S3",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S3",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g6",
+        "factorValue": "stem internode; DDYM; S6",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S6",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S6",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g7",
+        "factorValue": "stem internode; DDYM; S7",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "DDYM",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "DDYM.elongating_internode.S7",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "S7",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C growth room, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g8",
+        "factorValue": "stem internode; Della; T1",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T1",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T1",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g9",
+        "factorValue": "stem internode; Della; T10",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T10",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T10",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g10",
+        "factorValue": "stem internode; Della; T11",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T11",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T11",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g11",
+        "factorValue": "stem internode; Della; T2",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T2",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T2",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g12",
+        "factorValue": "stem internode; Della; T3",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T3",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T3",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g13",
+        "factorValue": "stem internode; Della; T4",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T4",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T4",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g14",
+        "factorValue": "stem internode; Della; T5",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T5",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T5",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g15",
+        "factorValue": "stem internode; Della; T6",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T6",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T6",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g16",
+        "factorValue": "stem internode; Della; T7",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T7",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T7",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g17",
+        "factorValue": "stem internode; Della; T8",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T8",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T8",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g18",
+        "factorValue": "stem internode; Della; T9",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Della",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Della.internode.T9",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T9",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g19",
+        "factorValue": "stem internode; Keller; T1",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T1",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T1",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g20",
+        "factorValue": "stem internode; Keller; T2",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T2",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T2",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g21",
+        "factorValue": "stem internode; Keller; T3",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T3",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T3",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g22",
+        "factorValue": "stem internode; Keller; T4",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T4",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T4",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g23",
+        "factorValue": "stem internode; Keller; T5",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T5",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T5",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g24",
+        "factorValue": "stem internode; Keller; T6",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T6",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T6",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g25",
+        "factorValue": "stem internode; Keller; T7",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T7",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T7",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g26",
+        "factorValue": "stem internode; Keller; T8",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T8",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T8",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g27",
+        "factorValue": "stem internode; Keller; T9",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "Keller",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "Keller.growing_internode.T9",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling time point",
+              "testValue": "T9",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g28",
+        "factorValue": "stem internode; TX08001; epithelial tissue",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.elongating_internode1.epithelial",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "epithelial tissue",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g29",
+        "factorValue": "stem internode; TX08001; epithelial tissue",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.elongating_internode2.epithelial",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "epithelial tissue",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g45",
+        "factorValue": "stem internode; TX08001; epithelial tissue",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.lower_internode.epithelial",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "epithelial tissue",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g46",
+        "factorValue": "stem internode; TX08001; epithelial tissue",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.middle_internode.epithelial",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "epithelial tissue",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g30",
+        "factorValue": "stem internode; TX08001; inner core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode2.inner_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "inner core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g33",
+        "factorValue": "stem internode; TX08001; inner core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode5.inner_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "inner core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g36",
+        "factorValue": "stem internode; TX08001; inner core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode6.inner_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "inner core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g39",
+        "factorValue": "stem internode; TX08001; inner core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode8.inner_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "inner core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g42",
+        "factorValue": "stem internode; TX08001; inner core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode9.inner_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "inner core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g31",
+        "factorValue": "stem internode; TX08001; middle core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode2.middle_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "middle core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g34",
+        "factorValue": "stem internode; TX08001; middle core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode5.middle_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "middle core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g37",
+        "factorValue": "stem internode; TX08001; middle core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode6.middle_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "middle core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g40",
+        "factorValue": "stem internode; TX08001; middle core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode8.middle_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "middle core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g43",
+        "factorValue": "stem internode; TX08001; middle core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode9.middle_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "middle core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g32",
+        "factorValue": "stem internode; TX08001; outer core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode2.outer_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "outer core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g35",
+        "factorValue": "stem internode; TX08001; outer core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode5.outer_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "outer core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g38",
+        "factorValue": "stem internode; TX08001; outer core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode6.outer_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "outer core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g41",
+        "factorValue": "stem internode; TX08001; outer core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode8.outer_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "outer core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      },
+      {
+        "assayGroupId": "g44",
+        "factorValue": "stem internode; TX08001; outer core",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "stem internode",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "cultivar",
+              "testValue": "TX08001",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "sample id",
+              "testValue": "TX08001.internode9.outer_core",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "sampling site",
+              "testValue": "outer core",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "growth condition",
+              "testValue": "14 hour daylength, ~30C/24C greenhouse, fertilized with Osmocote 13-13-13",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0020142"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3006G095600",
+          "name": "SORBI_3006G095600",
+          "uri": "genes/SORBI_3006G095600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 4.171,
+              "quartiles": {
+                "min": 4.171,
+                "lower": 4.171,
+                "median": 4.171,
+                "upper": 4.171,
+                "max": 4.171
+              }
+            },
+            {
+              "value": 3.355,
+              "quartiles": {
+                "min": 3.355,
+                "lower": 3.355,
+                "median": 3.355,
+                "upper": 3.355,
+                "max": 3.355
+              }
+            },
+            {
+              "value": 4.672,
+              "quartiles": {
+                "min": 4.672,
+                "lower": 4.672,
+                "median": 4.672,
+                "upper": 4.672,
+                "max": 4.672
+              }
+            },
+            {
+              "value": 4.943,
+              "quartiles": {
+                "min": 4.943,
+                "lower": 4.943,
+                "median": 4.943,
+                "upper": 4.943,
+                "max": 4.943
+              }
+            },
+            {
+              "value": 5.253,
+              "quartiles": {
+                "min": 5.253,
+                "lower": 5.253,
+                "median": 5.253,
+                "upper": 5.253,
+                "max": 5.253
+              }
+            },
+            {
+              "value": 3.689,
+              "quartiles": {
+                "min": 3.689,
+                "lower": 3.689,
+                "median": 3.689,
+                "upper": 3.689,
+                "max": 3.689
+              }
+            },
+            {
+              "value": 4.423,
+              "quartiles": {
+                "min": 4.423,
+                "lower": 4.423,
+                "median": 4.423,
+                "upper": 4.423,
+                "max": 4.423
+              }
+            },
+            {
+              "value": 3.98,
+              "quartiles": {
+                "min": 3.98,
+                "lower": 3.98,
+                "median": 3.98,
+                "upper": 3.98,
+                "max": 3.98
+              }
+            },
+            {
+              "value": 74.304,
+              "quartiles": {
+                "min": 74.304,
+                "lower": 74.304,
+                "median": 74.304,
+                "upper": 74.304,
+                "max": 74.304
+              }
+            },
+            {
+              "value": 46.054,
+              "quartiles": {
+                "min": 46.054,
+                "lower": 46.054,
+                "median": 46.054,
+                "upper": 46.054,
+                "max": 46.054
+              }
+            },
+            {
+              "value": 5.981,
+              "quartiles": {
+                "min": 5.981,
+                "lower": 5.981,
+                "median": 5.981,
+                "upper": 5.981,
+                "max": 5.981
+              }
+            },
+            {
+              "value": 5.446,
+              "quartiles": {
+                "min": 5.446,
+                "lower": 5.446,
+                "median": 5.446,
+                "upper": 5.446,
+                "max": 5.446
+              }
+            },
+            {
+              "value": 27.103,
+              "quartiles": {
+                "min": 27.103,
+                "lower": 27.103,
+                "median": 27.103,
+                "upper": 27.103,
+                "max": 27.103
+              }
+            },
+            {
+              "value": 57.297,
+              "quartiles": {
+                "min": 57.297,
+                "lower": 57.297,
+                "median": 57.297,
+                "upper": 57.297,
+                "max": 57.297
+              }
+            },
+            {
+              "value": 162.832,
+              "quartiles": {
+                "min": 162.832,
+                "lower": 162.832,
+                "median": 162.832,
+                "upper": 162.832,
+                "max": 162.832
+              }
+            },
+            {
+              "value": 176.952,
+              "quartiles": {
+                "min": 176.952,
+                "lower": 176.952,
+                "median": 176.952,
+                "upper": 176.952,
+                "max": 176.952
+              }
+            },
+            {
+              "value": 33.707,
+              "quartiles": {
+                "min": 33.707,
+                "lower": 33.707,
+                "median": 33.707,
+                "upper": 33.707,
+                "max": 33.707
+              }
+            },
+            {
+              "value": 21.342,
+              "quartiles": {
+                "min": 21.342,
+                "lower": 21.342,
+                "median": 21.342,
+                "upper": 21.342,
+                "max": 21.342
+              }
+            },
+            {
+              "value": 4.075,
+              "quartiles": {
+                "min": 4.075,
+                "lower": 4.075,
+                "median": 4.075,
+                "upper": 4.075,
+                "max": 4.075
+              }
+            },
+            {
+              "value": 4.489,
+              "quartiles": {
+                "min": 4.489,
+                "lower": 4.489,
+                "median": 4.489,
+                "upper": 4.489,
+                "max": 4.489
+              }
+            },
+            {
+              "value": 2.583,
+              "quartiles": {
+                "min": 2.583,
+                "lower": 2.583,
+                "median": 2.583,
+                "upper": 2.583,
+                "max": 2.583
+              }
+            },
+            {
+              "value": 2.915,
+              "quartiles": {
+                "min": 2.915,
+                "lower": 2.915,
+                "median": 2.915,
+                "upper": 2.915,
+                "max": 2.915
+              }
+            },
+            {
+              "value": 2.032,
+              "quartiles": {
+                "min": 2.032,
+                "lower": 2.032,
+                "median": 2.032,
+                "upper": 2.032,
+                "max": 2.032
+              }
+            },
+            {
+              "value": 2.582,
+              "quartiles": {
+                "min": 2.582,
+                "lower": 2.582,
+                "median": 2.582,
+                "upper": 2.582,
+                "max": 2.582
+              }
+            },
+            {
+              "value": 3.351,
+              "quartiles": {
+                "min": 3.351,
+                "lower": 3.351,
+                "median": 3.351,
+                "upper": 3.351,
+                "max": 3.351
+              }
+            },
+            {
+              "value": 3.386,
+              "quartiles": {
+                "min": 3.386,
+                "lower": 3.386,
+                "median": 3.386,
+                "upper": 3.386,
+                "max": 3.386
+              }
+            },
+            {
+              "value": 3.764,
+              "quartiles": {
+                "min": 3.764,
+                "lower": 3.764,
+                "median": 3.764,
+                "upper": 3.764,
+                "max": 3.764
+              }
+            },
+            {
+              "value": 51.583,
+              "quartiles": {
+                "min": 51.583,
+                "lower": 51.583,
+                "median": 51.583,
+                "upper": 51.583,
+                "max": 51.583
+              }
+            },
+            {
+              "value": 93.538,
+              "quartiles": {
+                "min": 93.538,
+                "lower": 93.538,
+                "median": 93.538,
+                "upper": 93.538,
+                "max": 93.538
+              }
+            },
+            {
+              "value": 16.454,
+              "quartiles": {
+                "min": 16.454,
+                "lower": 16.454,
+                "median": 16.454,
+                "upper": 16.454,
+                "max": 16.454
+              }
+            },
+            {
+              "value": 105.223,
+              "quartiles": {
+                "min": 105.223,
+                "lower": 105.223,
+                "median": 105.223,
+                "upper": 105.223,
+                "max": 105.223
+              }
+            },
+            {
+              "value": 1.957,
+              "quartiles": {
+                "min": 1.957,
+                "lower": 1.957,
+                "median": 1.957,
+                "upper": 1.957,
+                "max": 1.957
+              }
+            },
+            {
+              "value": 3.524,
+              "quartiles": {
+                "min": 3.524,
+                "lower": 3.524,
+                "median": 3.524,
+                "upper": 3.524,
+                "max": 3.524
+              }
+            },
+            {
+              "value": 5.304,
+              "quartiles": {
+                "min": 5.304,
+                "lower": 5.304,
+                "median": 5.304,
+                "upper": 5.304,
+                "max": 5.304
+              }
+            },
+            {
+              "value": 7.344,
+              "quartiles": {
+                "min": 7.344,
+                "lower": 7.344,
+                "median": 7.344,
+                "upper": 7.344,
+                "max": 7.344
+              }
+            },
+            {
+              "value": 9.74,
+              "quartiles": {
+                "min": 9.74,
+                "lower": 9.74,
+                "median": 9.74,
+                "upper": 9.74,
+                "max": 9.74
+              }
+            },
+            {
+              "value": 1.362,
+              "quartiles": {
+                "min": 1.362,
+                "lower": 1.362,
+                "median": 1.362,
+                "upper": 1.362,
+                "max": 1.362
+              }
+            },
+            {
+              "value": 5.441,
+              "quartiles": {
+                "min": 5.441,
+                "lower": 5.441,
+                "median": 5.441,
+                "upper": 5.441,
+                "max": 5.441
+              }
+            },
+            {
+              "value": 12.208,
+              "quartiles": {
+                "min": 12.208,
+                "lower": 12.208,
+                "median": 12.208,
+                "upper": 12.208,
+                "max": 12.208
+              }
+            },
+            {
+              "value": 7.677,
+              "quartiles": {
+                "min": 7.677,
+                "lower": 7.677,
+                "median": 7.677,
+                "upper": 7.677,
+                "max": 7.677
+              }
+            },
+            {
+              "value": 25.153,
+              "quartiles": {
+                "min": 25.153,
+                "lower": 25.153,
+                "median": 25.153,
+                "upper": 25.153,
+                "max": 25.153
+              }
+            },
+            {
+              "value": 2.415,
+              "quartiles": {
+                "min": 2.415,
+                "lower": 2.415,
+                "median": 2.415,
+                "upper": 2.415,
+                "max": 2.415
+              }
+            },
+            {
+              "value": 14.328,
+              "quartiles": {
+                "min": 14.328,
+                "lower": 14.328,
+                "median": 14.328,
+                "upper": 14.328,
+                "max": 14.328
+              }
+            },
+            {
+              "value": 14.272,
+              "quartiles": {
+                "min": 14.272,
+                "lower": 14.272,
+                "median": 14.272,
+                "upper": 14.272,
+                "max": 14.272
+              }
+            },
+            {
+              "value": 57.197,
+              "quartiles": {
+                "min": 57.197,
+                "lower": 57.197,
+                "median": 57.197,
+                "upper": 57.197,
+                "max": 57.197
+              }
+            },
+            {
+              "value": 24.509,
+              "quartiles": {
+                "min": 24.509,
+                "lower": 24.509,
+                "median": 24.509,
+                "upper": 24.509,
+                "max": 24.509
+              }
+            }
+          ]
+        }
+      ],
+      "searchResultTotal": "1"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "JGI-SB-2",
+      "description": "Sorghum bicolor internode timecourse: 46 sample groups from 136 RNA-seq libraries (Phytozome Sbicolor v3.1.1). PI John Mullet, Texas A&M. Submitted via JGI; awaiting citation.",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "genome_browsers": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1",
+        "main_page": "https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1"
+      }
+    }
+  }
+}
