@@ -220,10 +220,11 @@ message. A differential experiment gets a message instead of a grid.
   - One: a single row, labelled with the gene id. None: a single cell.
 - **Cells.** A cell holds every sample with its row's and column's values. Several samples (groups that share every
   factor value and differ by the `sample id` SAMPLE property) split the cell into equal bands, ordered by sample id.
-  Each band has exactly the colour the flat heatmap gives that assay group for the same payload: the grid computes
-  the heatmap's colour axis and applies it as Highcharts does, without drawing a chart. Cells with nothing measured,
-  and samples with no value, are hatched. The legend is the Paralogs heatmap's gradient legend, in the payload's unit
-  (TPM), with a key for the hatching.
+  Each band has exactly the colour the flat heatmap (e.g. the Paralogs heatmap of the same study) gives that assay
+  group for the same payload: the colour of the data series (Below cutoff, Low, …, High) its value falls in, without
+  drawing a chart. Cells with nothing measured, and samples with no value, are hatched. The legend is the Paralogs
+  heatmap's gradient legend, in the payload's unit (TPM), with a key for the hatching. The grid's table draws no
+  borders of its own, even when the host page's table rules give cells some.
 - **Tooltip.** Hovering or focusing a band shows its factor values, sample id (else the assay group id), replicates,
   and value with its unit. Every band is in the tab order and has an `aria-label`; Escape hides the tooltip.
 - **Labels.** Column labels longer than 8 characters are drawn vertically, cut short at 12rem with an ellipsis, and

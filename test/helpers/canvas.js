@@ -13,7 +13,9 @@ export const chartDataOf = (fixture, options = {}) => loadChartData({
   showAnatomogram: true, showControlMenu: true, isWidget: true, ...options
 })
 
-// The props HeatmapWithControls gives HeatmapCanvas for a fixture (heatmapExtraArgs), with spies for its callbacks
+// The props HeatmapWithControls gives HeatmapCanvas for a fixture (heatmapExtraArgs), with spies for its callbacks,
+// plus the chart data's colourAxis, which HeatmapWithControls gives only to the legend: pass {colourAxis: undefined}
+// for exactly the canvas it draws
 export const canvasProps = (fixture, overrides = {}) => {
   const {heatmapData, heatmapConfig, colourAxis} = chartDataOf(fixture)
   return {

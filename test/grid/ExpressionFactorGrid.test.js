@@ -4,13 +4,14 @@ import userEvent from '@testing-library/user-event'
 import Highcharts from 'highcharts'
 import { describe, expect, it, vi } from 'vitest'
 
-import { ExpressionFactorGrid } from '../../src/Main.js'
+import { ExpressionAtlasHeatmap, ExpressionFactorGrid } from '../../src/Main.js'
 import { allowConsole } from '../consoleGuard.js'
 import { assayGroupColours } from '../../src/grid/colours.js'
 import { chartDataOf } from '../helpers/canvas.js'
 import { mockFetch } from '../helpers/fetch.js'
 import sb1 from '../fixtures/grid.JGI-SB-1.msd2.json'
 import sb2 from '../fixtures/grid.JGI-SB-2.msd2.json'
+import sb3 from '../fixtures/grid.JGI-SB-3.msd2.json'
 import sb4 from '../fixtures/grid.JGI-SB-4.msd2.json'
 import curd25 from '../fixtures/paralogs.E-CURD-25.baseline.json'
 import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
@@ -22,7 +23,7 @@ vi.mock(`gramene-anatomogram`, () => import(`../stubs/anatomogram.js`))
 
 const SORGHUM_V11 = `https://data.sorghumbase.org/sorghum_v11/gxa/`
 const MSD2 = `SORBI_3006G095600`
-const FIXTURES = {'JGI-SB-1': sb1, 'JGI-SB-2': sb2, 'JGI-SB-4': sb4, 'E-CURD-25': curd25, 'E-GEOD-30249': geod30249}
+const FIXTURES = {'JGI-SB-1': sb1, 'JGI-SB-2': sb2, 'JGI-SB-3': sb3, 'JGI-SB-4': sb4, 'E-CURD-25': curd25, 'E-GEOD-30249': geod30249}
 
 // Answers json/experiments/<accession> with its fixture, for any gene; NOT_A_REAL_GENE gets the backend's 500
 const answerWithFixtures = () => mockFetch((url, init) => {
@@ -116,6 +117,27 @@ describe(`ExpressionFactorGrid`, () => {
     }
     expect(leafBands[0].style.background).not.toBe(leafBands[1].style.background)
   })
+
+  it.each([`JGI-SB-1`, `JGI-SB-2`, `JGI-SB-3`, `JGI-SB-4`])(
+    `colours every band of %s as ExpressionAtlasHeatmap colours that assay group's cell`, async experiment => {
+      answerWithFixtures()
+      // The flat heatmap of the same study and gene, as the Paralogs tab draws it (it debounces the chart by 50 ms)
+      const heatmap = render(<ExpressionAtlasHeatmap atlasUrl={SORGHUM_V11} query={{gene: MSD2}} experiment={experiment} />)
+      await waitFor(() => expect(heatmap.container.querySelector(`.highcharts-container`)).not.toBeNull())
+      const [chart] = liveCharts()
+      const cellColours = {}
+      chart.series.forEach(series => series.points.forEach(point => {
+        cellColours[chart.xAxis[0].categories[point.x].info.trackId] = cssColour(point.color)
+      }))
+      heatmap.unmount()
+
+      const {container} = render(grid({experiment}))
+      await findTable()
+      const bandColours = Object.fromEntries(bands(container).map(band =>
+        [band.getAttribute(`data-assay-group`), band.style.background]))
+      expect(Object.keys(bandColours).length).toBe(FIXTURES[experiment].body.columnHeaders.length)
+      expect(bandColours).toEqual(cellColours)
+    })
 
   it(`shows a tooltip for the band under the mouse or in focus, and hides it after (or on Escape)`, async () => {
     const user = userEvent.setup()

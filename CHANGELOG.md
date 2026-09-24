@@ -28,8 +28,11 @@ Versions before 6.0.0 are upstream's
   - A cell that holds several assay groups (groups that share every factor value and differ by `sample id`) is
     split into one band per sample, ordered by sample id. Each band has its own colour.
   - Every band has exactly the colour that ExpressionAtlasHeatmap gives that assay group for the same payload: the
-    same colour axis, checked against Highcharts' own `colorAxis.toColor` in the tests. The legend is the
-    single-experiment gradient legend of the Paralogs heatmap. Cells where nothing was measured are hatched.
+    colour of its data series (Below cutoff, Low, …, High), checked in the tests against the point colours of a real
+    ExpressionAtlasHeatmap drawn from the same payload. The legend is the single-experiment gradient legend of the
+    Paralogs heatmap. Cells where nothing was measured are hatched.
+  - The grid's table resets the borders that host pages' table rules give th and td (gramene-mdview's copy of
+    Bootstrap's reboot gives them 2px).
   - Hovering or focusing a band (every band is in the tab order, with an `aria-label`) shows a tooltip. It lists
     the sample's factor values, sample id, replicates, and value with its unit. Escape hides it.
   - Long column labels are drawn vertically and cut short with an ellipsis; hovering one shows the whole label.
