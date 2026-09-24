@@ -17,7 +17,7 @@ const buttonUnsetStyles = {
 }
 
 // The modal renders in a portal outside .gxaHeatmapContainer; .gxa-heatmap-modal scopes its styles
-const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadOptions}) => (
+const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadOptions, linkTarget}) => (
   <div>
     <Button
       size={`sm`}
@@ -36,7 +36,7 @@ const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadO
       </Modal.Header>
 
       <Modal.Body>
-        <Disclaimer />
+        <Disclaimer linkTarget={linkTarget} />
       </Modal.Body>
 
       <Modal.Footer>
@@ -107,7 +107,8 @@ const DownloadButton = ({currentlyShownContent, fullDatasetUrl, disclaimer, link
       <DownloadWithModal
         defaultShowModal={false}
         Disclaimer={disclaimers[disclaimer]}
-        downloadOptions={downloadOptions} /> :
+        downloadOptions={downloadOptions}
+        linkTarget={linkTarget} /> :
       <SplitDownloadButton downloadOptions={downloadOptions}/>
   )
 }

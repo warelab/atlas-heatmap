@@ -128,10 +128,43 @@ describe(`DownloadButton`, () => {
     expect(dialog).toHaveClass(`gxa-heatmap-modal`)
     expect(within(dialog).getByText(`Data Reuse Licence Agreement`)).toBeInTheDocument()
     expect(within(dialog).getByText(`The Blueprint Project Data Reuse Statement`)).toBeInTheDocument()
+    // the modal is in a portal, outside .gxaHeatmapContainer, and its links follow linkTarget too
+    const link = within(dialog).getByRole(`link`, {name: `www.blueprint-epigenome.eu`})
+    expect(link).toHaveAttribute(`target`, `_self`)
+    expect(link).not.toHaveAttribute(`rel`)
 
     await user.click(within(dialog).getByRole(`button`, {name: `Download: All data`}))
     expect(window.open).toHaveBeenCalledWith(`https://example.org/all.tsv`, `_self`, undefined)
     await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+  })
+
+  it(`opens the disclaimers' web links in a new tab by default, and leaves the mail link alone`, async () => {
+    const user = userEvent.setup()
+    const openDisclaimer = async (disclaimer, linkTarget) => {
+      const rendered = render(
+        <DownloadButton currentlyShownContent={content()} disclaimer={disclaimer} fullDatasetUrl={``} linkTarget={linkTarget} />)
+      await user.click(screen.getByRole(`button`, {name: `Download`}))
+      return {...rendered, links: within(await screen.findByRole(`dialog`)).getAllByRole(`link`)}
+    }
+
+    const lauderdale = await openDisclaimer(`lauderdale`)
+    expect(lauderdale.links.map(link => link.getAttribute(`href`)))
+      .toEqual([`http://www.sanger.ac.uk/datasharing/`, `https://www.ebi.ac.uk/gxa/experiments/E-ERAD-475`])
+    for (const link of lauderdale.links) {
+      expect(link).toHaveAttribute(`target`, `_blank`)
+      expect(link).toHaveAttribute(`rel`, `noopener noreferrer`)
+    }
+    lauderdale.unmount()
+
+    // a falsy linkTarget: no target attribute, as for every other link
+    const blueprint = await openDisclaimer(`blueprint`, null)
+    expect(blueprint.links).toHaveLength(1)
+    expect(blueprint.links[0]).not.toHaveAttribute(`target`)
+    blueprint.unmount()
+
+    const pcawg = await openDisclaimer(`pcawg`, `_blank`)
+    expect(pcawg.links.map(link => link.getAttribute(`href`))).toEqual([`mailto:jennifer.jennings@oicr.on.ca`])
+    expect(pcawg.links[0]).not.toHaveAttribute(`target`)
   })
 
   it(`writes the table with NA for missing values in multi-experiment heatmaps`, () => {
