@@ -85,8 +85,10 @@ export default defineConfig(({ command }) => {
       esbuildOptions: { loader: { '.js': 'jsx' } },
       // Served as-is so its lazy SVG chunks keep their relative dynamic imports.
       exclude: ['gramene-anatomogram'],
-      // prop-types for the excluded anatomogram; the JSX runtime because esbuild injects it after the scan.
-      include: ['prop-types', 'react/jsx-dev-runtime'],
+      // The CommonJS packages the excluded anatomogram imports (prop-types, and react/jsx-runtime, which its build uses;
+      // served unoptimised, the browser finds no `jsx` export in it); the dev JSX runtime because esbuild injects it
+      // after the scan.
+      include: ['prop-types', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     },
     server: {
       port: 5175,
