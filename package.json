@@ -1,6 +1,6 @@
 {
   "name": "gramene-atlas-heatmap",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "Warelab/Gramene fork of the EMBL-EBI Expression Atlas heatmap (atlas-heatmap 5.7.2): baseline and differential expression heatmaps for React 18 and react-bootstrap 2",
   "type": "module",
   "main": "./dist/gramene-atlas-heatmap.cjs",
