@@ -18,6 +18,12 @@ if (!SVGElement.prototype.getBBox) {
     return { x: 0, y: 0, width: 6 * length, height: length > 0 ? 12 : 0 }
   }
 }
+// Highcharts cuts a label short with an ellipsis by measuring substrings; without this it cannot measure in jsdom
+if (!SVGElement.prototype.getSubStringLength) {
+  SVGElement.prototype.getSubStringLength = function getSubStringLength(charnum, nchars) {
+    return Math.max(0, Math.min(nchars, (this.textContent || ``).length - charnum)) * 6
+  }
+}
 if (!SVGElement.prototype.getComputedTextLength) {
   SVGElement.prototype.getComputedTextLength = function getComputedTextLength() {
     return 6 * textLength(this)

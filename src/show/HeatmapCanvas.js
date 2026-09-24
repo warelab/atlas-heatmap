@@ -6,6 +6,7 @@ import getHeatmapHighcharts from './highcharts.js'
 import useElementWidth from './useElementWidth.js'
 
 import {heatmapDataPropTypes, colourAxisPropTypes} from '../manipulate/chartDataPropTypes.js'
+import {displayedLabel, sharedLabelOf} from '../load/sharedLabelPrefix.js'
 
 const stringWidthInPixels = (strLength, averageCharWidth, rotationInDeg) =>
   strLength * averageCharWidth * Math.cos(rotationInDeg * Math.PI / 180)
@@ -17,11 +18,26 @@ const stringHeightInPixels = (strLength, averageCharWidth, rotationInDeg) =>
 
 const countColumns = (heatmapData) => heatmapData.xAxisCategories.length
 
+// Column labels are cut short (with an ellipsis; the whole label shows on hover) beyond maxColumnLabelPx, so that a
+// study with very long column names (Warelab's differential contrasts run to 146 characters) does not push the heatmap
+// off the screen: the labels may take about as much height as the heatmap's rows (40 px each), within these bounds.
+const MIN_COLUMN_LABEL_PX = 300
+const MAX_COLUMN_LABEL_PX = 450
+const maxColumnLabelPx = heatmapData =>
+  Math.min(MAX_COLUMN_LABEL_PX, Math.max(MIN_COLUMN_LABEL_PX, heatmapData.yAxisCategories.length * 40))
+// The layout below estimates 6 px per character, like upstream
+const X_AXIS_AVG_CHAR_WIDTH = 6
+const maxColumnLabelChars = heatmapData => maxColumnLabelPx(heatmapData) / X_AXIS_AVG_CHAR_WIDTH
+// Room for the axis title that shows the text every column label shares
+const X_AXIS_TITLE_HEIGHT = 24
+
+const columnLabelLengths = (heatmapData) => heatmapData.xAxisCategories.map(category => displayedLabel(category).length)
+
 const getAutoRotationBasedOnLastLabelsLength = (heatmapData) => {
   // If any of the last four labels is longer than 30 chars make the labels vertical, ymmv, change if needed
   const tailLength = 4
   const maxChars = 30
-  const lastLabels = heatmapData.xAxisCategories.map((category) => category.label).slice(-tailLength)
+  const lastLabels = heatmapData.xAxisCategories.map(displayedLabel).slice(-tailLength)
   return lastLabels.some((label) => label.length > maxChars) ? [-90] : [-45]
 }
 
@@ -42,8 +58,7 @@ const getColumnWidthInPixels = (heatmapData, containerWidth) => {
 
 const xAxisLabelsRotationAngle = (heatmapData, containerWidth) => {
   const columnWidth = getColumnWidthInPixels(heatmapData, containerWidth)
-  const longestColumnLabelLength =
-    Math.max(...heatmapData.xAxisCategories.map(category => category.label.length))
+  const longestColumnLabelLength = Math.max(...columnLabelLengths(heatmapData))
 
   const labelLengthToWidthRatio = longestColumnLabelLength / columnWidth
 
@@ -62,7 +77,8 @@ const getAdjustedMarginRight = (heatmapData, containerWidth) => {
     const columnWidth = getColumnWidthInPixels(heatmapData, containerWidth)
     const longestColumnLabelWidthNearTheTailInPixels =
       stringWidthInPixels(
-        Math.max(...heatmapData.xAxisCategories.slice(-4).map(category => category.label.length)), 6, 45)
+        Math.min(Math.max(...columnLabelLengths(heatmapData).slice(-4)), maxColumnLabelChars(heatmapData)),
+        X_AXIS_AVG_CHAR_WIDTH, 45)
 
     // We divide by two because the label is placed in the middle of the column
     return Math.max(minMarginRight, longestColumnLabelWidthNearTheTailInPixels - columnWidth / 2)
@@ -71,15 +87,15 @@ const getAdjustedMarginRight = (heatmapData, containerWidth) => {
 
 const getMarginTop = (heatmapData, containerWidth) => {
   const minMarginTop = 30
-  const xAxisLabelAvgCharWidth = 6
   const rotationAngle = xAxisLabelsRotationAngle(heatmapData, containerWidth)
 
-  const longestColumnLabelLength =
-    Math.max(...heatmapData.xAxisCategories.map(category => category.label.length))
+  // Longer labels are cut short
+  const longestColumnLabelLength = Math.min(Math.max(...columnLabelLengths(heatmapData)), maxColumnLabelChars(heatmapData))
+  const titleHeight = sharedLabelOf(heatmapData.xAxisCategories) ? X_AXIS_TITLE_HEIGHT : 0
 
-  return rotationAngle === 0 ?
+  return titleHeight + (rotationAngle === 0 ?
     minMarginTop :
-    stringHeightInPixels(longestColumnLabelLength, xAxisLabelAvgCharWidth, Math.abs(rotationAngle))
+    stringHeightInPixels(longestColumnLabelLength, X_AXIS_AVG_CHAR_WIDTH, Math.abs(rotationAngle)))
 }
 
 const getHeight = (heatmapData, containerWidth, marginBottom) => {
@@ -116,6 +132,22 @@ const selectColumnsByOntologyIds = (chart, svgPathIds = []) => {
   })
 }
 
+// Each column label's hover title is its whole label: shortened labels, and those Highcharts cut short with an
+// ellipsis, still say in full what the column is. Runs on every render, as Highcharts redraws the labels.
+const titleColumnLabels = chart => {
+  const xAxis = chart.xAxis && chart.xAxis[0]
+  if (!xAxis) {
+    return
+  }
+  xAxis.tickPositions.forEach(position => {
+    const tick = xAxis.ticks[position]
+    const category = xAxis.categories && xAxis.categories[position]
+    if (tick && tick.label && category && category.label) {
+      tick.label.attr({title: category.label})
+    }
+  })
+}
+
 // Upstream's highchartsConfig. Series, categories and styles come from the props when the options are built; every
 // callback reads the latest props from latestRef when it runs, so new callbacks alone never rebuild the chart.
 // onSetExtremes(extremes | null) hears of every zoom and zoom reset.
@@ -136,6 +168,9 @@ const buildHeatmapOptions = (latestRef, {marginBottom, marginRight, height, auto
         // Fired by HeatmapCanvas when the anatomogram highlights tissues
         handleGxaAnatomogramTissueMouseEnter: function (e) {
           selectColumnsByOntologyIds(this, e.svgPathIds)
+        },
+        render: function () {
+          titleColumnLabels(this)
         }
       },
       zoomType: `x`
@@ -186,8 +221,17 @@ const buildHeatmapOptions = (latestRef, {marginBottom, marginRight, height, auto
       tickLength: 5,
       tickColor: `rgb(192, 192, 192)`,
       lineColor: `rgb(192, 192, 192)`,
+      // The text every column label starts with, shown once (the labels leave it out)
+      title: sharedLabelOf(heatmapData.xAxisCategories) ?
+        {
+          text: `${sharedLabelOf(heatmapData.xAxisCategories)} \u2026`,
+          align: `low`,
+          style: {fontSize: `12px`, color: `#555`}
+        } :
+        {text: null},
       labels: {
-        style: xAxisStyle,
+        // No longer than maxColumnLabelPx, with an ellipsis (upstream showed experiments' labels in full)
+        style: {...xAxisStyle, width: `${maxColumnLabelPx(heatmapData)}px`, textOverflow: `ellipsis`},
         // Events in labels enabled by 'highcharts-custom-events'
         events: {
           mouseover: function() {
@@ -402,5 +446,5 @@ const Main = props => (
     <HeatmapCanvas {...props} />
 )
 
-export {computeLayout, buildHeatmapOptions, selectColumnsByOntologyIds, HeatmapCanvas}
+export {computeLayout, buildHeatmapOptions, selectColumnsByOntologyIds, HeatmapCanvas, maxColumnLabelPx}
 export default Main

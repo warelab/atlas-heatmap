@@ -5,6 +5,20 @@ All notable changes to gramene-atlas-heatmap are recorded here. The format follo
 Versions before 6.0.0 are upstream's
 [@ebi-gene-expression-group/expression-atlas-heatmap-highcharts](https://github.com/ebi-gene-expression-group/atlas-heatmap).
 
+## [6.1.0] - 2026-09-24
+
+### Changed
+
+- Column labels no longer push the heatmap off the screen. Studies with very long column names, such as the
+  146-character differential contrasts of E-GEOD-128441, used to get a header about 700 px tall.
+  - Text that every column label starts with (15 characters or more, ending at a whole word) is shown once as the
+    column axis title, followed by "…". Each label shows only the rest. For example, "environmental stress: none vs
+    drought environment" is shown once above E-GEOD-128441's columns.
+  - Column labels may take about as much height as the heatmap's rows (40 px each), but always between 300 and
+    450 px. Longer labels are cut short with an ellipsis, and the header is sized for that. Upstream showed
+    experiments' labels in full.
+  - Hovering a column label shows the whole label. The cell tooltip, the filters and the download still use whole labels.
+
 ## [6.0.1] - 2026-09-24
 
 ### Fixed
@@ -113,5 +127,6 @@ instead of an iframe, so gramene-search can show the Expression Atlas heatmap in
 - Row labels and tooltips are no longer entity-decoded (he) after rendering: markup in a backend string, such as
   `<img onerror>` in a row name, shows as text instead of running.
 
+[6.1.0]: https://github.com/warelab/atlas-heatmap/compare/v6.0.1...v6.1.0
 [6.0.1]: https://github.com/warelab/atlas-heatmap/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/warelab/atlas-heatmap/compare/v5.7.2...v6.0.0

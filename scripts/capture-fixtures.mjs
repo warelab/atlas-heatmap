@@ -55,6 +55,8 @@ const FIXTURES = {
   'all-studies.SORBI_3001G000200.sorghum_v11': {query: {gene: `SORBI_3001G000200`}, experiment: false, expect: 200, base: SORGHUM_V11},
   // Few columns with long labels (up to 52 characters): at desktop widths each column is wider than 80 px.
   'paralogs.E-MTAB-5956.sorghum_v11': {query: {gene: MSD2_PARALOGS.join(` `)}, experiment: `E-MTAB-5956`, expect: 200, base: SORGHUM_V11},
+  // Differential, 49 contrasts whose names run to 146 characters and all begin with the same 50.
+  'paralogs.E-GEOD-128441.differential.sorghum_v11': {query: {gene: MSD2_PARALOGS.join(` `)}, experiment: `E-GEOD-128441`, expect: 200, base: SORGHUM_V11},
 }
 
 mkdirSync(OUT, { recursive: true })

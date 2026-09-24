@@ -3,10 +3,11 @@ import { act, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import Highcharts from 'highcharts'
 
-import HeatmapCanvas, { selectColumnsByOntologyIds } from '../../src/show/HeatmapCanvas.js'
+import HeatmapCanvas, { selectColumnsByOntologyIds, maxColumnLabelPx } from '../../src/show/HeatmapCanvas.js'
 import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
 import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
 import emtab5956 from '../fixtures/paralogs.E-MTAB-5956.sorghum_v11.json'
+import geod128441 from '../fixtures/paralogs.E-GEOD-128441.differential.sorghum_v11.json'
 import { canvasProps } from '../helpers/canvas.js'
 import { ResizeObserverStub } from '../shims.js'
 
@@ -240,6 +241,44 @@ describe(`HeatmapCanvas`, () => {
     render(<HeatmapCanvas {...props} heatmapData={shortLabels} />)
 
     expect(labelRotations(onlyChart().xAxis[0])).toEqual(Array(11).fill(0))
+  })
+
+  // E-GEOD-128441: 49 contrasts named in up to 146 characters, all starting "environmental stress: none vs drought
+  // environment "; upstream stood them up in full, about 700 px above an 11-row heatmap.
+  it(`shows text every column shares once, cuts long labels short, and keeps each whole label on hover`, () => {
+    withWidth(1300)
+    chartWidth(1300)
+    const props = canvasProps(geod128441)
+    const {container} = render(<HeatmapCanvas {...props} />)
+    const chart = onlyChart()
+    const xAxis = chart.xAxis[0]
+
+    expect(maxColumnLabelPx(props.heatmapData)).toBe(440)
+    expect(chart.options.chart.height).toBe(11 * 40 + 24 + 440 + 10)
+    expect(container.querySelector(`.highcharts-axis-title`)).toHaveTextContent(
+      `environmental stress: none vs drought environment \u2026`)
+
+    const labels = xAxis.tickPositions.map(position => xAxis.ticks[position].label.element)
+    expect(labels).toHaveLength(49)
+    const first = props.heatmapData.xAxisCategories[0]
+    // the label leaves out the shared start; Highcharts cuts it short at 440 px (6 px a character in these tests)
+    const shown = labels[0].querySelector(`tspan`) ? labels[0].querySelector(`tspan`).textContent : labels[0].textContent
+    expect(shown.startsWith(`after flowering and plot: 2 vs 21`)).toBe(true)
+    expect(shown.endsWith(`\u2026`)).toBe(true)
+    // (the visible text: the label's box would also count its <title>)
+    expect(labels.every(label => label.querySelector(`tspan`).getComputedTextLength() <= 440)).toBe(true)
+    // hovering a label shows the whole contrast name
+    expect(labels[0].querySelector(`title`).textContent).toBe(first.label)
+    labels.forEach((label, i) =>
+      expect(label.querySelector(`title`).textContent).toBe(props.heatmapData.xAxisCategories[i].label))
+    expect(xAxis.labelRotation).toBe(-90)
+  })
+
+  it(`adds no axis title when the columns share no long start`, () => {
+    withWidth(1300)
+    chartWidth(1300)
+    const {container} = render(<HeatmapCanvas {...canvasProps(emtab5956)} />)
+    expect(container.querySelector(`.highcharts-axis-title`)).toBeNull()
   })
 
   it(`says so when the filters leave no rows`, () => {

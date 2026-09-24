@@ -5,6 +5,7 @@ import ReactDOMServer from 'react-dom/server'
 import trimEllipsify from './trimEllipsify'
 import ExperimentIcon from './ExperimentIcon.js'
 import {keepDefaultUrl, linkAttrs} from '../../layout/links.js'
+import {displayedLabel} from '../../load/sharedLabelPrefix.js'
 
 // Highcharts puts useHTML labels in the page with innerHTML, so the escaped markup shows backend strings as text.
 // Upstream decoded the entities again (he), which let markup in a row name (e.g. <img onerror>) run.
@@ -60,7 +61,8 @@ YAxisLabel.propTypes = {
 }
 
 export default config => ({
-  xAxisFormatter: value => value.label,
+  // A label without the text every column shares (the axis title shows that once)
+  xAxisFormatter: value => displayedLabel(value),
   xAxisStyle: {
     fontSize: config.isDifferential ? `9px`: `smaller`,
     cursor: `default`,
