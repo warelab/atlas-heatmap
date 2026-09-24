@@ -229,9 +229,9 @@ message. A differential experiment gets a message instead of a grid.
   and value with its unit. Every band is in the tab order and has an `aria-label`; Escape hides the tooltip. When the
   table scrolls sideways, the tooltip of the band in focus moves with it (tabbing to a band out of view scrolls it
   into view), and the tooltip of the band under the mouse goes.
-- **Labels.** Column labels longer than 8 characters are drawn vertically, cut short at 12rem with an ellipsis, and
-  hovering one shows the whole label. Row labels are cut at 20rem. The table scrolls sideways when it is wider than
-  its container.
+- **Labels.** When any column label is longer than 8 characters, all the column labels are drawn vertically, cut
+  short at 12rem with an ellipsis; hovering one shows the whole label. Row labels are cut at 20rem. The table scrolls
+  sideways when it is wider than its container.
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|

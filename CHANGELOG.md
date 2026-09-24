@@ -36,7 +36,8 @@ Versions before 6.0.0 are upstream's
   - Hovering or focusing a band (every band is in the tab order, with an `aria-label`) shows a tooltip. It lists
     the sample's factor values, sample id, replicates, and value with its unit. Escape hides it. The tooltip of the
     band in focus moves with it when the table scrolls sideways.
-  - Long column labels are drawn vertically and cut short with an ellipsis; hovering one shows the whole label.
+  - When any column label is long (more than 8 characters), all the column labels are drawn vertically and cut short
+    with an ellipsis; hovering one shows the whole label.
   - Props: `experiment` and `gene` (both required), `atlasUrl`, `rowFactor`, `columnFactor`, `onChangeFactors`, and
     the heatmap's `inProxy`, `linkTarget`, `resolveUrl`, `fail`, `className`, `style` and `injectStyles`.
 - **`filterRows` prop** of ExpressionAtlasHeatmap: `(row) => boolean` over the payload's `profiles.rows`. It filters

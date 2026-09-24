@@ -14,7 +14,7 @@ import {analyseFactors, chooseAxis, layoutFactorGrid, LABEL_SEPARATOR, MISSING, 
 // A cell is at least MIN_CELL_PX wide, and wide enough for BAND_PX per sample of its column's fullest cell
 const MIN_CELL_PX = 40
 const BAND_PX = 14
-// Column labels longer than this are drawn vertically
+// When any column label is longer than this, all the column labels are drawn vertically
 const VERTICAL_LABEL_CHARS = 8
 // Room between a band and its tooltip, and between the tooltip and the window's edges
 const TOOLTIP_GAP_PX = 6
