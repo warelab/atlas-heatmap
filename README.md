@@ -187,10 +187,9 @@ npm run fixtures       # recapture test/fixtures from the live backend (read-onl
   with an event log of `fail` calls. URL parameters: `?api=mock` (answers from `test/fixtures`, offline),
   `?strict=1` (StrictMode) and `?panel=side-by-side|resizable|fullscreen|render-api`. From a workstation:
   `ssh -L 5175:localhost:5175 <host>`.
-- Until gramene-anatomogram 3.0.0 is on npm, `package-lock.json` cannot record it, so `npm ci` and a plain
-  `npm install` fail with E404. Install with its tarball instead, without saving it:
-  `npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz` (this also installs everything else from the
-  lockfile). Once it is published, run `npm install` once and commit the lockfile it writes.
+- To try unreleased gramene-anatomogram changes, install its packed tarball over the registry version, without
+  saving it: `npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz`. The next `npm install` puts the
+  registry version back.
 - The dev server uses gramene-anatomogram from `node_modules`, and the stub only when it is not installed.
 
 ### Trying a build in gramene-search
@@ -205,9 +204,8 @@ npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz ../atlas-heat
 rm -rf .parcel-cache*
 ```
 
-Until the packages are published, every `npm install` in gramene-search must repeat both tarballs; otherwise npm
-fails with E404 or prunes them. `npm run lint:pkg` packs into a temporary directory, so it never deletes the local
-tarball.
+The next `npm install` in gramene-search puts the registry versions back. `npm run lint:pkg` packs into a temporary
+directory, so it never deletes the local tarball.
 
 ## Fork maintenance
 

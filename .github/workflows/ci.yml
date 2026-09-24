@@ -19,7 +19,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: npm
-      # Fails with E404 until gramene-anatomogram 3.0.0 is published and package-lock.json records it
       - run: npm ci
       # vitest + jsdom; any React warning (console.error/warn) fails a test
       - run: npm test
