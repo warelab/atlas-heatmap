@@ -5,8 +5,10 @@
 //   without --no-save writes one, and it would not resolve inside a consumer's node_modules;
 // - the same in package-lock.json (a package resolved from file: or linked);
 // - a -dev prerelease version;
-// - no `## [x.y.z]` entry for the version in CHANGELOG.md.
-import { existsSync, readFileSync } from 'node:fs';
+// - no `## [x.y.z]` entry for the version in CHANGELOG.md;
+// - a package that src/ imports but package.json does not declare as a dependency or peer. The build keeps every
+//   package external, so the published bundles would import something a consumer's install does not bring.
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -38,6 +40,20 @@ if (existsSync(lockPath)) {
       if (isLocalSpec(spec)) problems.push(`package-lock.json ${field}.${name} is "${spec}"`);
     }
   }
+}
+
+const declared = new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]);
+const PACKAGE_IMPORT =
+  /(?:\bfrom\s*|\bimport\s*\(?\s*|\brequire\s*\(\s*)['"`]((?:@[a-z0-9~][\w.~-]*\/)?[a-z0-9~][\w.~-]*)(?:\/[^'"`\s]*)?['"`]/g;
+const sources = readdirSync(join(root, 'src'), { recursive: true }).filter((file) => /\.(c?js|mjs|jsx|ts)$/.test(file));
+const undeclared = new Map();
+for (const file of sources) {
+  for (const [, name] of readFileSync(join(root, 'src', file), 'utf8').matchAll(PACKAGE_IMPORT)) {
+    if (!declared.has(name) && !undeclared.has(name)) undeclared.set(name, file);
+  }
+}
+for (const [name, file] of undeclared) {
+  problems.push(`src/${file} imports ${name}, which package.json does not declare in dependencies or peerDependencies`);
 }
 
 if (/-dev\b/.test(pkg.version)) problems.push(`version ${pkg.version} is a -dev prerelease`);
