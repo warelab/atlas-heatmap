@@ -177,8 +177,9 @@ npm run fixtures       # recapture test/fixtures from the live backend (read-onl
 ```
 
 - **Tests** draw real Highcharts 6.2 in jsdom, with the layout shims in `test/shims.js`, from the backend responses
-  captured in `test/fixtures/`. They always use `test/stubs/anatomogram.js` for gramene-anatomogram: a stub that
-  records its props. `test/load/` holds golden snapshots of upstream's `src/load/` output.
+  captured in `test/fixtures/`. They use `test/stubs/anatomogram.js` for gramene-anatomogram: a stub that records its
+  props. The exception is `test/anatomogram.integration.test.js`, which draws the heatmap with the real package whenever
+  it is installed and is skipped otherwise. `test/load/` holds golden snapshots of upstream's `src/load/` output.
 - **The playground** has an `atlasUrl` choice (auth_testing, sorghum_v11, EBI), genes, experiment, the boolean props,
   `linkTarget`, a demo `resolveUrl`, and a switch that logs `window.open` instead of opening. Its panels show All
   Studies and Paralogs side by side, a resizable container, gramene-search's fullscreen modal and the `render()` API,
