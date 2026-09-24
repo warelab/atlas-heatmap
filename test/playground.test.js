@@ -9,6 +9,7 @@ import allStudies from './fixtures/all-studies.SORBI_3001G000200.json'
 import allStudiesV11 from './fixtures/all-studies.SORBI_3001G000200.sorghum_v11.json'
 import curd25 from './fixtures/paralogs.E-CURD-25.baseline.json'
 import unknownGene from './fixtures/error.unknown-gene.json'
+import gridSb1 from './fixtures/grid.JGI-SB-1.msd2.json'
 
 // The playground (npm run dev) in jsdom, on its own ?api=mock layer
 vi.mock(`gramene-anatomogram`, () => import(`./stubs/anatomogram.js`))
@@ -36,6 +37,7 @@ describe(`the mock API`, () => {
     expect(pickFixture(`${AUTH_TESTING}json/baseline_experiments`, `geneQuery=NOT_A_REAL_GENE`)).toBe(unknownGene)
     expect(pickFixture(`${AUTH_TESTING}json/experiments/E-GEOD-140928`, `geneQuery=A`)).toBe(unknownGene)
     expect(pickFixture(`/src/Main.js`)).toBeNull()
+    expect(pickFixture(`${SORGHUM_V11}json/experiments/JGI-SB-1`, `geneQuery=SORBI_3006G095600`)).toBe(gridSb1)
   })
 
   it(`serves it as a fetch Response, and aborts like fetch`, async () => {
@@ -124,6 +126,43 @@ describe(`the playground`, () => {
 
     await user.click(screen.getByLabelText(`log window.open instead of opening`))
     expect(window.open).toBe(open)
+  })
+})
+
+describe(`the factor grid panel`, () => {
+  it(`draws a JGI study on sorghum_v11, keeps the axes chosen per study, and logs onChangeFactors`, async () => {
+    const user = userEvent.setup()
+    render(<App api={`mock`} initialPanel={`grid`} />)
+    expect(screen.getByLabelText(`atlasUrl`)).toHaveValue(SORGHUM_V11)
+    const panel = screen.getByTestId(`panel-grid`)
+    const table = await within(panel).findByRole(`table`)
+    expect(within(table).getAllByRole(`rowheader`)).toHaveLength(5)
+    expect(liveCharts()).toHaveLength(0)
+
+    await user.click(within(panel).getByRole(`button`, {name: `Swap rows and columns`}))
+    expect(within(table).getAllByRole(`rowheader`)).toHaveLength(8)
+    expect(eventLines()[0]).toMatch(/onChangeFactors JGI-SB-1: rows organism part, columns developmental stage/)
+
+    // three factors: the selects
+    await user.selectOptions(within(panel).getByLabelText(`Study`), `JGI-SB-2`)
+    const rows = await within(panel).findByRole(`combobox`, {name: `Rows`})
+    expect(rows).toHaveValue(`cultivar`)
+
+    // back to JGI-SB-1: still swapped
+    await user.selectOptions(within(panel).getByLabelText(`Study`), `JGI-SB-1`)
+    await waitFor(() => expect(within(within(panel).getByRole(`table`)).getAllByRole(`rowheader`)).toHaveLength(8))
+  })
+
+  it(`offers sorghum_v11 when another atlasUrl is chosen`, async () => {
+    const user = userEvent.setup()
+    render(<App api={`mock`} />)
+    await user.click(screen.getByRole(`tab`, {name: `Factor grid`}))
+    const panel = screen.getByTestId(`panel-grid`)
+    expect(within(panel).getByText(`The JGI studies are on sorghum_v11.`)).toBeInTheDocument()
+    await user.click(within(panel).getByRole(`button`, {name: `Use sorghum_v11`}))
+    expect(screen.getByLabelText(`atlasUrl`)).toHaveValue(SORGHUM_V11)
+    expect(within(panel).queryByText(`The JGI studies are on sorghum_v11.`)).toBeNull()
+    expect(await within(panel).findByRole(`table`)).toBeInTheDocument()
   })
 })
 

@@ -6,8 +6,13 @@ import curd25 from '../../test/fixtures/paralogs.E-CURD-25.baseline.json'
 import geod30249 from '../../test/fixtures/paralogs.E-GEOD-30249.differential.json'
 import geod167101 from '../../test/fixtures/paralogs.E-GEOD-167101.baseline.json'
 import unknownGene from '../../test/fixtures/error.unknown-gene.json'
+import gridSb1 from '../../test/fixtures/grid.JGI-SB-1.msd2.json'
+import gridSb2 from '../../test/fixtures/grid.JGI-SB-2.msd2.json'
+import gridSb3 from '../../test/fixtures/grid.JGI-SB-3.msd2.json'
+import gridSb4 from '../../test/fixtures/grid.JGI-SB-4.msd2.json'
+import emtab5956 from '../../test/fixtures/paralogs.E-MTAB-5956.sorghum_v11.json'
 
-const FIXTURES = [allStudies, allStudiesV11, curd25, geod30249, geod167101]
+const FIXTURES = [allStudies, allStudiesV11, curd25, geod30249, geod167101, gridSb1, gridSb2, gridSb3, gridSb4, emtab5956]
 
 // json/baseline_experiments, json/experiments/E-CURD-25, … or null for a request that is not the heatmap's
 const endpointOf = url => {

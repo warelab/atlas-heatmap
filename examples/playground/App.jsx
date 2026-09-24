@@ -3,13 +3,15 @@ import { createPortal } from 'react-dom'
 import { Alert, Badge, Button, ButtonGroup, Card, Col, Form, Modal, Row, Tab, Tabs } from 'react-bootstrap'
 import * as anatomogram from 'gramene-anatomogram'
 
-import { ExpressionAtlasHeatmap, render as renderHeatmap } from 'gramene-atlas-heatmap'
+import { ExpressionAtlasHeatmap, ExpressionFactorGrid, render as renderHeatmap } from 'gramene-atlas-heatmap'
 
 // Playground for gramene-atlas-heatmap: `npm run dev`, then http://localhost:5175/ (?api=mock, ?strict=1, ?panel=…).
 
+const SORGHUM_V11 = `https://data.sorghumbase.org/sorghum_v11/gxa/`
+
 export const ATLAS_URLS = [
   {value: `https://data.sorghumbase.org/auth_testing/gxa/`, label: `auth_testing (gramene-search default)`},
-  {value: `https://data.sorghumbase.org/sorghum_v11/gxa/`, label: `sorghum_v11 (SorghumBase)`},
+  {value: SORGHUM_V11, label: `sorghum_v11 (SorghumBase)`},
   {value: `https://www.ebi.ac.uk/gxa/`, label: `EBI Expression Atlas (the component's default)`}
 ]
 
@@ -29,8 +31,20 @@ const PANELS = [
   [`side-by-side`, `Side by side`],
   [`resizable`, `Resizable`],
   [`fullscreen`, `Fullscreen modal`],
-  [`render-api`, `render() API`]
+  [`render-api`, `render() API`],
+  [`grid`, `Factor grid`]
 ]
+
+// The studies of the factor grid panel (sorghum_v11), and what each shows
+export const GRID_STUDIES = [
+  [`JGI-SB-1`, `Mullet lab - developmental stages: 2 factors, up to 3 samples a cell`],
+  [`JGI-SB-2`, `Mullet lab - internode time course: 3 factors, which some samples lack`],
+  [`JGI-SB-3`, `Mullet lab - nitrogen source: 2 factors, every cell measured`],
+  [`JGI-SB-4`, `Mullet lab - standard tissue panel: 3 factors`],
+  [`E-MTAB-5956`, `Wang et al., 2018 (EBI): 2 factors`],
+  [`E-CURD-25`, `Turco et al 2017 (EBI): 1 factor, one row`]
+]
+export const GRID_GENE = `SORBI_3006G095600`
 
 // A resolveUrl like gramene-search's: the Warelab backend echoes geneQuery as [null,…] and answers relative row uris
 // (genes/<id>), and atlasUrl is an API rather than a page, so links go to EBI instead.
@@ -191,10 +205,68 @@ const RenderApi = ({heatmapProps, query, experiment, log}) => {
   )
 }
 
+// ExpressionFactorGrid with its axes kept per study in the panel's state, as gramene-search keeps them in its view
+const FactorGridPanel = ({heatmapProps, atlasUrl, onChangeAtlasUrl, log}) => {
+  const [study, setStudy] = useState(GRID_STUDIES[0][0])
+  const [draftGene, setDraftGene] = useState(GRID_GENE)
+  const [gene, setGene] = useState(GRID_GENE)
+  const [axes, setAxes] = useState({})
+  const onChangeFactors = useCallback(next => {
+    log(`onChangeFactors`, `${study}: rows ${next.rowFactor}, columns ${next.columnFactor}`)
+    setAxes(current => ({...current, [study]: next}))
+  }, [study, log])
+  const {rowFactor, columnFactor} = axes[study] || {}
+
+  return (
+    <Panel title={<>ExpressionFactorGrid · <code>{study}</code> · <code>{gene}</code></>} data-testid={`panel-grid`}>
+      {atlasUrl !== SORGHUM_V11 &&
+        <Alert variant={`info`} className={`py-2 small d-flex align-items-center gap-2`}>
+          The JGI studies are on sorghum_v11.
+          <Button size={`sm`} variant={`outline-primary`} onClick={() => onChangeAtlasUrl(SORGHUM_V11)}>Use sorghum_v11</Button>
+        </Alert>}
+      <Form
+        className={`mb-3`}
+        onSubmit={event => {
+          event.preventDefault()
+          setGene(draftGene.trim())
+        }}>
+        <Row className={`g-2 align-items-end`}>
+          <Form.Group as={Col} md={6} controlId={`grid-study`}>
+            <Form.Label className={`small mb-1`}>Study</Form.Label>
+            <Form.Select size={`sm`} value={study} onChange={event => setStudy(event.target.value)}>
+              {GRID_STUDIES.map(([accession, about]) => <option key={accession} value={accession}>{`${accession}: ${about}`}</option>)}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group as={Col} md={4} controlId={`grid-gene`}>
+            <Form.Label className={`small mb-1`}>Gene</Form.Label>
+            <Form.Control size={`sm`} value={draftGene} onChange={event => setDraftGene(event.target.value)} />
+          </Form.Group>
+          <Col md={2}>
+            <Button size={`sm`} type={`submit`}>Show</Button>
+          </Col>
+        </Row>
+      </Form>
+      <ExpressionFactorGrid
+        key={`${atlasUrl} ${study} ${gene}`}
+        atlasUrl={atlasUrl}
+        experiment={study}
+        gene={gene}
+        rowFactor={rowFactor}
+        columnFactor={columnFactor}
+        onChangeFactors={onChangeFactors}
+        linkTarget={heatmapProps.linkTarget}
+        resolveUrl={heatmapProps.resolveUrl}
+        injectStyles={heatmapProps.injectStyles}
+        fail={heatmapProps.fail} />
+    </Panel>
+  )
+}
+
 let nextEventId = 0
 
 const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
-  const [atlasUrl, setAtlasUrl] = useState(ATLAS_URLS[0].value)
+  // The JGI studies of the factor grid panel are on sorghum_v11
+  const [atlasUrl, setAtlasUrl] = useState(initialPanel === `grid` ? SORGHUM_V11 : ATLAS_URLS[0].value)
   const [draft, setDraft] = useState({genes: DEFAULT_GENES, experiment: `E-CURD-25`})
   const [applied, setApplied] = useState(draft)
   const [flags, setFlags] = useState({
@@ -344,11 +416,16 @@ const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
         <Tab eventKey={`render-api`} title={PANELS[3][1]}>
           <RenderApi key={generation} {...panelProps} />
         </Tab>
+        <Tab eventKey={`grid`} title={PANELS[4][1]}>
+          <FactorGridPanel key={generation} {...panelProps} atlasUrl={atlasUrl} onChangeAtlasUrl={setAtlasUrl} />
+        </Tab>
       </Tabs>
 
       <Panel title={<>Events <Button size={`sm`} variant={`link`} className={`p-0 ms-2`} onClick={() => setEvents([])}>clear</Button></>}>
         {events.length === 0 ?
-          <p className={`text-muted small mb-0`}>fail() calls, render() callbacks and logged window.open calls show here.</p> :
+          <p className={`text-muted small mb-0`}>
+            fail() calls, render() callbacks, onChangeFactors calls and logged window.open calls show here.
+          </p> :
           <ul className={`list-unstyled small mb-0`} data-testid={`events`}>
             {events.map(event =>
               <li key={event.id}><span className={`text-muted`}>{event.time}</span> <strong>{event.kind}</strong> {event.detail}</li>)}
