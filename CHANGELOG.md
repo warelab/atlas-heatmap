@@ -5,6 +5,57 @@ All notable changes to gramene-atlas-heatmap are recorded here. The format follo
 Versions before 6.0.0 are upstream's
 [@ebi-gene-expression-group/expression-atlas-heatmap-highcharts](https://github.com/ebi-gene-expression-group/atlas-heatmap).
 
+## [6.3.0] - 2026-09-24
+
+### Changed
+
+- **The heatmap's Download control is a plain Download button that opens a dialog**, instead of a split button whose
+  main part saved a TSV under a fixed name (`expression_atlas-<species>.tsv`, `<accession>.tsv`) or opened the full
+  experiment download. The dialog asks for:
+  - a **file name**, prefilled with a default (`expression-<experiment accession, or studies>-<first gene>`, or the
+    new `downloadFileName` prop), focused and selected. Download is disabled while it is blank. The name is
+    sanitised (path separators, `: * ? " < > |`, control characters, and surrounding spaces and dots are removed; an
+    empty result falls back to the default), and the format's extension is added unless it is already there (in any
+    case);
+  - a **format**: tab-delimited text (`.tsv`, `text/tab-separated-values`), selected every time the dialog opens, or
+    JSON (`.json`, `application/json`).
+
+  Download (or Enter) saves the file under exactly that name and closes the dialog; Cancel, the close button and
+  Escape save nothing. The focus returns to the Download button. The dialog says what it saves, e.g. "9 rows × 24
+  columns, as shown".
+- The file holds **what the heatmap shows**: the rows and columns after the filters, the ordering and the similarly
+  expressed genes, in the order shown, with whole labels (not the shortened column labels). **While the chart is
+  zoomed in, only the columns in view** (whose labels show) are saved.
+  - Tab-delimited text keeps upstream's layout (comment lines, a header line of column labels, a line per row), adds
+    `# Unit:` and `# Zoomed in:` comment lines, and names the genes asked for instead of the backend's
+    `Gene query: [null,…]` (and drops `in conditions []`).
+  - JSON: `{source, atlasUrl, experiment: {accession, description, type} | null, query: {genes}, unit, zoom, columns:
+    [{label, id}], rows: [{label, id, unit, values}], downloadedFrom, downloadedAt}`, `null` for no data. Rows of a
+    differential experiment also have `pValues`.
+- The full experiment data ("All data") is now a secondary link in the dialog, *Full experiment data on Expression
+  Atlas*, shown only when there is a full dataset URL (`resolveUrl('download', …)` can still drop it). It is no
+  longer the default action.
+- A payload's data reuse disclaimer (`blueprint`, `lauderdale`, `pcawg`) is shown in the dialog, which replaces the
+  separate licence modal: Download and the full data link wait for the reader to agree to it, each time.
+- Files are saved as UTF-8: downloadjs is given a Blob, since it wrote strings with characters beyond U+007F one byte
+  per UTF-16 unit.
+
+### Added
+
+- **A Download button in ExpressionFactorGrid's toolbar**, opening the same dialog. It saves every sample of the
+  study for the gene, one per line, whatever the axes (ordered by the study's factors, then sample id).
+  - Tab-delimited text: `gene`, `study`, every factor of the study in its order, `sample id`, `replicates`,
+    `expression (<unit>)`. A factor a sample lacks (shown as "—") and a missing value are empty.
+  - JSON: `{gene, study: {accession, description}, factors: [{name, values, varies}], rowFactor, columnFactor, unit,
+    samples: [{factors, sampleId, assayGroupId, replicates, value}], downloadedFrom, downloadedAt}`, with `null` for
+    a missing factor value or value.
+  - Default file name `<gene>-<experiment>`. A payload's data reuse disclaimer is agreed to first, as in the
+    heatmap's dialog.
+- Props **`downloadFileName`** (the file name the dialog suggests, without extension) and **`showDownload`** (default
+  `true`) on both ExpressionAtlasHeatmap and ExpressionFactorGrid. `DEFAULT_OPTIONS` has `showDownload: true`.
+- The playground has a `downloadFileName` field and a `showDownload` switch; its demo `resolveUrl` leaves out the full
+  data link of the JGI studies, as gramene-search does.
+
 ## [6.2.0] - 2026-09-24
 
 ### Added

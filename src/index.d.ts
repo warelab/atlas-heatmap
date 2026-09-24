@@ -10,7 +10,7 @@ export type UrlKind =
   | 'moreInformation'  // “click here for the full record” in the footer
   | 'support'          // the EBI support links in the footer and the error alert
   | 'genomeBrowser'    // opened by a click on a differential cell
-  | 'download'         // “All data” in the Download menu
+  | 'download'         // “Full experiment data on Expression Atlas” in the Download dialog
 
 /** An object query; `gene` and `condition` are sent as `geneQuery` and `conditionQuery`, other keys as they are. */
 export interface HeatmapQuery {
@@ -117,6 +117,14 @@ export interface ExpressionAtlasHeatmapProps {
    * without a new request, and redraws only when it keeps other rows (memoize it anyway).
    */
   filterRows?: (row: HeatmapProfileRow) => boolean
+  /**
+   * The file name (without extension) the Download dialog suggests. Default
+   * `expression-<experiment accession, or 'studies'>-<first gene>`. The reader can change it; it is sanitised and the
+   * format's extension (`.tsv` or `.json`) is added.
+   */
+  downloadFileName?: string
+  /** Default true: show the Download button among the controls (which `showControlMenu` shows or hides). */
+  showDownload?: boolean
   /** @deprecated Accepted and ignored: there is no Google Analytics any more. */
   disableGoogleAnalytics?: boolean
 }
@@ -146,6 +154,13 @@ export interface ExpressionFactorGridProps {
   columnFactor?: string
   /** Called when the reader swaps the axes or chooses a factor for one; not for the defaults. */
   onChangeFactors?: (axes: FactorGridAxes) => void
+  /**
+   * The file name (without extension) the Download dialog suggests. Default `<gene>-<experiment>`. The reader can
+   * change it; it is sanitised and the format's extension (`.tsv` or `.json`) is added.
+   */
+  downloadFileName?: string
+  /** Default true: show the Download button, which saves every sample of the study for the gene. */
+  showDownload?: boolean
   /** Prefix for requests. Default `''`. */
   inProxy?: string
   /** Target of the links (those of the error alert). Default `'_blank'`. */
@@ -192,6 +207,7 @@ export declare const DEFAULT_OPTIONS: Readonly<{
   experiment: string
   linkTarget: string
   injectStyles: true
+  showDownload: true
 }>
 
 /**

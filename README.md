@@ -20,6 +20,8 @@ What is different from 5.7.2 (details in [CHANGELOG.md](CHANGELOG.md)):
 - Baseline colours are upstream 5.7.2's five log-range buckets.
 - New: `ExpressionFactorGrid` draws one gene in one study by the study's factors, and `filterRows` leaves rows of
   the payload out.
+- **Download dialog**: the heatmap's and the grid's Download button asks for a file name and a format (tab-delimited
+  text, the default, or JSON) and saves what the widget shows. See [Downloads](#downloads).
 - react-refetch, react-highcharts, styled-components, react-ga and every other React 16-only package are gone.
   Highcharts stays at 6.2.
 - ESM and CommonJS builds with TypeScript declarations. The code keeps upstream's module layout; see
@@ -119,6 +121,8 @@ handle.unmount()
 | `className`, `style` | | | On the root `div.gxaHeatmapContainer` |
 | `injectStyles` | boolean | `true` | See [Styles](#styles) |
 | `filterRows` | `(row) => boolean` | | Keeps the payload's `profiles.rows` it returns true for, and the columns they have values in (above) |
+| `downloadFileName` | string | `expression-<accession or studies>-<first gene>` | The file name (without extension) the Download dialog suggests. See [Downloads](#downloads) |
+| `showDownload` | boolean | `true` | The Download button, among the controls that `showControlMenu` shows |
 | `disableGoogleAnalytics` | | | **Ignored**: there is no Google Analytics any more |
 
 Exports: `ExpressionAtlasHeatmap` (also the default), `ExpressionFactorGrid`, `render`, `DEFAULT_OPTIONS`,
@@ -139,7 +143,7 @@ read through a ref, so passing a new one does not redraw the chart.
 | `moreInformation` | “here” (the full record) in the footer | `config`: the payload's |
 | `support` | The EBI support links in the footer and the error alert | |
 | `genomeBrowser` | A differential cell click, opened with `window.open` | `genomeBrowser`, `geneId`, `trackId` |
-| `download` | “All data” in the Download menu | |
+| `download` | “Full experiment data on Expression Atlas” in the Download dialog; `null` leaves it out | |
 
 gramene-search points the Warelab backend's links at EBI, since the backend answers with relative row URIs and
 `geneQuery=[null]`:
@@ -159,6 +163,118 @@ const resolveUrl = (kind, url, {query, experiment, row}) => {
   }
 }
 ```
+
+### Downloads
+
+The Download button (among the heatmap's controls, and in the factor grid's toolbar) opens a dialog titled
+*Download*:
+
+- **File name**, prefilled with `downloadFileName` (or the default), focused and selected so that typing replaces it.
+  *Download* is disabled while it is blank. The name is sanitised: path separators (`/`, `\`), the characters
+  Windows does not allow (`: * ? " < > |`) and control characters are removed, as are the spaces around it, leading
+  dots and trailing dots; a name with nothing left is saved under the default name. The format's extension is added
+  unless the name already ends with it (in any case). The dialog shows the name the file will be saved under.
+- **Format**: *Tab-delimited text (.tsv)*, selected each time the dialog opens, or *JSON (.json)*.
+- A line saying what is saved, e.g. `9 rows × 24 columns, as shown` or `31 samples of JGI-SB-1 for SORBI_3006G095600`.
+- *Download* (or Enter) saves the file with downloadjs, as `text/tab-separated-values` or `application/json` in UTF-8,
+  and closes the dialog. *Cancel*, the close button and Escape save nothing. The focus goes back to the Download
+  button.
+- For an experiment whose payload names a full download (`experiment.urls.download`, then `resolveUrl('download', …)`),
+  a secondary link *Full experiment data on Expression Atlas* opens it in `linkTarget`, as the old menu's “All data”
+  did. It is not the default action; `resolveUrl` returning `null` leaves it out.
+- A payload with a `disclaimer` (`blueprint`, `lauderdale`, `pcawg`) shows its data reuse statement in the dialog, and
+  *Download* and the full data link wait for the reader to tick *I agree to the data reuse statement above* (asked
+  again each time the dialog opens).
+
+**The heatmap** saves what it shows: the rows and columns after the filters, the ordering and the similarly expressed
+genes, in the order shown; while the chart is zoomed in, only the columns in view (those whose centres are within the
+zoomed axis, i.e. whose labels show). Labels are whole, not the shortened ones the chart draws.
+
+- Tab-delimited text keeps upstream's layout: comment lines (`# Downloaded from: <page URL>`, `# Timestamp:`, the
+  query or experiment description, the ordering, `# Unit: TPM` and `# Zoomed in: columns 3 to 6 of 24` when they
+  apply), a header line with an empty first cell then the column labels, and one line per row: its label, then its
+  values in column order. Differential experiments give the log2 fold changes. Cells with no data are empty in one
+  experiment and `NA` across experiments (All Studies).
+
+  ```
+  # Downloaded from: https://www.sorghumbase.org/genes?idList=SORBI_3001G000200
+  # Timestamp: 2026-09-24T12:00:00.000Z
+  # Experiment accession: E-CURD-25
+  # Gene Expression Regulation Associated with Vascularization in Sorghum bicolor
+  # Gene query: SORBI_3001G000200 SORBI_3001G000400 SORBI_3001G000100
+  # Results as shown on page
+  # Unit: TPM
+  	nonvascular system	root	shoot	vascular system
+  SORBI_3001G000200	45	74	63	30
+  SORBI_3001G000400	9	25	19	9
+  SORBI_3001G000100		0.7		
+  ```
+
+- JSON: `{source: "Expression Atlas", atlasUrl, experiment: {accession, description, type} | null (All Studies),
+  query: {genes: [...]}, unit, zoom: null | {from, to, of} (1-based columns), columns: [{label, id}], rows: [{label,
+  id, unit, values}], downloadedFrom, downloadedAt}`. `values` are aligned with `columns`, `null` where there is no
+  data. A column's `id` is its ontology term (or the contrast id; `null` when there is none), and a baseline
+  experiment's columns also have their `assayGroupId`. `unit` is the unit every row shares (`null` when they differ;
+  each row has its own). Differential experiments' rows also have `pValues`, aligned with `values`.
+
+  ```json
+  {
+    "source": "Expression Atlas",
+    "atlasUrl": "https://data.sorghumbase.org/sorghum_v11/gxa/",
+    "experiment": {"accession": "E-GEOD-30249", "description": "RNA-Seq of Sorghum bicolor 9d seedlings in response to osmotic stress and abscisic acid", "type": "rnaseq_mrna_differential"},
+    "query": {"genes": ["SORBI_3001G000200", "SORBI_3001G000400", "SORBI_3001G000100"]},
+    "unit": "Log2 fold change",
+    "zoom": null,
+    "columns": [
+      {"label": "compound: sodium hydroxide 0.2 molar vs abscisic acid 20 micromolar in organism part: root", "id": "g5_g1"},
+      {"label": "compound: water vs polyethylene glycol 20 percent in organism part: root", "id": "g7_g3"}
+    ],
+    "rows": [
+      {"label": "SORBI_3001G000200", "id": "SORBI_3001G000200", "unit": "Log2 fold change", "values": [-0.3, null], "pValues": [0.023848945245277, null]},
+      {"label": "SORBI_3001G000400", "id": "SORBI_3001G000400", "unit": "Log2 fold change", "values": [-1.7, 0.3], "pValues": [1.48769027960814e-26, 0.00251968357307113]}
+    ],
+    "downloadedFrom": "https://www.sorghumbase.org/genes?idList=SORBI_3001G000200",
+    "downloadedAt": "2026-09-24T12:00:00.000Z"
+  }
+  ```
+
+**The factor grid** saves every sample of the study for the gene, one per line (long format), whatever the axes:
+ordered by the study's factors in its order, then by sample id.
+
+- Tab-delimited text: a header line, `gene`, `study`, each factor of the study in its order (those that vary and
+  those that do not), `sample id`, `replicates`, `expression (<unit>)`; then one line per sample. There are no comment
+  lines. A factor the sample lacks (the grid's `—`) and a missing value are empty.
+
+  ```
+  gene	study	organism part	developmental stage	sample id	replicates	expression (TPM)
+  SORBI_3006G095600	JGI-SB-1	leaf lamina	inflorescence development stage	leaf_lower_growing.floral_initiation	2	41.344
+  SORBI_3006G095600	JGI-SB-1	leaf lamina	inflorescence development stage	leaf_upper_growing.floral_initiation	2	10.795
+  SORBI_3006G095600	JGI-SB-1	leaf lamina	seedling development stage	leaf_blade.juvenile	2	21.535
+  ```
+
+- JSON: `{gene, study: {accession, description}, factors: [{name, values, varies}], rowFactor, columnFactor, unit,
+  samples: [{factors: {<name>: value | null}, sampleId, assayGroupId, replicates, value}], downloadedFrom,
+  downloadedAt}`. `rowFactor` and `columnFactor` are the axes shown (`null` when there is none).
+
+  ```json
+  {
+    "gene": "SORBI_3006G095600",
+    "study": {"accession": "JGI-SB-1", "description": "Sorghum bicolor developmental stages: 31 sample groups from 88 RNA-seq libraries (Phytozome Sbicolor v3.1.1). PI John Mullet, Texas A&M. Submitted via JGI; awaiting citation."},
+    "factors": [
+      {"name": "organism part", "values": ["leaf lamina", "leaf sheath", "panicle inflorescence", "peduncle", "root", "root tip", "shoot system", "stem internode"], "varies": true},
+      {"name": "developmental stage", "values": ["inflorescence development stage", "seedling development stage", "sporophyte vegetative stage", "whole plant flowering stage", "whole plant fruit ripening stage"], "varies": true}
+    ],
+    "rowFactor": "developmental stage",
+    "columnFactor": "organism part",
+    "unit": "TPM",
+    "samples": [
+      {"factors": {"organism part": "leaf lamina", "developmental stage": "inflorescence development stage"}, "sampleId": "leaf_lower_growing.floral_initiation", "assayGroupId": "g9", "replicates": 2, "value": 41.344},
+      …
+    ],
+    "downloadedFrom": "https://www.sorghumbase.org/genes?idList=SORBI_3006G095600",
+    "downloadedAt": "2026-09-24T12:00:00.000Z"
+  }
+  ```
 
 ### Styles
 
@@ -232,6 +348,9 @@ message. A differential experiment gets a message instead of a grid.
 - **Labels.** When any column label is longer than 8 characters, all the column labels are drawn vertically, cut
   short at 12rem with an ellipsis; hovering one shows the whole label. Row labels are cut at 20rem. The table scrolls
   sideways when it is wider than its container.
+- **Download.** A *Download* button in the toolbar opens the [Download dialog](#downloads), which saves every sample
+  of the study for the gene (not only the cells in view), as tab-delimited text or JSON. The default file name is
+  `<gene>-<experiment>`.
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
@@ -240,6 +359,8 @@ message. A differential experiment gets a message instead of a grid.
 | `atlasUrl` | string | `'https://www.ebi.ac.uk/gxa/'` | As ExpressionAtlasHeatmap's |
 | `rowFactor`, `columnFactor` | string | | The factors on the rows and the columns. Each is used when it names a factor that varies, and otherwise ignored; `columnFactor` wins when both name the same one. Without them the grid keeps its own choice |
 | `onChangeFactors` | `({rowFactor, columnFactor}) => void` | | When the reader swaps or chooses the axes (not for the defaults). Store the axes and pass them back to keep them |
+| `downloadFileName` | string | `<gene>-<experiment>` | The file name (without extension) the Download dialog suggests |
+| `showDownload` | boolean | `true` | The Download button |
 | `inProxy`, `linkTarget`, `resolveUrl`, `fail`, `className`, `style`, `injectStyles` | | | As ExpressionAtlasHeatmap's. `resolveUrl` gets `{query: {gene}, experiment}`; the only link is the error alert's support link. The root is `div.gxaHeatmapContainer.gxaFactorGrid` |
 
 A new `experiment`, `gene` or `atlasUrl` fetches again, and the grid's own choice of axes starts afresh. gramene-search
@@ -263,8 +384,9 @@ npm run fixtures       # recapture test/fixtures from the live backend (read-onl
   the injected sorghum SVG, tissue and column highlighting both ways, and `normaliseSpecies`. `test/load/` holds golden
   snapshots of upstream's `src/load/` output. `test/grid/` tests ExpressionFactorGrid's model on the four JGI
   studies, and its colours against those Highcharts itself gives the points of the same payload's heatmap.
-- **The playground** has an `atlasUrl` choice (auth_testing, sorghum_v11, EBI), genes, experiment, the boolean props,
-  `linkTarget`, a demo `resolveUrl`, and a switch that logs `window.open` instead of opening. Its panels show All
+- **The playground** has an `atlasUrl` choice (auth_testing, sorghum_v11, EBI), genes, experiment, the boolean props
+  (`showDownload` included), `linkTarget`, `downloadFileName`, a demo `resolveUrl` (which, like gramene-search's,
+  leaves out the full data link of the JGI studies), and a switch that logs `window.open` instead of opening. Its panels show All
   Studies and Paralogs side by side, a resizable container, gramene-search's fullscreen modal, the `render()` API
   and ExpressionFactorGrid (a study select, JGI-SB-1 to 4 and two EBI studies, and a gene field; the axes are kept
   per study), with an event log of `fail` and `onChangeFactors` calls. URL parameters: `?api=mock` (answers from
@@ -281,9 +403,9 @@ Install tarballs rather than `npm link` (a symlink would load a second React), a
 spec (`check-release` refuses to pack one):
 
 ```bash
-npm run pack:local                       # gramene-atlas-heatmap-6.2.0.tgz
+npm run pack:local                       # gramene-atlas-heatmap-6.3.0.tgz
 cd ../gramene-search
-npm install --no-save ../atlas-heatmap/gramene-atlas-heatmap-6.2.0.tgz
+npm install --no-save ../atlas-heatmap/gramene-atlas-heatmap-6.3.0.tgz
 rm -rf .parcel-cache*
 ```
 
