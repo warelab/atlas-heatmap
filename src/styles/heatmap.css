@@ -95,6 +95,209 @@
 }
 
 /*
+ * ExpressionFactorGrid (src/grid): a table of one gene's expression by two study factors. Each cell is split into one
+ * band per sample, coloured inline; cells with nothing measured, and samples without a value, are hatched.
+ */
+.gxaHeatmapContainer .gxa-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* As wide as the table (the toolbar and the legend follow it), and no wider than the page: the table then scrolls */
+.gxaHeatmapContainer .gxa-grid {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: top;
+  font-size: 12px;
+  color: #333;
+}
+
+.gxaHeatmapContainer .gxa-grid-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.gxaHeatmapContainer .gxa-grid-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+
+.gxaHeatmapContainer .gxa-grid-axis-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.gxaHeatmapContainer .gxa-grid-axis-choice .form-select {
+  width: auto;
+  max-width: 16rem;
+}
+
+.gxaHeatmapContainer .gxa-grid-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: auto;
+  color: #606060;
+}
+
+.gxaHeatmapContainer .gxa-grid-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.gxaHeatmapContainer .gxa-grid-table {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.gxaHeatmapContainer .gxa-grid-table caption {
+  caption-side: top;
+  padding: 0 2px 0.25rem;
+  color: #555;
+  text-align: left;
+}
+
+.gxaHeatmapContainer .gxa-grid-axis {
+  padding: 0 2px 2px;
+  color: #555;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gxaHeatmapContainer .gxa-grid-axis--columns {
+  text-align: left;
+  border-bottom: 1px solid rgb(192, 192, 192);
+}
+
+.gxaHeatmapContainer .gxa-grid-axis--rows {
+  text-align: right;
+  vertical-align: bottom;
+  padding-right: 6px;
+}
+
+.gxaHeatmapContainer .gxa-grid-col {
+  padding: 2px 0;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+/* Long column labels run bottom to top, cut short with an ellipsis (the title has the whole label) */
+.gxaHeatmapContainer .gxa-grid-col--vertical .gxa-grid-col-label {
+  display: inline-block;
+  max-height: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.gxaHeatmapContainer .gxa-grid-row {
+  padding: 0 6px 0 0;
+  font-weight: normal;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.gxaHeatmapContainer .gxa-grid-row-label {
+  display: inline-block;
+  max-width: 20rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
+.gxaHeatmapContainer .gxa-grid-cell {
+  position: relative;
+  height: 32px;
+  padding: 0;
+  background: #fff;
+}
+
+.gxaHeatmapContainer .gxa-grid-bands {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  gap: 1px;
+}
+
+.gxaHeatmapContainer .gxa-grid-band {
+  flex: 1 1 0;
+  min-width: 4px;
+  cursor: default;
+}
+
+/* No data: an empty cell, a sample without a value, and their legend swatch (after the rules it overrides) */
+.gxaHeatmapContainer .gxa-grid-no-data {
+  background: repeating-linear-gradient(135deg, rgb(235, 235, 235) 0 3px, #fafafa 3px 6px);
+}
+
+.gxaHeatmapContainer .gxa-grid-band:hover,
+.gxaHeatmapContainer .gxa-grid-band:focus-visible,
+.gxaHeatmapContainer .gxa-grid-band--active {
+  outline: 2px solid #333;
+  outline-offset: -2px;
+}
+
+.gxaHeatmapContainer .gxa-grid-tooltip {
+  position: absolute;
+  z-index: 1100;
+  width: max-content;
+  max-width: 26rem;
+  padding: 5px 7px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid darkgray;
+  border-radius: 3px;
+  box-shadow: 2px 2px 2px darkslategray;
+  color: #333;
+  font-size: 12px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.gxaHeatmapContainer .gxa-grid-tooltip dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 0.5rem;
+  margin: 0;
+}
+
+.gxaHeatmapContainer .gxa-grid-tooltip dt {
+  color: #555;
+  font-weight: normal;
+}
+
+.gxaHeatmapContainer .gxa-grid-tooltip dd {
+  margin: 0;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.gxaHeatmapContainer .gxa-grid-swatch {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: 0.25rem;
+  border: 1px solid rgb(192, 192, 192);
+}
+
+/*
  * The one global rule. Highcharts 6.2 appends the tooltip's own container (tooltip.outside) to <body> with no
  * z-index, so it would show behind a fullscreen host modal (Bootstrap 5 modals are at z-index 1055).
  */

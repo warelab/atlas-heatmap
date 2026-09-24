@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {createRoot} from 'react-dom/client'
 
+import ExpressionFactorGrid from './grid/ExpressionFactorGrid.js'
 import ContainerLoader from './layout/ContainerLoader.js'
 import HeatmapErrorBoundary from './layout/HeatmapErrorBoundary.js'
 import {DEFAULT_ATLAS_URL, useUrlFor, withDefaults, withTrailingSlash} from './layout/options.js'
@@ -159,6 +160,7 @@ const render = (options = {}) => {
 export {
   ExpressionAtlasHeatmap as default,
   ExpressionAtlasHeatmap,
+  ExpressionFactorGrid,
   render,
   DEFAULT_OPTIONS,
   ensureStylesInjected,

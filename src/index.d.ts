@@ -124,6 +124,50 @@ export interface ExpressionAtlasHeatmapProps {
 export declare const ExpressionAtlasHeatmap: FunctionComponent<ExpressionAtlasHeatmapProps>
 export default ExpressionAtlasHeatmap
 
+/** The factors on the rows and on the columns of an ExpressionFactorGrid. */
+export interface FactorGridAxes {
+  rowFactor: string
+  columnFactor: string
+}
+
+export interface ExpressionFactorGridProps {
+  /** The experiment accession, e.g. `'JGI-SB-1'`. */
+  experiment: string
+  /** One gene id, sent as `geneQuery`. */
+  gene: string
+  /** As ExpressionAtlasHeatmap's: default `'https://www.ebi.ac.uk/gxa/'`; a trailing `/` is added. */
+  atlasUrl?: string
+  /**
+   * The factor on the rows. Used when the experiment's assay groups have more than one value of it; otherwise (and
+   * when absent) the grid's own choice: the default, or the last one made in the grid.
+   */
+  rowFactor?: string
+  /** The factor on the columns; as `rowFactor`, and it wins when both name the same factor. */
+  columnFactor?: string
+  /** Called when the reader swaps the axes or chooses a factor for one; not for the defaults. */
+  onChangeFactors?: (axes: FactorGridAxes) => void
+  /** Prefix for requests. Default `''`. */
+  inProxy?: string
+  /** Target of the links (those of the error alert). Default `'_blank'`. */
+  linkTarget?: string
+  /** As ExpressionAtlasHeatmap's; `context.experiment` is the accession and `context.query` is `{gene}`. */
+  resolveUrl?: ResolveUrl
+  /** Called once per failed request, and when drawing the grid throws. */
+  fail?: (failure: HeatmapFailure) => void
+  /** Added to the root `div.gxaHeatmapContainer.gxaFactorGrid`. */
+  className?: string
+  style?: CSSProperties
+  /** Default true. */
+  injectStyles?: boolean
+}
+
+/**
+ * One gene's expression in one baseline experiment, as a table of the experiment's factors: one factor on the columns
+ * (`organism part` when it varies), another on the rows, any others folded into the rows, and a cell per combination
+ * split into one band per sample, coloured as ExpressionAtlasHeatmap colours that experiment. No Highcharts.
+ */
+export declare const ExpressionFactorGrid: FunctionComponent<ExpressionFactorGridProps>
+
 export interface RenderOptions extends ExpressionAtlasHeatmapProps {
   /** An element, or the id of one. */
   target: string | Element

@@ -94,7 +94,8 @@ if (!css.includes('.gxaHeatmapContainer') || !css.includes('body > .highcharts-t
 // node_modules.
 const NAMED_IMPORT = /\bimport\s*(?:[\w$]+\s*,\s*)?\{([^}]*)\}\s*from\s*"([^"]+)"/g;
 const PUBLIC_EXPORTS = [
-  'default', 'ExpressionAtlasHeatmap', 'render', 'DEFAULT_OPTIONS', 'ensureStylesInjected', 'STYLE_ELEMENT_ID', 'HEATMAP_CSS',
+  'default', 'ExpressionAtlasHeatmap', 'ExpressionFactorGrid', 'render', 'DEFAULT_OPTIONS', 'ensureStylesInjected',
+  'STYLE_ELEMENT_ID', 'HEATMAP_CSS',
 ];
 const resolves = (specifier) => {
   try {

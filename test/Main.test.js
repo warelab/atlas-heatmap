@@ -3,8 +3,9 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ExpressionAtlasHeatmapDefault, {
-  DEFAULT_OPTIONS, ExpressionAtlasHeatmap, render as renderHeatmap
+  DEFAULT_OPTIONS, ExpressionAtlasHeatmap, ExpressionFactorGrid, render as renderHeatmap
 } from '../src/Main.js'
+import GridComponent, { GRID_DEFAULTS } from '../src/grid/ExpressionFactorGrid.js'
 import { allowConsole } from './consoleGuard.js'
 import { mockFetch } from './helpers/fetch.js'
 import allStudies from './fixtures/all-studies.SORBI_3001G000200.json'
@@ -48,6 +49,14 @@ describe(`ExpressionAtlasHeatmap`, () => {
       linkTarget: `_blank`,
       injectStyles: true
     })
+  })
+
+  it(`exports ExpressionFactorGrid, whose defaults are the heatmap's`, () => {
+    expect(ExpressionFactorGrid).toBe(GridComponent)
+    expect(GRID_DEFAULTS).toEqual({
+      atlasUrl: DEFAULT_OPTIONS.atlasUrl, inProxy: ``, linkTarget: DEFAULT_OPTIONS.linkTarget, injectStyles: true
+    })
+    expect(Object.isFrozen(GRID_DEFAULTS)).toBe(true)
   })
 
   it(`fetches All Studies and hands the Container the payload and the defaults`, async () => {
