@@ -1,4 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
+import { dirname, join } from 'node:path'
 import { act, render, waitFor } from '@testing-library/react'
 import Highcharts from 'highcharts'
 import { describe, expect, it, vi } from 'vitest'
@@ -13,27 +15,23 @@ import curd25 from './fixtures/paralogs.E-CURD-25.baseline.json'
 // Everywhere else the tests use the anatomogram stub (vitest.config.js aliases gramene-anatomogram to it). This file
 // renders the heatmap with the real package, so that a change on either side of the contract fails a test: the props
 // (species, showIds, highlightIds, onMouseOver, onMouseOut, linkTarget) and the species helpers, which the stub copies.
-// It runs whenever gramene-anatomogram is installed (after plan step H10, and in CI once 3.0.0 is published); until
-// then it is skipped, and the stub stands in so that the imports resolve.
+// gramene-anatomogram is a dependency, so the file fails when it is not installed. Until 3.0.0 is on npm, install its
+// tarball: npm install --no-save ../anatomogram/gramene-anatomogram-3.0.0.tgz
+// The alias would also catch `import('gramene-anatomogram')` here, so the mock imports the installed entry by its path.
+// (vi.mock is hoisted above the imports, so the factory resolves the entry itself.)
 vi.mock(`gramene-anatomogram`, async () => {
   const {createRequire} = await import(`node:module`)
-  let entry
-  try {
-    entry = createRequire(import.meta.url).resolve(`gramene-anatomogram`)
-  } catch {
-    return import(`./stubs/anatomogram.js`)
-  }
-  return import(/* @vite-ignore */ entry)
+  return import(/* @vite-ignore */ createRequire(import.meta.url).resolve(`gramene-anatomogram`))
 })
+const ANATOMOGRAM_ENTRY = createRequire(import.meta.url).resolve(`gramene-anatomogram`)
 
-const installed = (() => {
-  try {
-    createRequire(import.meta.url).resolve(`gramene-anatomogram`)
-    return true
-  } catch {
-    return false
-  }
-})()
+// The tissue ids of the sorghum whole-plant SVG, read from the package's lazy chunk for it
+const sorghumWholePlantIds = () => {
+  const svgDir = join(dirname(ANATOMOGRAM_ENTRY), `svg`)
+  const chunks = readdirSync(svgDir).filter(name => name.startsWith(`sorghum_bicolor.whole_plant-`))
+  expect(chunks).toHaveLength(1)
+  return new Set(readFileSync(join(svgDir, chunks[0]), `utf8`).match(/\bPO_\d{7}\b/g))
+}
 
 const AUTH_TESTING = `https://data.sorghumbase.org/auth_testing/gxa/`
 const PARALOGS = `SORBI_3001G000200 SORBI_3001G000400 SORBI_3001G000100`
@@ -63,16 +61,22 @@ const mouse = (element, type) => act(() => {
   element.dispatchEvent(new MouseEvent(type, {bubbles: true}))
 })
 
-describe.skipIf(!installed)(`with the real gramene-anatomogram`, () => {
+describe(`with the real gramene-anatomogram`, () => {
   it(`exports what the heatmap imports, as the stub models it`, () => {
     // the real package, not the stub
     expect(Object.keys(anatomogram)).not.toContain(`resetAnatomogramStub`)
     expect(Object.keys(anatomogram)).toEqual(expect.arrayContaining([`default`, `anatomogramSpecies`, `normaliseSpecies`]))
     expect(anatomogram.anatomogramSpecies).toEqual(stub.anatomogramSpecies)
-    for (const species of [`Sorghum bicolor`, `Sorghum  bicolor`, `sorghum_bicolor`, `Zea mays`, `Oryza sativa Japonica Group`]) {
+    // /\s+/g: every run of any whitespace becomes one `_`
+    for (const species of [
+      `Sorghum bicolor`, `Sorghum  bicolor`, `Sorghum\tbicolor`, `sorghum_bicolor`, `Zea mays`, `Oryza sativa Japonica Group`,
+      ` Sorghum bicolor `, ``, undefined, null,
+    ]) {
       expect(anatomogram.normaliseSpecies(species)).toBe(stub.normaliseSpecies(species))
     }
     expect(anatomogram.normaliseSpecies(`Sorghum bicolor`)).toBe(`sorghum_bicolor`)
+    expect(anatomogram.normaliseSpecies(`Sorghum\tbicolor`)).toBe(`sorghum_bicolor`)
+    expect(anatomogram.normaliseSpecies(`Oryza sativa Japonica Group`)).toBe(`oryza_sativa_japonica_group`)
   })
 
   it(`All Studies: the tissues and the columns highlight each other`, async () => {
@@ -80,6 +84,15 @@ describe.skipIf(!installed)(`with the real gramene-anatomogram`, () => {
     const {container} = render(
       <ExpressionAtlasHeatmap atlasUrl={AUTH_TESTING} query={{gene: `SORBI_3001G000200`}} experiment={false} />)
     const chart = await drawn(container)
+
+    // the real anatomogram, not the stub, has injected the sorghum whole-plant SVG
+    expect(container.querySelector(`[data-testid="anatomogram-stub"]`)).toBeNull()
+    const svg = container.querySelector(`.gxa-anatomogram svg.injected-svg`)
+    expect(svg).not.toBeNull()
+    expect(svg.querySelector(`#LAYER_EFO #${LEAF}`)).not.toBeNull()
+    const injectedIds = new Set([...svg.querySelectorAll(`#LAYER_EFO [id^="PO_"]`)].map(element => element.id))
+    expect(injectedIds).toEqual(sorghumWholePlantIds())
+    expect(container.querySelector(`.gxa-anatomogram-switcher [aria-pressed="true"]`)).toHaveAttribute(`title`, `whole plant`)
 
     // the SVG's licence link follows linkTarget
     const svgLinks = [...container.querySelectorAll(`svg a`)]
