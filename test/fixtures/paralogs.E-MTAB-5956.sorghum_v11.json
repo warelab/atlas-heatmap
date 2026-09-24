@@ -1,0 +1,1613 @@
+{
+  "captured_at": "2026-09-24T17:15:43.102Z",
+  "base": "https://data.sorghumbase.org/sorghum_v11/gxa/",
+  "method": "POST",
+  "path": "json/experiments/E-MTAB-5956",
+  "body_sent": "geneQuery=SORBI_3001G125700 SORBI_3001G125800 SORBI_3001G125900 SORBI_3001G483400 SORBI_3003G385500 SORBI_3003G385900 SORBI_3004G078600 SORBI_3006G095600 SORBI_3006G248300 SORBI_3007G210400 SORBI_3008G191000",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "body": {
+    "anatomogram": {
+      "species": "Sorghum bicolor",
+      "allSvgPathIds": [
+        "PO_0009089",
+        "PO_0009084",
+        "PO_0009009",
+        "PO_0009010",
+        "PO_0025281",
+        "PO_0007014",
+        "PO_0009049",
+        "PO_0025034",
+        "PO_0007131",
+        "PO_0009005",
+        "PO_0009006",
+        "UBERON_0000468"
+      ]
+    },
+    "columnHeaders": [
+      {
+        "assayGroupId": "g1",
+        "factorValue": "endosperm; 20 days after pollination",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "endosperm",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "20 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant flowering stage",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009089"
+      },
+      {
+        "assayGroupId": "g5",
+        "factorValue": "inflorescence; inflorescence size 1 to 10 millimeter",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "inflorescence",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "not available",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "inflorescence size 1 to 10 millimeter",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "g6",
+        "factorValue": "inflorescence; inflorescence size 1 to 2 centimeter",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "inflorescence",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "not available",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "inflorescence size 1 to 2 centimeter",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "g7",
+        "factorValue": "inflorescence; inflorescence size 1 to 5 millimeter",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "inflorescence",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "not available",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "inflorescence size 1 to 5 millimeter",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009049"
+      },
+      {
+        "assayGroupId": "g8",
+        "factorValue": "leaf; seedling developmental stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "leaf",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "14 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling developmental stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007131"
+      },
+      {
+        "assayGroupId": "g2",
+        "factorValue": "pericarp; 20 days after pollination",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "pericarp",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "20 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "whole plant flowering stage",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009084"
+      },
+      {
+        "assayGroupId": "g3",
+        "factorValue": "plant embryo; 20 days after pollination",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "plant embryo",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "20 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "20 days after pollination",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0009010"
+      },
+      {
+        "assayGroupId": "g4",
+        "factorValue": "pollen; booting stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "pollen",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "9 to 10 week",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "booting stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007014"
+      },
+      {
+        "assayGroupId": "g9",
+        "factorValue": "root; seedling developmental stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "root",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "14 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling developmental stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007131"
+      },
+      {
+        "assayGroupId": "g10",
+        "factorValue": "shoot; seedling developmental stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "shoot",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "14 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling developmental stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007131"
+      },
+      {
+        "assayGroupId": "g11",
+        "factorValue": "whole organism; seedling developmental stage",
+        "assayGroupSummary": {
+          "replicates": 2,
+          "properties": [
+            {
+              "propertyName": "cultivar",
+              "testValue": "BTX623",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism",
+              "testValue": "Sorghum bicolor",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "organism part",
+              "testValue": "whole organism",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "age",
+              "testValue": "14 day",
+              "contrastPropertyType": "SAMPLE"
+            },
+            {
+              "propertyName": "developmental stage",
+              "testValue": "seedling developmental stage",
+              "contrastPropertyType": "FACTOR"
+            },
+            {
+              "propertyName": "genotype",
+              "testValue": "wild type genotype",
+              "contrastPropertyType": "SAMPLE"
+            }
+          ]
+        },
+        "factorValueOntologyTermId": "PO_0007131"
+      }
+    ],
+    "columnGroupings": [],
+    "profiles": {
+      "rows": [
+        {
+          "id": "SORBI_3001G125700",
+          "name": "SORBI_3001G125700",
+          "uri": "genes/SORBI_3001G125700",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {},
+            {
+              "value": 245,
+              "quartiles": {
+                "min": 245,
+                "lower": 245,
+                "median": 245,
+                "upper": 245,
+                "max": 245
+              }
+            },
+            {
+              "value": 22,
+              "quartiles": {
+                "min": 22,
+                "lower": 22,
+                "median": 22,
+                "upper": 22,
+                "max": 22
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {},
+            {
+              "value": 88,
+              "quartiles": {
+                "min": 88,
+                "lower": 88,
+                "median": 88,
+                "upper": 88,
+                "max": 88
+              }
+            },
+            {
+              "value": 90,
+              "quartiles": {
+                "min": 90,
+                "lower": 90,
+                "median": 90,
+                "upper": 90,
+                "max": 90
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G125800",
+          "name": "SORBI_3001G125800",
+          "uri": "genes/SORBI_3001G125800",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 5,
+              "quartiles": {
+                "min": 5,
+                "lower": 5,
+                "median": 5,
+                "upper": 5,
+                "max": 5
+              }
+            },
+            {
+              "value": 8,
+              "quartiles": {
+                "min": 8,
+                "lower": 8,
+                "median": 8,
+                "upper": 8,
+                "max": 8
+              }
+            },
+            {
+              "value": 8,
+              "quartiles": {
+                "min": 8,
+                "lower": 8,
+                "median": 8,
+                "upper": 8,
+                "max": 8
+              }
+            },
+            {
+              "value": 7,
+              "quartiles": {
+                "min": 7,
+                "lower": 7,
+                "median": 7,
+                "upper": 7,
+                "max": 7
+              }
+            },
+            {
+              "value": 18,
+              "quartiles": {
+                "min": 18,
+                "lower": 18,
+                "median": 18,
+                "upper": 18,
+                "max": 18
+              }
+            },
+            {
+              "value": 212,
+              "quartiles": {
+                "min": 212,
+                "lower": 212,
+                "median": 212,
+                "upper": 212,
+                "max": 212
+              }
+            },
+            {
+              "value": 5,
+              "quartiles": {
+                "min": 5,
+                "lower": 5,
+                "median": 5,
+                "upper": 5,
+                "max": 5
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 208,
+              "quartiles": {
+                "min": 208,
+                "lower": 208,
+                "median": 208,
+                "upper": 208,
+                "max": 208
+              }
+            },
+            {
+              "value": 23,
+              "quartiles": {
+                "min": 23,
+                "lower": 23,
+                "median": 23,
+                "upper": 23,
+                "max": 23
+              }
+            },
+            {
+              "value": 89,
+              "quartiles": {
+                "min": 89,
+                "lower": 89,
+                "median": 89,
+                "upper": 89,
+                "max": 89
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G125900",
+          "name": "SORBI_3001G125900",
+          "uri": "genes/SORBI_3001G125900",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            },
+            {
+              "value": 97,
+              "quartiles": {
+                "min": 97,
+                "lower": 97,
+                "median": 97,
+                "upper": 97,
+                "max": 97
+              }
+            },
+            {
+              "value": 157,
+              "quartiles": {
+                "min": 157,
+                "lower": 157,
+                "median": 157,
+                "upper": 157,
+                "max": 157
+              }
+            },
+            {
+              "value": 104,
+              "quartiles": {
+                "min": 104,
+                "lower": 104,
+                "median": 104,
+                "upper": 104,
+                "max": 104
+              }
+            },
+            {
+              "value": 115,
+              "quartiles": {
+                "min": 115,
+                "lower": 115,
+                "median": 115,
+                "upper": 115,
+                "max": 115
+              }
+            },
+            {
+              "value": 313,
+              "quartiles": {
+                "min": 313,
+                "lower": 313,
+                "median": 313,
+                "upper": 313,
+                "max": 313
+              }
+            },
+            {
+              "value": 41,
+              "quartiles": {
+                "min": 41,
+                "lower": 41,
+                "median": 41,
+                "upper": 41,
+                "max": 41
+              }
+            },
+            {
+              "value": 30,
+              "quartiles": {
+                "min": 30,
+                "lower": 30,
+                "median": 30,
+                "upper": 30,
+                "max": 30
+              }
+            },
+            {
+              "value": 470,
+              "quartiles": {
+                "min": 470,
+                "lower": 470,
+                "median": 470,
+                "upper": 470,
+                "max": 470
+              }
+            },
+            {
+              "value": 199,
+              "quartiles": {
+                "min": 199,
+                "lower": 199,
+                "median": 199,
+                "upper": 199,
+                "max": 199
+              }
+            },
+            {
+              "value": 288,
+              "quartiles": {
+                "min": 288,
+                "lower": 288,
+                "median": 288,
+                "upper": 288,
+                "max": 288
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3001G483400",
+          "name": "SORBI_3001G483400",
+          "uri": "genes/SORBI_3001G483400",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            },
+            {
+              "value": 10,
+              "quartiles": {
+                "min": 10,
+                "lower": 10,
+                "median": 10,
+                "upper": 10,
+                "max": 10
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            },
+            {
+              "value": 14,
+              "quartiles": {
+                "min": 14,
+                "lower": 14,
+                "median": 14,
+                "upper": 14,
+                "max": 14
+              }
+            },
+            {
+              "value": 18,
+              "quartiles": {
+                "min": 18,
+                "lower": 18,
+                "median": 18,
+                "upper": 18,
+                "max": 18
+              }
+            },
+            {
+              "value": 6,
+              "quartiles": {
+                "min": 6,
+                "lower": 6,
+                "median": 6,
+                "upper": 6,
+                "max": 6
+              }
+            },
+            {},
+            {
+              "value": 15,
+              "quartiles": {
+                "min": 15,
+                "lower": 15,
+                "median": 15,
+                "upper": 15,
+                "max": 15
+              }
+            },
+            {
+              "value": 16,
+              "quartiles": {
+                "min": 16,
+                "lower": 16,
+                "median": 16,
+                "upper": 16,
+                "max": 16
+              }
+            },
+            {
+              "value": 20,
+              "quartiles": {
+                "min": 20,
+                "lower": 20,
+                "median": 20,
+                "upper": 20,
+                "max": 20
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3003G385500",
+          "name": "SORBI_3003G385500",
+          "uri": "genes/SORBI_3003G385500",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {
+              "value": 20,
+              "quartiles": {
+                "min": 20,
+                "lower": 20,
+                "median": 20,
+                "upper": 20,
+                "max": 20
+              }
+            },
+            {
+              "value": 97,
+              "quartiles": {
+                "min": 97,
+                "lower": 97,
+                "median": 97,
+                "upper": 97,
+                "max": 97
+              }
+            },
+            {
+              "value": 13,
+              "quartiles": {
+                "min": 13,
+                "lower": 13,
+                "median": 13,
+                "upper": 13,
+                "max": 13
+              }
+            },
+            {
+              "value": 45,
+              "quartiles": {
+                "min": 45,
+                "lower": 45,
+                "median": 45,
+                "upper": 45,
+                "max": 45
+              }
+            },
+            {
+              "value": 243,
+              "quartiles": {
+                "min": 243,
+                "lower": 243,
+                "median": 243,
+                "upper": 243,
+                "max": 243
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 109,
+              "quartiles": {
+                "min": 109,
+                "lower": 109,
+                "median": 109,
+                "upper": 109,
+                "max": 109
+              }
+            },
+            {
+              "value": 144,
+              "quartiles": {
+                "min": 144,
+                "lower": 144,
+                "median": 144,
+                "upper": 144,
+                "max": 144
+              }
+            },
+            {
+              "value": 170,
+              "quartiles": {
+                "min": 170,
+                "lower": 170,
+                "median": 170,
+                "upper": 170,
+                "max": 170
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3003G385900",
+          "name": "SORBI_3003G385900",
+          "uri": "genes/SORBI_3003G385900",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 28,
+              "quartiles": {
+                "min": 28,
+                "lower": 28,
+                "median": 28,
+                "upper": 28,
+                "max": 28
+              }
+            },
+            {
+              "value": 25,
+              "quartiles": {
+                "min": 25,
+                "lower": 25,
+                "median": 25,
+                "upper": 25,
+                "max": 25
+              }
+            },
+            {
+              "value": 24,
+              "quartiles": {
+                "min": 24,
+                "lower": 24,
+                "median": 24,
+                "upper": 24,
+                "max": 24
+              }
+            },
+            {
+              "value": 20,
+              "quartiles": {
+                "min": 20,
+                "lower": 20,
+                "median": 20,
+                "upper": 20,
+                "max": 20
+              }
+            },
+            {
+              "value": 62,
+              "quartiles": {
+                "min": 62,
+                "lower": 62,
+                "median": 62,
+                "upper": 62,
+                "max": 62
+              }
+            },
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            },
+            {},
+            {
+              "value": 57,
+              "quartiles": {
+                "min": 57,
+                "lower": 57,
+                "median": 57,
+                "upper": 57,
+                "max": 57
+              }
+            },
+            {
+              "value": 53,
+              "quartiles": {
+                "min": 53,
+                "lower": 53,
+                "median": 53,
+                "upper": 53,
+                "max": 53
+              }
+            },
+            {
+              "value": 49,
+              "quartiles": {
+                "min": 49,
+                "lower": 49,
+                "median": 49,
+                "upper": 49,
+                "max": 49
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3004G078600",
+          "name": "SORBI_3004G078600",
+          "uri": "genes/SORBI_3004G078600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 39,
+              "quartiles": {
+                "min": 39,
+                "lower": 39,
+                "median": 39,
+                "upper": 39,
+                "max": 39
+              }
+            },
+            {
+              "value": 45,
+              "quartiles": {
+                "min": 45,
+                "lower": 45,
+                "median": 45,
+                "upper": 45,
+                "max": 45
+              }
+            },
+            {
+              "value": 40,
+              "quartiles": {
+                "min": 40,
+                "lower": 40,
+                "median": 40,
+                "upper": 40,
+                "max": 40
+              }
+            },
+            {
+              "value": 44,
+              "quartiles": {
+                "min": 44,
+                "lower": 44,
+                "median": 44,
+                "upper": 44,
+                "max": 44
+              }
+            },
+            {
+              "value": 1253,
+              "quartiles": {
+                "min": 1253,
+                "lower": 1253,
+                "median": 1253,
+                "upper": 1253,
+                "max": 1253
+              }
+            },
+            {
+              "value": 697,
+              "quartiles": {
+                "min": 697,
+                "lower": 697,
+                "median": 697,
+                "upper": 697,
+                "max": 697
+              }
+            },
+            {
+              "value": 33,
+              "quartiles": {
+                "min": 33,
+                "lower": 33,
+                "median": 33,
+                "upper": 33,
+                "max": 33
+              }
+            },
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {
+              "value": 30,
+              "quartiles": {
+                "min": 30,
+                "lower": 30,
+                "median": 30,
+                "upper": 30,
+                "max": 30
+              }
+            },
+            {
+              "value": 724,
+              "quartiles": {
+                "min": 724,
+                "lower": 724,
+                "median": 724,
+                "upper": 724,
+                "max": 724
+              }
+            },
+            {
+              "value": 525,
+              "quartiles": {
+                "min": 525,
+                "lower": 525,
+                "median": 525,
+                "upper": 525,
+                "max": 525
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3006G095600",
+          "name": "SORBI_3006G095600",
+          "uri": "genes/SORBI_3006G095600",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {
+              "value": 3,
+              "quartiles": {
+                "min": 3,
+                "lower": 3,
+                "median": 3,
+                "upper": 3,
+                "max": 3
+              }
+            },
+            {
+              "value": 31,
+              "quartiles": {
+                "min": 31,
+                "lower": 31,
+                "median": 31,
+                "upper": 31,
+                "max": 31
+              }
+            },
+            {
+              "value": 4,
+              "quartiles": {
+                "min": 4,
+                "lower": 4,
+                "median": 4,
+                "upper": 4,
+                "max": 4
+              }
+            },
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {
+              "value": 16,
+              "quartiles": {
+                "min": 16,
+                "lower": 16,
+                "median": 16,
+                "upper": 16,
+                "max": 16
+              }
+            },
+            {
+              "value": 60,
+              "quartiles": {
+                "min": 60,
+                "lower": 60,
+                "median": 60,
+                "upper": 60,
+                "max": 60
+              }
+            },
+            {
+              "value": 68,
+              "quartiles": {
+                "min": 68,
+                "lower": 68,
+                "median": 68,
+                "upper": 68,
+                "max": 68
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3006G248300",
+          "name": "SORBI_3006G248300",
+          "uri": "genes/SORBI_3006G248300",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {},
+            {
+              "value": 6,
+              "quartiles": {
+                "min": 6,
+                "lower": 6,
+                "median": 6,
+                "upper": 6,
+                "max": 6
+              }
+            },
+            {},
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {
+              "value": 83,
+              "quartiles": {
+                "min": 83,
+                "lower": 83,
+                "median": 83,
+                "upper": 83,
+                "max": 83
+              }
+            },
+            {
+              "value": 2,
+              "quartiles": {
+                "min": 2,
+                "lower": 2,
+                "median": 2,
+                "upper": 2,
+                "max": 2
+              }
+            },
+            {},
+            {
+              "value": 5,
+              "quartiles": {
+                "min": 5,
+                "lower": 5,
+                "median": 5,
+                "upper": 5,
+                "max": 5
+              }
+            },
+            {
+              "value": 15,
+              "quartiles": {
+                "min": 15,
+                "lower": 15,
+                "median": 15,
+                "upper": 15,
+                "max": 15
+              }
+            },
+            {
+              "value": 14,
+              "quartiles": {
+                "min": 14,
+                "lower": 14,
+                "median": 14,
+                "upper": 14,
+                "max": 14
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3007G210400",
+          "name": "SORBI_3007G210400",
+          "uri": "genes/SORBI_3007G210400",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {
+              "value": 0.7,
+              "quartiles": {
+                "min": 0.7,
+                "lower": 0.7,
+                "median": 0.7,
+                "upper": 0.7,
+                "max": 0.7
+              }
+            },
+            {},
+            {
+              "value": 0.6,
+              "quartiles": {
+                "min": 0.6,
+                "lower": 0.6,
+                "median": 0.6,
+                "upper": 0.6,
+                "max": 0.6
+              }
+            },
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            }
+          ]
+        },
+        {
+          "id": "SORBI_3008G191000",
+          "name": "SORBI_3008G191000",
+          "uri": "genes/SORBI_3008G191000",
+          "expressionUnit": "TPM",
+          "expressions": [
+            {
+              "value": 0.5,
+              "quartiles": {
+                "min": 0.5,
+                "lower": 0.5,
+                "median": 0.5,
+                "upper": 0.5,
+                "max": 0.5
+              }
+            },
+            {},
+            {
+              "value": 0.9,
+              "quartiles": {
+                "min": 0.9,
+                "lower": 0.9,
+                "median": 0.9,
+                "upper": 0.9,
+                "max": 0.9
+              }
+            },
+            {},
+            {
+              "value": 3,
+              "quartiles": {
+                "min": 3,
+                "lower": 3,
+                "median": 3,
+                "upper": 3,
+                "max": 3
+              }
+            },
+            {
+              "value": 10,
+              "quartiles": {
+                "min": 10,
+                "lower": 10,
+                "median": 10,
+                "upper": 10,
+                "max": 10
+              }
+            },
+            {
+              "value": 1,
+              "quartiles": {
+                "min": 1,
+                "lower": 1,
+                "median": 1,
+                "upper": 1,
+                "max": 1
+              }
+            },
+            {},
+            {
+              "value": 11,
+              "quartiles": {
+                "min": 11,
+                "lower": 11,
+                "median": 11,
+                "upper": 11,
+                "max": 11
+              }
+            },
+            {
+              "value": 8,
+              "quartiles": {
+                "min": 8,
+                "lower": 8,
+                "median": 8,
+                "upper": 8,
+                "max": 8
+              }
+            },
+            {
+              "value": 9,
+              "quartiles": {
+                "min": 9,
+                "lower": 9,
+                "median": 9,
+                "upper": 9,
+                "max": 9
+              }
+            }
+          ]
+        }
+      ],
+      "searchResultTotal": "11"
+    },
+    "config": {
+      "columnType": "",
+      "conditionQuery": "",
+      "disclaimer": "",
+      "geneQuery": "%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D",
+      "genomeBrowsers": [],
+      "species": "Sorghum bicolor"
+    },
+    "experiment": {
+      "accession": "E-MTAB-5956",
+      "description": "RNA-sequencing of Sorghum tissues at different developmental stages (comparative transcriptome study)",
+      "species": "Sorghum bicolor",
+      "type": "rnaseq_mrna_baseline",
+      "urls": {
+        "download": "https://www.ebi.ac.uk/gxa/experiments-content/E-MTAB-5956/download/RNASEQ_MRNA_BASELINE?unit=TPM&cutoff=0.5&heatmapMatrixSize=50&selectedColumnIds=&type=RNASEQ_MRNA_BASELINE&geneQuery=%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D",
+        "genome_browsers": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956/redirect/genome-browsers",
+        "main_page": "https://www.ebi.ac.uk/gxa/experiments/E-MTAB-5956?geneQuery=%5Bnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%5D"
+      }
+    }
+  }
+}

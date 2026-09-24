@@ -36,6 +36,14 @@ const FOURTEEN_PARALOGS = [
   `SORBI_3005G114400`, `SORBI_3006G050000`, `SORBI_3007G179800`, `SORBI_3K044407`,
 ]
 
+// The within-species paralogs gramene-search sends for SORBI_3006G095600 (msd2; sorghum_v11 search API:
+// q=homology__within_species_paralog:SORBI_3006G095600, fq=taxon_id:4558006), in that order.
+const MSD2_PARALOGS = [
+  `SORBI_3001G125700`, `SORBI_3001G125800`, `SORBI_3001G125900`, `SORBI_3001G483400`, `SORBI_3003G385500`,
+  `SORBI_3003G385900`, `SORBI_3004G078600`, `SORBI_3006G095600`, `SORBI_3006G248300`, `SORBI_3007G210400`,
+  `SORBI_3008G191000`,
+]
+
 // name -> the heatmap props that produce the request, plus the status the capture expects
 const FIXTURES = {
   'all-studies.SORBI_3001G000200': {query: {gene: `SORBI_3001G000200`}, experiment: false, expect: 200},
@@ -45,6 +53,8 @@ const FIXTURES = {
   'error.unknown-gene': {query: {gene: `NOT_A_REAL_GENE`}, experiment: false, expect: 500},
   // A larger All Studies payload from the instance SorghumBase uses (about 58 rows).
   'all-studies.SORBI_3001G000200.sorghum_v11': {query: {gene: `SORBI_3001G000200`}, experiment: false, expect: 200, base: SORGHUM_V11},
+  // Few columns with long labels (up to 52 characters): at desktop widths each column is wider than 80 px.
+  'paralogs.E-MTAB-5956.sorghum_v11': {query: {gene: MSD2_PARALOGS.join(` `)}, experiment: `E-MTAB-5956`, expect: 200, base: SORGHUM_V11},
 }
 
 mkdirSync(OUT, { recursive: true })

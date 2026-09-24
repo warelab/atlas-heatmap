@@ -6,6 +6,7 @@ import Highcharts from 'highcharts'
 import HeatmapCanvas, { selectColumnsByOntologyIds } from '../../src/show/HeatmapCanvas.js'
 import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
 import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
+import emtab5956 from '../fixtures/paralogs.E-MTAB-5956.sorghum_v11.json'
 import { canvasProps } from '../helpers/canvas.js'
 import { ResizeObserverStub } from '../shims.js'
 
@@ -27,6 +28,17 @@ const withWidth = initial => {
     await act(() => new Promise(resolve => setTimeout(resolve, 150)))
   }
 }
+
+// Highcharts sizes a chart from Highcharts.getStyle(container, 'width'), which is NaN in jsdom (no layout), so every
+// chart is 600 px wide. This gives the chart container (marked data-highcharts-chart before it is measured) a width.
+const chartWidth = width => {
+  const getStyle = Highcharts.getStyle
+  vi.spyOn(Highcharts, `getStyle`).mockImplementation((element, property, toInt) =>
+    property === `width` && element.hasAttribute(`data-highcharts-chart`) ? width : getStyle(element, property, toInt))
+}
+
+// The rotation each column label is drawn with
+const labelRotations = xAxis => xAxis.tickPositions.map(position => xAxis.ticks[position].label.rotation || 0)
 
 const LEAF = `PO_0025034`
 
@@ -199,6 +211,35 @@ describe(`HeatmapCanvas`, () => {
     expect(container.querySelectorAll(`.highcharts-container`)).toHaveLength(1)
     unmount()
     expect(liveCharts()).toHaveLength(0)
+  })
+
+  // msd2's paralogs in E-MTAB-5956: 11 columns, labels of up to 52 characters that do not wrap (whiteSpace nowrap).
+  // Highcharts 6 only auto-rotates labels while a column is under autoRotationLimit (80 px) wide, so on a desktop
+  // screen they were left horizontal and ran into each other.
+  it(`rotates column labels that are wider than their column, however wide the columns are`, () => {
+    withWidth(1600)
+    chartWidth(1600)
+    const props = canvasProps(emtab5956)
+    render(<HeatmapCanvas {...props} />)
+
+    const xAxis = onlyChart().xAxis[0]
+    expect(xAxis.categories).toHaveLength(11)
+    expect(xAxis.len / xAxis.categories.length).toBeGreaterThan(80)
+    expect(labelRotations(xAxis)).toEqual(Array(11).fill(-90))
+  })
+
+  it(`leaves column labels that fit their column horizontal`, () => {
+    withWidth(1600)
+    chartWidth(1600)
+    const props = canvasProps(emtab5956)
+    // one-word labels, about 36 px in the test's text metrics, in columns over 80 px wide
+    const shortLabels = {
+      ...props.heatmapData,
+      xAxisCategories: props.heatmapData.xAxisCategories.map(category => ({...category, label: category.label.split(`;`)[0].slice(0, 6)}))
+    }
+    render(<HeatmapCanvas {...props} heatmapData={shortLabels} />)
+
+    expect(labelRotations(onlyChart().xAxis[0])).toEqual(Array(11).fill(0))
   })
 
   it(`says so when the filters leave no rows`, () => {

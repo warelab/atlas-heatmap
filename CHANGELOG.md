@@ -5,6 +5,15 @@ All notable changes to gramene-atlas-heatmap are recorded here. The format follo
 Versions before 6.0.0 are upstream's
 [@ebi-gene-expression-group/expression-atlas-heatmap-highcharts](https://github.com/ebi-gene-expression-group/atlas-heatmap).
 
+## [6.0.1] - 2026-09-24
+
+### Fixed
+
+- Column labels no longer overlap when each column is 80 px wide or more (few columns on a wide screen, e.g.
+  E-MTAB-5956's 11 columns on a desktop). Highcharts only auto-rotated labels in narrower columns and otherwise
+  tried to word-wrap them, which the baseline labels' `white-space: nowrap` prevents. Labels wider than their
+  column are now rotated at any width (`xAxis.labels.autoRotationLimit: Infinity`); labels that fit stay horizontal.
+
 ## [6.0.0] - 2026-09-23
 
 The first release of the Gramene fork, from expression-atlas-heatmap-highcharts 5.7.2. It is drawn in the host page
@@ -104,4 +113,5 @@ instead of an iframe, so gramene-search can show the Expression Atlas heatmap in
 - Row labels and tooltips are no longer entity-decoded (he) after rendering: markup in a backend string, such as
   `<img onerror>` in a row name, shows as text instead of running.
 
+[6.0.1]: https://github.com/warelab/atlas-heatmap/compare/v6.0.0...v6.0.1
 [6.0.0]: https://github.com/warelab/atlas-heatmap/compare/v5.7.2...v6.0.0

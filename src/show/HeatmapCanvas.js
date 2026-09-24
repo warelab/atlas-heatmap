@@ -198,6 +198,10 @@ const buildHeatmapOptions = (latestRef, {marginBottom, marginRight, height, auto
           }
         },
         autoRotation,
+        // Highcharts only auto-rotates while a column is under 80 px wide; wider, it word-wraps instead, which the
+        // nowrap style of baseline labels prevents, so long labels overlapped on wide screens. Rotate whenever a label
+        // is wider than its column, as the layout (marginTop, height) already assumes.
+        autoRotationLimit: Infinity,
         formatter: function() {
           return latest().xAxisFormatter(this.value)
         }
