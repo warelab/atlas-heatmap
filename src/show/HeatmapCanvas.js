@@ -148,6 +148,19 @@ const titleColumnLabels = chart => {
   })
 }
 
+// The columns in view of a zoomed x axis ({from, to}, both included), or null when it is not zoomed. The axis shows
+// [min - 0.5, max + 0.5] (each column is a category one wide), and a column is in view when its centre is: the columns
+// whose labels show.
+const visibleColumnsOf = axis => {
+  const zoomed = axis.userMin !== undefined && axis.userMin !== null && axis.userMax !== undefined && axis.userMax !== null
+  if (!zoomed) {
+    return null
+  }
+  const last = (axis.categories ? axis.categories.length : 0) - 1
+  const from = Math.max(0, Math.ceil(axis.min - 0.5))
+  return {from, to: Math.max(from, Math.min(last, Math.floor(axis.max + 0.5)))}
+}
+
 // Upstream's highchartsConfig. Series, categories and styles come from the props when the options are built; every
 // callback reads the latest props from latestRef when it runs, so new callbacks alone never rebuild the chart.
 // onSetExtremes(extremes | null) hears of every zoom and zoom reset.
@@ -261,6 +274,11 @@ const buildHeatmapOptions = (latestRef, {marginBottom, marginRight, height, auto
           const zoomed = event.min !== undefined && event.max !== undefined
           onSetExtremes && onSetExtremes(zoomed ? {min: event.min, max: event.max} : null)
           latest().onZoom(zoomed)
+        },
+        // Once the zoom is applied: the columns in view, for the download
+        afterSetExtremes: function() {
+          const {onVisibleColumns} = latest()
+          onVisibleColumns && onVisibleColumns(visibleColumnsOf(this))
         }
       }
     },
@@ -372,6 +390,7 @@ const HeatmapCanvas = (props) => {
     if (current && current.dataKey !== dataKey) {
       zoom.current = null
       latest.current.onZoom(false)
+      latest.current.onVisibleColumns && latest.current.onVisibleColumns(null)
     }
   }, [dataKey])
 
@@ -433,6 +452,8 @@ HeatmapCanvas.propTypes = {
     onClick: PropTypes.func
   }),
   onZoom: PropTypes.func.isRequired,
+  // ({from, to} | null): the columns in view after each zoom, null when the chart is not zoomed
+  onVisibleColumns: PropTypes.func,
   labelsKey: PropTypes.string,
   withAnatomogram: PropTypes.bool.isRequired,
   currentGenomeBrowser: PropTypes.string   // null when there are no genome browsers
@@ -446,5 +467,5 @@ const Main = props => (
     <HeatmapCanvas {...props} />
 )
 
-export {computeLayout, buildHeatmapOptions, selectColumnsByOntologyIds, HeatmapCanvas, maxColumnLabelPx}
+export {computeLayout, buildHeatmapOptions, selectColumnsByOntologyIds, HeatmapCanvas, maxColumnLabelPx, visibleColumnsOf}
 export default Main

@@ -6,6 +6,7 @@ import download from 'downloadjs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { ExpressionAtlasHeatmap, render as renderHeatmap } from '../src/Main.js'
+import { lastDownload } from './helpers/download.js'
 import { mockFetch } from './helpers/fetch.js'
 import { lastProps, renders as anatomogramRenders, resetAnatomogramStub } from './stubs/anatomogram.js'
 import allStudies from './fixtures/all-studies.SORBI_3001G000200.json'
@@ -93,7 +94,7 @@ describe(`All Studies (SORBI_3001G000200)`, () => {
     expect([...container.querySelectorAll(`.gxa-legend-item`)].map(item => item.textContent.trim()))
       .toEqual(expect.arrayContaining([`Below cutoff`, `Low`, `Medium`, `High`]))
     expect(toggles(container).map(toggle => toggle.textContent.trim()))
-      .toEqual([`By experiment type`, `Filters`, `Download`, `More download options`])
+      .toEqual([`By experiment type`, `Filters`, `Download`])
 
     // the anatomogram: the payload's species, every column's tissue, and the link target for its licence link
     expect(screen.getByTestId(`anatomogram-stub`)).toBeInTheDocument()
@@ -134,11 +135,31 @@ describe(`All Studies (SORBI_3001G000200)`, () => {
     await user.keyboard(`{Escape}`)
     await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
 
-    // All Studies has no full dataset: the main button downloads what is shown
+    // the Download dialog saves what is shown, as tab-delimited text by default; All Studies has no full dataset
     await user.click(within(controls(container)).getByRole(`button`, {name: `Download`}))
+    const downloadDialog = await screen.findByRole(`dialog`)
+    expect(downloadDialog).toHaveTextContent(`9 rows × 24 columns, as shown`)
+    expect(within(downloadDialog).getByLabelText(`File name`)).toHaveValue(`expression-studies-SORBI_3001G000200`)
+    expect(within(downloadDialog).queryByRole(`button`, {name: /Full experiment data/})).toBeNull()
+    await user.click(within(downloadDialog).getByRole(`button`, {name: `Download`}))
     expect(download).toHaveBeenCalledTimes(1)
-    expect(download.mock.calls[0].slice(1)).toEqual([`expression_atlas-sorghum_bicolor.tsv`, `text/tsv`])
+    const {content, fileName, mimeType} = await lastDownload()
+    expect([fileName, mimeType]).toEqual([`expression-studies-SORBI_3001G000200.tsv`, `text/tab-separated-values`])
+    const lines = content.trimEnd().split(`\n`)
+    expect(lines.filter(line => line.startsWith(`#`))).toEqual([
+      `# Downloaded from: ${window.location.href}`,
+      expect.stringMatching(/^# Timestamp: \d{4}-\d\d-\d\dT/),
+      `# Query results for: SORBI_3001G000200, in species Sorghum bicolor`,
+      `# Ordering: Alphabetical order`,
+      `# Unit: TPM`
+    ])
+    const table = lines.filter(line => !line.startsWith(`#`)).map(line => line.split(`\t`))
+    expect(table[0]).toEqual([``, ...onlyChart().xAxis[0].categories.map(column => column.label)])
+    // the rows in the order shown, labelled in full
+    expect(table.slice(1).map(cells => cells[0])).toEqual(onlyChart().yAxis[0].categories.map(row => row.label))
+    expect(table.slice(1).every(cells => cells.length === 25)).toBe(true)
     expect(window.open).not.toHaveBeenCalled()
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
   })
 
   describe(`anatomogram and heatmap highlight each other`, () => {
@@ -329,7 +350,7 @@ describe(`Paralogs, baseline (E-CURD-25)`, () => {
     expect(rowLabels(container).map(label => label.textContent)).toEqual(PARALOGS.split(` `))
     // upstream 5.7.2's five log-range buckets (no cell is below the cutoff)
     expect(chart.series.map(series => series.name)).toEqual([`Low`, `Low-Medium`, `Medium`, `Medium-High`, `High`])
-    expect(toggles(container).map(toggle => toggle.textContent.trim())).toEqual([`Download`, `More download options`])
+    expect(toggles(container).map(toggle => toggle.textContent.trim())).toEqual([`Download`])
 
     const description = screen.getByRole(`link`, {name: curd25.body.experiment.description})
     expect(description).toHaveAttribute(`href`, curd25.body.experiment.urls.main_page)
@@ -379,7 +400,7 @@ describe(`Paralogs, differential (E-GEOD-30249)`, () => {
     expect(chart.series.map(series => series.name)).toEqual([`High down`, `Down`, `Below cutoff`, `Up`, `High up`])
     expect(container.querySelector(`.gxaHeatmapContainer`)).toHaveTextContent(`Log2-fold change`)
     expect(toggles(container).map(toggle => toggle.textContent.trim()))
-      .toEqual([`Ensembl Genomes genome browser`, `Download`, `More download options`])
+      .toEqual([`Ensembl Genomes genome browser`, `Download`])
     expect(container).toHaveTextContent(`Click on a cell to open the selected genome browser`)
     expect(screen.queryByTestId(`anatomogram-stub`)).toBeNull()
   })
@@ -418,6 +439,115 @@ describe(`Paralogs, differential (E-GEOD-30249)`, () => {
     expect(window.open).toHaveBeenCalledWith(`https://example.org/gb`, `gxa`, undefined)
     expect(resolveUrl).toHaveBeenCalledWith(`genomeBrowser`, expect.stringContaining(`/redirect/genome-browsers?`),
       expect.objectContaining({experiment: `E-GEOD-30249`, genomeBrowser: `ensemblgenomes`}))
+  })
+})
+
+describe(`the Download dialog`, () => {
+  const openDownload = async (user, container) => {
+    await user.click(within(controls(container)).getByRole(`button`, {name: `Download`}))
+    return screen.findByRole(`dialog`)
+  }
+
+  it(`saves only the columns in view while the chart is zoomed in (All Studies)`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const {container} = render(allStudiesHeatmap())
+    const chart = await findChart(container)
+    const labels = chart.xAxis[0].categories.map(column => column.label)
+
+    act(() => {
+      chart.xAxis[0].zoom(2, 5)
+      chart.showResetZoom()
+      chart.redraw(false)
+    })
+    let dialog = await openDownload(user, container)
+    expect(dialog).toHaveTextContent(`9 rows × 4 of 24 columns (zoomed in), as shown`)
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
+    const {content} = await lastDownload()
+    const lines = content.trimEnd().split(`\n`)
+    expect(lines).toContain(`# Zoomed in: columns 3 to 6 of 24`)
+    const table = lines.filter(line => !line.startsWith(`#`)).map(line => line.split(`\t`))
+    expect(table[0]).toEqual([``, ...labels.slice(2, 6)])
+    expect(table).toHaveLength(10)
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+
+    // JSON too
+    dialog = await openDownload(user, container)
+    await user.click(within(dialog).getByRole(`radio`, {name: `JSON (.json)`}))
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
+    const json = JSON.parse((await lastDownload()).content)
+    expect(json.zoom).toEqual({from: 3, to: 6, of: 24})
+    expect(json.columns.map(column => column.label)).toEqual(labels.slice(2, 6))
+    expect(json.query).toEqual({genes: [`SORBI_3001G000200`]})
+    expect(json.experiment).toBeNull()
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+
+    // zoomed out: every column again
+    act(() => {
+      chart.zoomOut()
+    })
+    dialog = await openDownload(user, container)
+    expect(dialog).toHaveTextContent(`9 rows × 24 columns, as shown`)
+  })
+
+  it(`saves a differential experiment's fold changes and p-values, and links to its full data (E-GEOD-30249)`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const {container} = render(paralogsHeatmap(`E-GEOD-30249`))
+    await findChart(container)
+
+    let dialog = await openDownload(user, container)
+    expect(dialog).toHaveTextContent(`2 rows × 2 columns, as shown`)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`expression-E-GEOD-30249-SORBI_3001G000200`)
+    await user.click(within(dialog).getByRole(`radio`, {name: `JSON (.json)`}))
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
+    const {content, fileName} = await lastDownload()
+    expect(fileName).toBe(`expression-E-GEOD-30249-SORBI_3001G000200.json`)
+    const json = JSON.parse(content)
+    expect(json).toMatchObject({
+      experiment: {accession: `E-GEOD-30249`, type: `rnaseq_mrna_differential`},
+      query: {genes: PARALOGS.split(` `)},
+      atlasUrl: AUTH_TESTING,
+      unit: `Log2 fold change`
+    })
+    expect(json.rows.map(row => [row.label, row.values, row.pValues.map(p => p !== null)]))
+      .toEqual(expect.arrayContaining([[`SORBI_3001G000200`, [-0.3, null], [true, false]]]))
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+
+    dialog = await openDownload(user, container)
+    expect(within(dialog).getByRole(`radio`, {name: `Tab-delimited text (.tsv)`})).toBeChecked()
+    await user.click(within(dialog).getByRole(`button`, {name: `Full experiment data on Expression Atlas`}))
+    expect(window.open).toHaveBeenCalledTimes(1)
+    const [url, target] = window.open.mock.calls[0]
+    expect(url).toMatch(/^https:\/\/www\.ebi\.ac\.uk\/gxa\/experiments-content\/E-GEOD-30249\/download\//)
+    expect(new URL(url).searchParams.get(`cutoff`)).toBe(`0.0`)
+    expect(new URL(url).searchParams.has(`heatmapMatrixSize`)).toBe(false)
+    expect(target).toBe(`_blank`)
+    expect(download).toHaveBeenCalledTimes(1)
+  })
+
+  it(`has no full data link when resolveUrl drops it, suggests downloadFileName, and hides with showDownload={false}`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const resolveUrl = vi.fn(kind => (kind === `download` ? null : undefined))
+    const {container, unmount} = render(paralogsHeatmap(`E-CURD-25`, {resolveUrl, downloadFileName: `SORBI_3001G000200-paralogs-E-CURD-25`}))
+    await findChart(container)
+    const dialog = await openDownload(user, container)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`SORBI_3001G000200-paralogs-E-CURD-25`)
+    expect(within(dialog).queryByRole(`button`, {name: /Full experiment data/})).toBeNull()
+    expect(resolveUrl).toHaveBeenCalledWith(`download`, expect.stringContaining(`/E-CURD-25/download/`),
+      expect.objectContaining({experiment: `E-CURD-25`}))
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
+    const {content, fileName} = await lastDownload()
+    expect(fileName).toBe(`SORBI_3001G000200-paralogs-E-CURD-25.tsv`)
+    expect(content).toContain(`# Gene query: ${PARALOGS}\n# Results as shown on page\n# Unit: TPM\n`)
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+    unmount()
+
+    const hidden = render(paralogsHeatmap(`E-CURD-25`, {showDownload: false}))
+    await findChart(hidden.container)
+    expect(controls(hidden.container)).not.toBeNull()
+    expect(within(hidden.container).queryByRole(`button`, {name: `Download`})).toBeNull()
   })
 })
 

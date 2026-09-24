@@ -6,6 +6,7 @@ import { uncontrollable } from 'uncontrollable'
 import GenomeBrowsersDropdown from './controls/GenomeBrowsersDropdown.js'
 import OrderingsDropdown from './controls/OrderingsDropdown.js'
 import DownloadButton from './controls/download-button/DownloadButton.js'
+import {withQueriedGenes} from './controls/download-button/Download.js'
 import FiltersButton from './controls/filter/FiltersButton.js'
 
 import cellTooltipFormatter from './formatters/heatmapCellTooltipFormatter.js'
@@ -74,35 +75,46 @@ const renderOrderings = ({heatmapData,heatmapConfig,allOrderings,currentOrdering
   )
 }
 
+// The Download button, unless showDownload is false. It saves what the heatmap shows: heatmapData (already filtered and
+// ordered), and when zoomed in only the columns in view (zoomedColumns, from HeatmapCanvas)
 const renderDownloadButton = ({
   heatmapConfig:{
-    shortDescription,
     description,
     disclaimer,
     experiment,
     atlasUrl,
     outProxy,
     linkTarget,
+    isDifferential,
     urlFor = keepDefaultUrl
   },
+  download: {query = {genes: []}, fileName, show = true} = {},
   currentOrdering,
+  currentZoom,
+  zoomedColumns,
   allNumCoexpressions,
   currentNumCoexpressions}
 ,heatmapData) => (
+  show &&
   <div style={{display: `inline-block`, padding: `5px`}}>
     <DownloadButton
       disclaimer={disclaimer}
       linkTarget={linkTarget}
       isSingleExperiment={Boolean(experiment)}
+      experiment={experiment || null}
+      query={query}
+      atlasUrl={atlasUrl}
+      isDifferential={isDifferential}
+      defaultFileName={fileName}
       currentlyShownContent={{
-        name: shortDescription || `download`,
         descriptionLines:
-          description.concat(
+          withQueriedGenes(description, query.genes).concat(
             experiment ? [] : [`Ordering: ${currentOrdering.name}`],
             allNumCoexpressions && currentNumCoexpressions ? [`Including ${currentNumCoexpressions} genes with similar expression pattern`] : [],
             experiment ? [`Results as shown on page`] : []
           ),
-        heatmapData
+        heatmapData,
+        visibleColumns: currentZoom ? zoomedColumns : null
       }}
       fullDatasetUrl={
         experiment
@@ -187,10 +199,12 @@ const heatmapExtraArgs = ({
   onOntologyIdIsUnderFocus,
   heatmapConfig,
   onChangeCurrentZoom,
+  onVisibleColumns,
   ontologyIdsToHighlight} ) => ({
   noDataCellsColour: heatmapConfig.isMultiExperiment ? `white` : `rgb(235, 235, 235)`,
   ontologyIdsToHighlight,
   onZoom:onChangeCurrentZoom,
+  onVisibleColumns,
   // The row labels' links depend on these as well as on the data
   labelsKey: JSON.stringify([heatmapConfig.linkTarget, heatmapConfig.outProxy]),
   events:
@@ -279,12 +293,24 @@ class _HeatmapWithControls extends React.Component {
 
     this.state = {
       highlightIds: [],
-      highlightColumns: []
+      highlightColumns: [],
+      // The columns in view while the chart is zoomed in ({from, to}), for the download
+      zoomedColumns: null
     }
 
     this.onOntologyIdIsUnderFocus = this._onOntologyIdIsUnderFocus.bind(this)
     this.onTissueIdIsUnderFocus = this._onTissueIdIsUnderFocus.bind(this)
     this.onTissueIdIsNotUnderFocus = this._onTissueIdIsNotUnderFocus.bind(this)
+    this.onVisibleColumns = this._onVisibleColumns.bind(this)
+  }
+
+  _onVisibleColumns(range) {
+    this.setState(({zoomedColumns}) => (
+      (zoomedColumns && range && zoomedColumns.from === range.from && zoomedColumns.to === range.to) ||
+      (!zoomedColumns && !range) ?
+        null :
+        {zoomedColumns: range}
+    ))
   }
 
   _onOntologyIdIsUnderFocus(ids) {
@@ -310,6 +336,7 @@ class _HeatmapWithControls extends React.Component {
       this.state, this.props,
       {
         onOntologyIdIsUnderFocus: this.onOntologyIdIsUnderFocus,
+        onVisibleColumns: this.onVisibleColumns,
         ontologyIdsToHighlight: this.state.highlightColumns
       })
     const heatmapData= heatmapDataToPresent(args)
@@ -349,6 +376,12 @@ _HeatmapWithControls.propTypes = {
   heatmapData: heatmapDataPropTypes.isRequired,
   colourAxis: colourAxisPropTypes,    // Only available in experiment heatmap
   columnGroups: columnGroupsPropTypes,
+  // The Download button: the query's genes, the default file name, and whether to show it
+  download: PropTypes.shape({
+    query: PropTypes.shape({genes: PropTypes.arrayOf(PropTypes.string).isRequired}),
+    fileName: PropTypes.string,
+    show: PropTypes.bool
+  })
 }
 
 const HeatmapWithControls = uncontrollable(_HeatmapWithControls, {

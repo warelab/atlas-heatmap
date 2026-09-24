@@ -1,4 +1,5 @@
 import React, {Suspense} from 'react'
+import PropTypes from 'prop-types'
 
 import Heatmap from './HeatmapWithControls.js'
 import {chartDataPropTypes} from './chartDataPropTypes.js'
@@ -36,7 +37,7 @@ class ChartContainer extends React.Component {
         </a>
         }
         <div style={{display: this.state.chartType === `heatmap` ? `block` : `none`, width: `100%`}} >
-          <Heatmap {...this.props.chartData} />
+          <Heatmap {...this.props.chartData} download={this.props.download} />
         </div>
         { this.props.chartData.geneSpecificResults &&
         <div style={{display: this.state.chartType === `boxplot and transcripts` ? `block` : `none`, width: `100%`}} >
@@ -51,7 +52,9 @@ class ChartContainer extends React.Component {
 }
 
 ChartContainer.propTypes = {
-  chartData: chartDataPropTypes.isRequired
+  chartData: chartDataPropTypes.isRequired,
+  // The Download button's {query, fileName, show}
+  download: PropTypes.object
 }
 
 export default ChartContainer

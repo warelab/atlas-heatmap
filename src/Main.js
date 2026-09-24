@@ -42,6 +42,9 @@ import {ensureStylesInjected, HEATMAP_CSS, STYLE_ELEMENT_ID, useStyleInjection} 
  * @param {function}        options.filterRows - (row) => boolean: drops the payload's profiles.rows for which it is false,
  *                              and the columns left without a value. It filters the fetched payload: a new function
  *                              filters again without a new request (memoize it to keep the chart as it is).
+ * @param {string}          options.downloadFileName - The file name (without extension) the Download dialog suggests;
+ *                              default expression-<experiment accession, or studies>-<first gene>
+ * @param {boolean}         options.showDownload - Show the Download button among the controls (default true)
  */
 const DEFAULT_OPTIONS = Object.freeze({
   showAnatomogram: true,
@@ -52,14 +55,15 @@ const DEFAULT_OPTIONS = Object.freeze({
   outProxy: ``,
   experiment: ``,
   linkTarget: `_blank`,
-  injectStyles: true
+  injectStyles: true,
+  showDownload: true
 })
 
 const ExpressionAtlasHeatmap = props => {
   const options = withDefaults(DEFAULT_OPTIONS, props)
   const {
     query, experiment, inProxy, outProxy, showAnatomogram, isWidget, showControlMenu, fail, linkTarget, className, style,
-    filterRows
+    filterRows, downloadFileName, showDownload
   } = options
   const atlasUrl = withTrailingSlash(options.atlasUrl)
   useStyleInjection(options.injectStyles !== false)
@@ -92,6 +96,8 @@ const ExpressionAtlasHeatmap = props => {
           linkTarget={linkTarget}
           urlFor={urlFor}
           filterRows={filterRows}
+          downloadFileName={downloadFileName}
+          showDownload={showDownload}
           source={source} />
       </HeatmapErrorBoundary>
     </div>
@@ -114,6 +120,8 @@ ExpressionAtlasHeatmap.propTypes = {
   style: PropTypes.object,
   injectStyles: PropTypes.bool,
   filterRows: PropTypes.func,
+  downloadFileName: PropTypes.string,
+  showDownload: PropTypes.bool,
   disableGoogleAnalytics: PropTypes.bool
 }
 

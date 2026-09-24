@@ -123,7 +123,9 @@ ContainerLoader.propTypes = {
   fail: PropTypes.func,
   linkTarget: PropTypes.string,
   urlFor: PropTypes.func,
-  filterRows: PropTypes.func
+  filterRows: PropTypes.func,
+  downloadFileName: PropTypes.string,
+  showDownload: PropTypes.bool
 }
 
 export {outcome, Loading, FailureAlert, NoResultsAlert, useReportFailure, PROBLEM_CONTACTING_SERVER, NO_RESULTS}

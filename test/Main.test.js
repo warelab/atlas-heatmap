@@ -47,7 +47,8 @@ describe(`ExpressionAtlasHeatmap`, () => {
       outProxy: ``,
       experiment: ``,
       linkTarget: `_blank`,
-      injectStyles: true
+      injectStyles: true,
+      showDownload: true
     })
   })
 

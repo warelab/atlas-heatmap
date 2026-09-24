@@ -3,7 +3,7 @@ import { act, render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import Highcharts from 'highcharts'
 
-import HeatmapCanvas, { selectColumnsByOntologyIds, maxColumnLabelPx } from '../../src/show/HeatmapCanvas.js'
+import HeatmapCanvas, { selectColumnsByOntologyIds, maxColumnLabelPx, visibleColumnsOf } from '../../src/show/HeatmapCanvas.js'
 import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
 import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
 import emtab5956 from '../fixtures/paralogs.E-MTAB-5956.sorghum_v11.json'
@@ -131,6 +131,51 @@ describe(`HeatmapCanvas`, () => {
     expect(fresh.xAxis[0].getExtremes().userMin).toBeUndefined()
     expect(fresh.resetZoomButton).toBeUndefined()
     expect(props.onZoom).toHaveBeenLastCalledWith(false)
+  })
+
+  it(`tells onVisibleColumns which columns are in view after each zoom (those whose labels show), null when unzoomed`, () => {
+    const onVisibleColumns = vi.fn()
+    const props = canvasProps(allStudies, {onVisibleColumns})
+    const {rerender} = render(<HeatmapCanvas {...props} />)
+    const chart = onlyChart()
+    expect(onVisibleColumns).not.toHaveBeenCalled()
+
+    act(() => {
+      chart.xAxis[0].zoom(2.3, 12.7)
+      chart.redraw(false)
+    })
+    expect(onVisibleColumns).toHaveBeenLastCalledWith({from: 2, to: 13})
+    expect(chart.xAxis[0].tickPositions).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
+
+    act(() => {
+      chart.zoomOut()
+    })
+    expect(onVisibleColumns).toHaveBeenLastCalledWith(null)
+
+    // new data is drawn unzoomed
+    act(() => {
+      chart.xAxis[0].zoom(0, 3)
+      chart.redraw(false)
+    })
+    expect(onVisibleColumns).toHaveBeenLastCalledWith({from: 0, to: 3})
+    const fewerRows = {
+      ...props.heatmapData,
+      yAxisCategories: props.heatmapData.yAxisCategories.slice(0, -1),
+      dataSeries: props.heatmapData.dataSeries.map(series => ({...series, data: series.data.filter(point => point.y < 8)}))
+    }
+    rerender(<HeatmapCanvas {...props} heatmapData={fewerRows} />)
+    expect(onVisibleColumns).toHaveBeenLastCalledWith(null)
+  })
+
+  it(`counts a column in view when its centre is, within the axis`, () => {
+    const axis = (min, max, zoomed = true) =>
+      ({min, max, userMin: zoomed ? min : undefined, userMax: zoomed ? max : undefined, categories: new Array(24)})
+    expect(visibleColumnsOf(axis(0, 23, false))).toBeNull()
+    expect(visibleColumnsOf({...axis(0, 23), userMin: null, userMax: null})).toBeNull()
+    expect(visibleColumnsOf(axis(2, 5))).toEqual({from: 2, to: 5})
+    expect(visibleColumnsOf(axis(2.3, 3.1))).toEqual({from: 2, to: 3})
+    expect(visibleColumnsOf(axis(2.6, 3.4))).toEqual({from: 3, to: 3})
+    expect(visibleColumnsOf(axis(-0.4, 30))).toEqual({from: 0, to: 23})
   })
 
   it(`redraws the labels for a new labelsKey, keeping the zoom`, () => {

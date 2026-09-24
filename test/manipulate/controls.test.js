@@ -12,6 +12,7 @@ import CategoryCheckboxes from '../../src/manipulate/controls/filter/CategoryChe
 import CoexpressionOption from '../../src/manipulate/coexpression/CoexpressionOption.js'
 import loadChartData from '../../src/load/main.js'
 import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
+import { lastDownload } from '../helpers/download.js'
 
 vi.mock(`downloadjs`, () => ({default: vi.fn()}))
 
@@ -82,58 +83,95 @@ describe(`GenomeBrowsersDropdown`, () => {
 
 describe(`DownloadButton`, () => {
   const content = () => {
-    const {heatmapData, heatmapConfig} = chartData()
-    return {name: heatmapConfig.shortDescription, descriptionLines: [`Ordering: By experiment type`], heatmapData}
+    const {heatmapData} = chartData()
+    return {descriptionLines: [`Ordering: By experiment type`], heatmapData}
+  }
+  const openDialog = async user => {
+    await user.click(screen.getByRole(`button`, {name: `Download`}))
+    return screen.findByRole(`dialog`)
   }
 
-  it(`is a split button: the main button opens "All data" in linkTarget, the menu has both options`, async () => {
+  it(`is a plain button that opens the Download dialog, which saves what is shown as tab-delimited text by default`, async () => {
     const user = userEvent.setup()
-    render(
-      <DownloadButton currentlyShownContent={content()} disclaimer={``} linkTarget={`_blank`} isSingleExperiment={true}
-        fullDatasetUrl={`https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?cutoff=0.0`} />)
+    render(<DownloadButton currentlyShownContent={content()} disclaimer={``} fullDatasetUrl={``}
+      query={{genes: [`SORBI_3001G000200`]}} />)
 
-    await user.click(screen.getByRole(`button`, {name: `Download`}))
-    expect(window.open).toHaveBeenCalledWith(
-      `https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?cutoff=0.0`,
-      `_blank`, `noopener,noreferrer`)
+    const button = screen.getByRole(`button`, {name: `Download`})
+    expect(button).toHaveClass(`btn-sm`, `btn-outline-secondary`)
+    expect(button).not.toHaveClass(`dropdown-toggle`)
+    expect(screen.queryByRole(`button`, {name: `More download options`})).toBeNull()
 
-    await user.click(screen.getByRole(`button`, {name: `More download options`}))
-    const items = screen.getAllByRole(`button`).filter(b => b.classList.contains(`dropdown-item`))
-    expect(items.map(item => item.textContent.trim())).toEqual([`All data`, `Table content`])
+    const dialog = await openDialog(user)
+    expect(dialog).toHaveTextContent(`9 rows × 24 columns, as shown`)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`expression-studies-SORBI_3001G000200`)
+    expect(within(dialog).getByRole(`radio`, {name: `Tab-delimited text (.tsv)`})).toBeChecked()
+    // no full dataset: no link to it
+    expect(within(dialog).queryByRole(`button`, {name: /Full experiment data/})).toBeNull()
 
-    await user.click(items[1])
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
     expect(download).toHaveBeenCalledTimes(1)
-    const [blob, fileName, mimeType] = download.mock.calls[0]
-    expect(blob).toBeInstanceOf(Blob)
-    expect(fileName).toBe(`expression_atlas-sorghum_bicolor.tsv`)
-    expect(mimeType).toBe(`text/tsv`)
-  })
-
-  it(`downloads the table content from the main button when there is no full dataset`, async () => {
-    const user = userEvent.setup()
-    render(<DownloadButton currentlyShownContent={content()} disclaimer={``} fullDatasetUrl={``} />)
-    await user.click(screen.getByRole(`button`, {name: `Download`}))
-    expect(download).toHaveBeenCalledTimes(1)
+    const {content: text, fileName, mimeType} = await lastDownload()
+    expect([fileName, mimeType]).toEqual([`expression-studies-SORBI_3001G000200.tsv`, `text/tab-separated-values`])
+    expect(text).toMatch(/^# Downloaded from: http.*\n# Timestamp: .*\n# Ordering: By experiment type\n# Unit: TPM\n\t/)
     expect(window.open).not.toHaveBeenCalled()
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
   })
 
-  it(`asks for the data reuse agreement first when there is a disclaimer`, async () => {
+  it(`saves JSON when asked, under the default name given`, async () => {
+    const user = userEvent.setup()
+    render(<DownloadButton currentlyShownContent={content()} disclaimer={``} fullDatasetUrl={``}
+      query={{genes: [`SORBI_3001G000200`]}} atlasUrl={`https://data.sorghumbase.org/auth_testing/gxa/`}
+      defaultFileName={`SORBI_3001G000200-ebi-studies`} />)
+    const dialog = await openDialog(user)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`SORBI_3001G000200-ebi-studies`)
+    await user.click(within(dialog).getByRole(`radio`, {name: `JSON (.json)`}))
+    await user.click(within(dialog).getByRole(`button`, {name: `Download`}))
+
+    const {content: text, fileName, mimeType} = await lastDownload()
+    expect([fileName, mimeType]).toEqual([`SORBI_3001G000200-ebi-studies.json`, `application/json`])
+    const json = JSON.parse(text)
+    expect(json).toMatchObject({
+      source: `Expression Atlas`, atlasUrl: `https://data.sorghumbase.org/auth_testing/gxa/`, experiment: null,
+      query: {genes: [`SORBI_3001G000200`]}, unit: `TPM`, zoom: null
+    })
+    expect(json.columns).toHaveLength(24)
+    expect(json.rows).toHaveLength(9)
+  })
+
+  it(`offers the full experiment data only as a secondary link, opened in linkTarget`, async () => {
+    const user = userEvent.setup()
+    const url = `https://www.ebi.ac.uk/gxa/experiments-content/E-CURD-25/download/RNASEQ_MRNA_BASELINE?cutoff=0.0`
+    render(<DownloadButton currentlyShownContent={content()} disclaimer={``} linkTarget={`_blank`} isSingleExperiment={true}
+      fullDatasetUrl={url} />)
+
+    const dialog = await openDialog(user)
+    // Download (the default action) saves what is shown; the full data is a link in the body
+    expect(within(dialog).getByRole(`button`, {name: `Download`}).closest(`.modal-footer`)).not.toBeNull()
+    await user.click(within(dialog).getByRole(`button`, {name: `Full experiment data on Expression Atlas`}))
+    expect(window.open).toHaveBeenCalledWith(url, `_blank`, `noopener,noreferrer`)
+    expect(download).not.toHaveBeenCalled()
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+  })
+
+  it(`shows the data reuse statement in the dialog and waits for the reader to agree to it`, async () => {
     const user = userEvent.setup()
     render(
       <DownloadButton currentlyShownContent={content()} disclaimer={`blueprint`} fullDatasetUrl={`https://example.org/all.tsv`}
         linkTarget={`_self`} />)
 
-    await user.click(screen.getByRole(`button`, {name: `Download`}))
-    const dialog = await screen.findByRole(`dialog`)
+    const dialog = await openDialog(user)
     expect(dialog).toHaveClass(`gxa-heatmap-modal`)
-    expect(within(dialog).getByText(`Data Reuse Licence Agreement`)).toBeInTheDocument()
     expect(within(dialog).getByText(`The Blueprint Project Data Reuse Statement`)).toBeInTheDocument()
     // the modal is in a portal, outside .gxaHeatmapContainer, and its links follow linkTarget too
     const link = within(dialog).getByRole(`link`, {name: `www.blueprint-epigenome.eu`})
     expect(link).toHaveAttribute(`target`, `_self`)
     expect(link).not.toHaveAttribute(`rel`)
 
-    await user.click(within(dialog).getByRole(`button`, {name: `Download: All data`}))
+    const full = within(dialog).getByRole(`button`, {name: `Full experiment data on Expression Atlas`})
+    expect(within(dialog).getByRole(`button`, {name: `Download`})).toBeDisabled()
+    expect(full).toBeDisabled()
+    await user.click(within(dialog).getByRole(`checkbox`, {name: `I agree to the data reuse statement above`}))
+    await user.click(full)
     expect(window.open).toHaveBeenCalledWith(`https://example.org/all.tsv`, `_self`, undefined)
     await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
   })
@@ -143,8 +181,8 @@ describe(`DownloadButton`, () => {
     const openDisclaimer = async (disclaimer, linkTarget) => {
       const rendered = render(
         <DownloadButton currentlyShownContent={content()} disclaimer={disclaimer} fullDatasetUrl={``} linkTarget={linkTarget} />)
-      await user.click(screen.getByRole(`button`, {name: `Download`}))
-      return {...rendered, links: within(await screen.findByRole(`dialog`)).getAllByRole(`link`)}
+      const dialog = await openDialog(user)
+      return {...rendered, links: within(within(dialog).getByRole(`region`, {name: `Data reuse statement`})).getAllByRole(`link`)}
     }
 
     const lauderdale = await openDisclaimer(`lauderdale`)

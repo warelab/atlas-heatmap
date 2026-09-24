@@ -1,124 +1,63 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Dropdown, Modal, SplitButton } from 'react-bootstrap'
 
-import { uncontrollable } from 'uncontrollable'
 import disclaimers from './disclaimers.js'
-import ClientSideDownload from './Download.js'
-import {Download as DownloadIcon} from '../icons.js'
-import {openUrl} from '../../../layout/links.js'
+import {heatmapFileName, heatmapJson, heatmapSummary, heatmapTsv} from './Download.js'
+import {DownloadDialogButton} from './DownloadDialog.js'
+import {downloadContext} from './downloadFile.js'
 
 import { heatmapDataPropTypes } from '../../../manipulate/chartDataPropTypes.js'
 
-const buttonUnsetStyles = {
-  textTransform: `unset`,
-  letterSpacing: `unset`,
-  height: `unset`
-}
-
-// The modal renders in a portal outside .gxaHeatmapContainer; .gxa-heatmap-modal scopes its styles
-const _DownloadWithModal = ({showModal, onChangeShowModal, Disclaimer, downloadOptions, linkTarget}) => (
-  <div>
-    <Button
-      size={`sm`}
-      variant={`outline-secondary`}
-      onClick={() => onChangeShowModal(true)}
-      title={`Download`}
-      style={buttonUnsetStyles}>
-      <DownloadIcon /> Download
-    </Button>
-
-    <Modal show={showModal} onHide={() => onChangeShowModal(false)} className={`gxa-heatmap-modal`}>
-      <Modal.Header closeButton>
-        <Modal.Title>
-          Data Reuse Licence Agreement
-        </Modal.Title>
-      </Modal.Header>
-
-      <Modal.Body>
-        <Disclaimer linkTarget={linkTarget} />
-      </Modal.Body>
-
-      <Modal.Footer>
-        <Button variant={`secondary`} onClick={() => onChangeShowModal(false)}>
-          Close
-        </Button>
-        {
-          downloadOptions.map(o => (
-            <Button
-              key={o.description}
-              variant={`primary`}
-              onClick={() => {
-                o.onClick()
-                onChangeShowModal(false)
-              }}>
-              {`Download: ${o.description}`}
-            </Button>
-          ))
-        }
-      </Modal.Footer>
-    </Modal>
-  </div>
-)
-
-const DownloadWithModal = uncontrollable(_DownloadWithModal, { showModal: `onChangeShowModal` })
-
-// The main button runs the first option (react-bootstrap 2's SplitButton hands onClick to it, not to the toggle)
-const SplitDownloadButton = ({downloadOptions}) => (
-  <SplitButton
-    size={`sm`}
-    variant={`outline-secondary`}
-    onClick={downloadOptions[0].onClick}
-    title={<><DownloadIcon /> Download</>}
-    toggleLabel={`More download options`}>
-    {
-      downloadOptions.map((o,ix) => (
-        <Dropdown.Item
-          as={`button`}
-          type={`button`}
-          key={o.description}
-          eventKey={String(ix)}
-          onClick={o.onClick}>
-          <DownloadIcon /> {o.description}
-        </Dropdown.Item>
-      ))
-    }
-  </SplitButton>
-)
-
-
-// fullDatasetUrl is final (resolveUrl applied, cutoff set); without one there is no “All data” option
-const DownloadButton = ({currentlyShownContent, fullDatasetUrl, disclaimer, linkTarget, isSingleExperiment = Boolean(fullDatasetUrl)}) => {
-  const downloadOptions = [].concat(
-    fullDatasetUrl ?
-      [{
-        onClick: () => openUrl(fullDatasetUrl, linkTarget),
-        description: `All data`
-      }] :
-      [],
-    [{
-      onClick: () => ClientSideDownload({...currentlyShownContent, isSingleExperiment}),
-      description : `Table content`
-    }]
-  )
+// The heatmap's Download button. It opens the Download dialog, which saves what the heatmap shows (heatmapData, and
+// only the columns of `visibleColumns` when the chart is zoomed in) as tab-delimited text or JSON. An experiment's
+// full data (fullDatasetUrl, final: resolveUrl applied) is a secondary link in the dialog; there is none without one.
+// A disclaimer is shown in the dialog, and must be agreed to before either.
+const DownloadButton = ({
+  currentlyShownContent: {heatmapData, descriptionLines, visibleColumns = null},
+  experiment = null,
+  query = null,
+  atlasUrl = ``,
+  isDifferential = false,
+  defaultFileName,
+  fullDatasetUrl,
+  disclaimer,
+  linkTarget,
+  isSingleExperiment = Boolean(experiment)
+}) => {
+  const buildContent = format => {
+    const context = downloadContext()
+    return format === `json` ?
+      heatmapJson({heatmapData, range: visibleColumns, experiment, query, atlasUrl, isDifferential, ...context}) :
+      heatmapTsv({heatmapData, range: visibleColumns, descriptionLines, isSingleExperiment, ...context})
+  }
 
   return (
-    disclaimers[disclaimer] ?
-      <DownloadWithModal
-        defaultShowModal={false}
-        Disclaimer={disclaimers[disclaimer]}
-        downloadOptions={downloadOptions}
-        linkTarget={linkTarget} /> :
-      <SplitDownloadButton downloadOptions={downloadOptions}/>
+    <DownloadDialogButton
+      defaultFileName={defaultFileName || heatmapFileName({experiment, genes: query ? query.genes : []})}
+      summary={heatmapSummary(heatmapData, visibleColumns)}
+      buildContent={buildContent}
+      disclaimer={disclaimers[disclaimer]}
+      fullDatasetUrl={fullDatasetUrl || undefined}
+      linkTarget={linkTarget} />
   )
 }
 
 DownloadButton.propTypes = {
   currentlyShownContent: PropTypes.shape({
-    name: PropTypes.string.isRequired,
     descriptionLines : PropTypes.arrayOf(PropTypes.string).isRequired,
     heatmapData: heatmapDataPropTypes,
+    // The columns in view when zoomed in: indexes of heatmapData.xAxisCategories, both included
+    visibleColumns: PropTypes.shape({from: PropTypes.number.isRequired, to: PropTypes.number.isRequired})
   }).isRequired,
+  experiment: PropTypes.shape({
+    accession: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    type: PropTypes.string
+  }),
+  query: PropTypes.shape({genes: PropTypes.arrayOf(PropTypes.string).isRequired}),
+  atlasUrl: PropTypes.string,
+  isDifferential: PropTypes.bool,
+  defaultFileName: PropTypes.string,
   fullDatasetUrl: PropTypes.string.isRequired,
   disclaimer: PropTypes.string.isRequired,
   linkTarget: PropTypes.string,

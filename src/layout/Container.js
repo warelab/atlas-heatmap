@@ -10,9 +10,10 @@ import ChartContainer from '../manipulate/ChartContainer.js'
 import DataPropTypes from './jsonPayloadPropTypes.js'
 import loadChartData from '../load/main.js'
 import {keepDefaultUrl, SUPPORT_URL} from './links.js'
+import {queryOfSource} from '../manipulate/controls/download-button/Download.js'
 
 const Container = (props) => {
-  const {data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget, linkTarget} = props
+  const {data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget, linkTarget, source} = props
   const {geneQuery, conditionQuery, species} = data.config
 
   // Every link of this payload tells resolveUrl which experiment it is about (null for the All Studies view)
@@ -27,6 +28,13 @@ const Container = (props) => {
     () => loadChartData({data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget, linkTarget, urlFor}),
     [data, inProxy, outProxy, atlasUrl, showAnatomogram, showControlMenu, isWidget, linkTarget, urlFor])
 
+  // The Download button: the genes asked for (the Warelab backend echoes geneQuery as [null,…]), the default file
+  // name and whether to show it
+  const sourceKey = JSON.stringify(source || null)
+  const download = useMemo(
+    () => ({query: queryOfSource(source), fileName: props.downloadFileName, show: props.showDownload !== false}),
+    [sourceKey, props.downloadFileName, props.showDownload])
+
   const moreInformationUrl = data.experiment ?    // single experiment?
     URI(data.experiment.urls.main_page, atlasUrl) :
     URI(atlasUrl).segment(`query`).search({geneQuery, conditionQuery, species})
@@ -40,7 +48,8 @@ const Container = (props) => {
         description={data.experiment.description} /> }
 
       <ChartContainer
-        chartData={chartData} />
+        chartData={chartData}
+        download={download} />
 
       { isWidget &&
       <Footer
@@ -60,6 +69,12 @@ Container.propTypes = {
   isWidget: PropTypes.bool.isRequired,
   linkTarget: PropTypes.string,
   urlFor: PropTypes.func,
+  source: PropTypes.shape({
+    endpoint: PropTypes.string.isRequired,
+    params: PropTypes.object.isRequired
+  }),
+  downloadFileName: PropTypes.string,
+  showDownload: PropTypes.bool,
   data: DataPropTypes.isRequired
 }
 
