@@ -34,7 +34,8 @@ Versions before 6.0.0 are upstream's
   - The grid's table resets the borders that host pages' table rules give th and td (gramene-mdview's copy of
     Bootstrap's reboot gives them 2px).
   - Hovering or focusing a band (every band is in the tab order, with an `aria-label`) shows a tooltip. It lists
-    the sample's factor values, sample id, replicates, and value with its unit. Escape hides it.
+    the sample's factor values, sample id, replicates, and value with its unit. Escape hides it. The tooltip of the
+    band in focus moves with it when the table scrolls sideways.
   - Long column labels are drawn vertically and cut short with an ellipsis; hovering one shows the whole label.
   - Props: `experiment` and `gene` (both required), `atlasUrl`, `rowFactor`, `columnFactor`, `onChangeFactors`, and
     the heatmap's `inProxy`, `linkTarget`, `resolveUrl`, `fail`, `className`, `style` and `injectStyles`.

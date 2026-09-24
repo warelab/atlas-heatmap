@@ -1,5 +1,5 @@
 import { StrictMode } from 'react'
-import { act, render, screen, waitFor, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Highcharts from 'highcharts'
 import { describe, expect, it, vi } from 'vitest'
@@ -178,6 +178,38 @@ describe(`ExpressionFactorGrid`, () => {
     expect(screen.getByRole(`tooltip`)).toHaveTextContent(`leaf_upper_growing.floral_initiation`)
     await user.tab({shift: true})
     expect(screen.getByRole(`tooltip`)).toHaveTextContent(`leaf_lower_growing.floral_initiation`)
+  })
+
+  it(`moves the tooltip of the band in focus with it when the table scrolls, and hides the mouse's`, async () => {
+    const user = userEvent.setup()
+    answerWithFixtures()
+    const {container} = render(grid())
+    const table = await findTable()
+    const scroller = container.querySelector(`.gxa-grid-scroll`)
+    const [lower, upper] = within(cell(table, `inflorescence development stage`, `leaf lamina`)).getAllByRole(`img`)
+    // jsdom lays nothing out: the band is at the window's left edge until the table scrolls it to x = 500
+    const at = left => ({left, right: left + 10, top: 100, bottom: 110, width: 10, height: 10, x: left, y: 100})
+    lower.getBoundingClientRect = () => at(0)
+
+    // focusing a band out of view scrolls it into view after the focus event: its tooltip stays, and moves with it
+    act(() => lower.focus())
+    const tooltip = screen.getByRole(`tooltip`)
+    expect(tooltip.style.left).toBe(`6px`)
+    lower.getBoundingClientRect = () => at(500)
+    fireEvent.scroll(scroller)
+    expect(screen.getByRole(`tooltip`)).toBe(tooltip)
+    expect(tooltip).toHaveTextContent(`leaf_lower_growing.floral_initiation`)
+    expect(tooltip.style.left).toBe(`505px`)
+    expect(lower).toHaveAttribute(`aria-describedby`, tooltip.id)
+    act(() => lower.blur())
+    expect(screen.queryByRole(`tooltip`)).toBeNull()
+
+    // the mouse's band is not under the mouse after a scroll
+    await user.hover(upper)
+    expect(screen.getByRole(`tooltip`)).toHaveTextContent(`leaf_upper_growing.floral_initiation`)
+    fireEvent.scroll(scroller)
+    expect(screen.queryByRole(`tooltip`)).toBeNull()
+    expect(upper).not.toHaveAttribute(`aria-describedby`)
   })
 
   it(`swaps rows and columns, tells onChangeFactors, and does not fetch again`, async () => {

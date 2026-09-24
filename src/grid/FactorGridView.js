@@ -108,27 +108,44 @@ const FactorGridView = ({payload, gene, inProxy, atlasUrl, linkTarget, urlFor, r
     () => layoutFactorGrid(analysis, {rowFactor: requestedRow, columnFactor: requestedColumn}),
     [analysis, requestedRow, requestedColumn])
 
+  // The sample whose tooltip shows, and its band: the tooltip is placed by the band's box, relative to the wrapper's
   const [active, setActive] = useState(null)
+  const activeBandRef = useRef(null)
   const change = next => {
+    activeBandRef.current = null
     setActive(null)
     setChosen(next)
     onChangeFactors && onChangeFactors(next)
   }
   const axes = {rowFactor: grid.rowFactor, columnFactor: grid.columnFactor}
 
+  const anchorOf = element => {
+    const box = wrapperRef.current.getBoundingClientRect()
+    const band = element.getBoundingClientRect()
+    return {left: band.left - box.left, top: band.top - box.top, width: band.width, height: band.height}
+  }
   const show = (sample, element) => {
-    const wrapper = wrapperRef.current
-    if (!wrapper) {
+    if (!wrapperRef.current) {
       return
     }
-    const box = wrapper.getBoundingClientRect()
-    const band = element.getBoundingClientRect()
-    setActive({
-      index: sample.index,
-      anchor: {left: band.left - box.left, top: band.top - box.top, width: band.width, height: band.height}
-    })
+    activeBandRef.current = element
+    setActive({index: sample.index, anchor: anchorOf(element)})
   }
-  const hide = () => setActive(null)
+  const hide = () => {
+    activeBandRef.current = null
+    setActive(null)
+  }
+  // Scrolling the table moves its bands. The tooltip of the band in focus moves with it: focusing a band out of view
+  // scrolls it into view, after the focus event. Any other tooltip (the mouse's) goes.
+  const onScroll = () => {
+    const band = activeBandRef.current
+    if (band && band === document.activeElement && wrapperRef.current) {
+      const anchor = anchorOf(band)
+      setActive(current => current && {...current, anchor})
+    } else if (band) {
+      hide()
+    }
+  }
 
   // Centred below the band (above it when the window has no room below), and inside the window
   useLayoutEffect(() => {
@@ -188,7 +205,7 @@ const FactorGridView = ({payload, gene, inProxy, atlasUrl, linkTarget, urlFor, r
         </div>
       </div>
 
-      <div className={`gxa-grid-scroll`} onScroll={hide}>
+      <div className={`gxa-grid-scroll`} onScroll={onScroll}>
         <table className={`gxa-grid-table`}>
           <caption>
             <span className={`gxa-visually-hidden`}>
