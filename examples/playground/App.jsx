@@ -74,7 +74,8 @@ export const demoResolveUrl = (kind, url, context) => {
     case `moreInformation`:
       return context.experiment ? editUrl(url, withGenes) : `${EBI_GXA}genes/${encodeURIComponent(genes[0] || ``)}`
     case `download`:
-      return editUrl(url, params => params.delete(`geneQuery`))
+      // gramene-search's: the JGI studies have no full download at EBI
+      return /^JGI-/.test(context.experiment || ``) ? null : editUrl(url, params => params.delete(`geneQuery`))
     default:
       return undefined
   }
@@ -254,6 +255,8 @@ const FactorGridPanel = ({heatmapProps, atlasUrl, onChangeAtlasUrl, log}) => {
         rowFactor={rowFactor}
         columnFactor={columnFactor}
         onChangeFactors={onChangeFactors}
+        downloadFileName={heatmapProps.downloadFileName}
+        showDownload={heatmapProps.showDownload}
         linkTarget={heatmapProps.linkTarget}
         resolveUrl={heatmapProps.resolveUrl}
         injectStyles={heatmapProps.injectStyles}
@@ -270,10 +273,11 @@ const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
   const [draft, setDraft] = useState({genes: DEFAULT_GENES, experiment: `E-CURD-25`})
   const [applied, setApplied] = useState(draft)
   const [flags, setFlags] = useState({
-    showAnatomogram: true, isWidget: true, showControlMenu: true, injectStyles: true,
+    showAnatomogram: true, isWidget: true, showControlMenu: true, showDownload: true, injectStyles: true,
     demoResolveUrl: false, logWindowOpen: false
   })
   const [linkTarget, setLinkTarget] = useState(`_blank`)
+  const [downloadFileName, setDownloadFileName] = useState(``)
   const [panel, setPanel] = useState(PANELS.some(([key]) => key === initialPanel) ? initialPanel : PANELS[0][0])
   const [generation, setGeneration] = useState(0)
   const [events, setEvents] = useState([])
@@ -311,8 +315,10 @@ const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
     showAnatomogram: flags.showAnatomogram,
     isWidget: flags.isWidget,
     showControlMenu: flags.showControlMenu,
+    showDownload: flags.showDownload,
     injectStyles: flags.injectStyles,
     linkTarget,
+    downloadFileName: downloadFileName.trim() || undefined,
     resolveUrl: flags.demoResolveUrl ? demoResolveUrl : undefined,
     fail
   }
@@ -383,7 +389,7 @@ const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
           </Col>
         </Row>
         <div className={`d-flex flex-wrap gap-3 mt-2 small`}>
-          {[`showAnatomogram`, `isWidget`, `showControlMenu`, `injectStyles`].map(name =>
+          {[`showAnatomogram`, `isWidget`, `showControlMenu`, `showDownload`, `injectStyles`].map(name =>
             <Form.Check key={name} type={`switch`} id={`flag-${name}`} label={name} checked={flags[name]} onChange={toggle(name)} />)}
           <Form.Check type={`switch`} id={`flag-demoResolveUrl`} label={`demo resolveUrl (links to EBI)`}
             checked={flags.demoResolveUrl} onChange={toggle(`demoResolveUrl`)} />
@@ -394,6 +400,15 @@ const App = ({api = `live`, strict = false, initialPanel = `side-by-side`}) => {
             <Form.Select size={`sm`} style={{width: `auto`}} value={linkTarget} onChange={event => setLinkTarget(event.target.value)}>
               {LINK_TARGETS.map(([value, label]) => <option key={label} value={value}>{label}</option>)}
             </Form.Select>
+          </Form.Group>
+          <Form.Group controlId={`downloadFileName`} className={`d-flex align-items-center gap-1`}>
+            <Form.Label className={`mb-0`}>downloadFileName</Form.Label>
+            <Form.Control
+              size={`sm`}
+              style={{width: `14rem`}}
+              placeholder={`the component's default`}
+              value={downloadFileName}
+              onChange={event => setDownloadFileName(event.target.value)} />
           </Form.Group>
         </div>
         {api === `mock` &&

@@ -153,6 +153,29 @@ describe(`the factor grid panel`, () => {
     await waitFor(() => expect(within(within(panel).getByRole(`table`)).getAllByRole(`rowheader`)).toHaveLength(8))
   })
 
+  it(`has the grid's Download button, which suggests the playground's downloadFileName`, async () => {
+    const user = userEvent.setup()
+    render(<App api={`mock`} initialPanel={`grid`} />)
+    const panel = screen.getByTestId(`panel-grid`)
+    await within(panel).findByRole(`table`)
+
+    await user.click(within(panel).getByRole(`button`, {name: `Download`}))
+    let dialog = await screen.findByRole(`dialog`)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`SORBI_3006G095600-JGI-SB-1`)
+    await user.click(within(dialog).getByRole(`button`, {name: `Cancel`}))
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+
+    await user.type(screen.getByLabelText(`downloadFileName`), `msd2-grid`)
+    await user.click(within(panel).getByRole(`button`, {name: `Download`}))
+    dialog = await screen.findByRole(`dialog`)
+    expect(within(dialog).getByRole(`textbox`, {name: `File name`})).toHaveValue(`msd2-grid`)
+    await user.click(within(dialog).getByRole(`button`, {name: `Cancel`}))
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+
+    await user.click(screen.getByLabelText(`showDownload`))
+    expect(within(panel).queryByRole(`button`, {name: `Download`})).toBeNull()
+  })
+
   it(`offers sorghum_v11 when another atlasUrl is chosen`, async () => {
     const user = userEvent.setup()
     render(<App api={`mock`} />)
@@ -180,6 +203,8 @@ describe(`the demo resolveUrl`, () => {
     expect(demoResolveUrl(`moreInformation`, `${AUTH_TESTING}query`, {...context, experiment: null}))
       .toBe(`https://www.ebi.ac.uk/gxa/genes/SORBI_3001G000200`)
     expect(demoResolveUrl(`download`, curd25.body.experiment.urls.download, context)).not.toMatch(/geneQuery/)
+    expect(demoResolveUrl(`download`, `https://phytozome-next.jgi.doe.gov/info/Sbicolor_v3_1_1`,
+      {...context, experiment: `JGI-SB-1`})).toBeNull()
     expect(demoResolveUrl(`support`, `https://www.ebi.ac.uk/support/gxa`, context)).toBeUndefined()
   })
 })
