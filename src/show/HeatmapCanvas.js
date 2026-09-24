@@ -291,6 +291,10 @@ const HeatmapCanvas = (props) => {
   const layout = width > 0 ? computeLayout(props.heatmapData, width) : null
   const layoutKey = layout && JSON.stringify(layout)
 
+  // What else the labels are formatted from (the link target and outProxy of the row links). Highcharts formats them as
+  // the chart is drawn, so a new key redraws the chart; it is no new data, so the zoom is kept.
+  const labelsKey = props.labelsKey
+
   // {dataKey, min, max} of the current zoom, or null
   const zoom = useRef(null)
 
@@ -300,7 +304,7 @@ const HeatmapCanvas = (props) => {
         zoom.current = extremes && {...extremes, dataKey: dataKeyRef.current}
       }
     }),
-    [dataKey, layoutKey])   // layoutKey stands for layout
+    [dataKey, layoutKey, labelsKey])   // layoutKey stands for layout
 
   // Runs as each chart is created: a chart redrawn for a new layout gets the zoom of the one it replaces
   const restoreZoom = useCallback(chart => {
@@ -381,6 +385,7 @@ HeatmapCanvas.propTypes = {
     onClick: PropTypes.func
   }),
   onZoom: PropTypes.func.isRequired,
+  labelsKey: PropTypes.string,
   withAnatomogram: PropTypes.bool.isRequired,
   currentGenomeBrowser: PropTypes.string   // null when there are no genome browsers
 }

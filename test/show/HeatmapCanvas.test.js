@@ -120,6 +120,30 @@ describe(`HeatmapCanvas`, () => {
     expect(props.onZoom).toHaveBeenLastCalledWith(false)
   })
 
+  it(`redraws the labels for a new labelsKey, keeping the zoom`, () => {
+    const props = canvasProps(allStudies, {labelsKey: `["_blank",""]`})
+    const {rerender} = render(<HeatmapCanvas {...props} />)
+    const chart = onlyChart()
+    act(() => {
+      chart.xAxis[0].zoom(2, 5)
+      chart.showResetZoom()
+      chart.redraw(false)
+    })
+
+    // new callbacks and an equal key: the same chart
+    rerender(<HeatmapCanvas {...canvasProps(allStudies, {onZoom: props.onZoom, labelsKey: `["_blank",""]`})} />)
+    expect(onlyChart()).toBe(chart)
+
+    const yAxisFormatter = vi.fn(() => `<span>row</span>`)
+    rerender(<HeatmapCanvas {...props} yAxisFormatter={yAxisFormatter} labelsKey={`["_self",""]`} />)
+    const redrawn = onlyChart()
+    expect(redrawn).not.toBe(chart)
+    expect(yAxisFormatter).toHaveBeenCalled()
+    expect(redrawn.xAxis[0].getExtremes()).toMatchObject({userMin: 2, userMax: 5})
+    expect(redrawn.resetZoomButton).toBeTruthy()
+    expect(props.onZoom).not.toHaveBeenCalledWith(false)
+  })
+
   it(`selects the columns of the tissues the anatomogram highlights`, () => {
     const props = canvasProps(allStudies)
     const {rerender} = render(<HeatmapCanvas {...props} />)

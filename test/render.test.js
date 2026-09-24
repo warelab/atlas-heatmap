@@ -222,6 +222,45 @@ describe(`All Studies (SORBI_3001G000200)`, () => {
     expect(tooltipContainers()).toHaveLength(0)
   })
 
+  it(`sends a new linkTarget or outProxy to the row labels as well, and keeps the zoom`, async () => {
+    const fetchMock = answerWithFixtures()
+    const {container, rerender} = render(allStudiesHeatmap())
+    const chart = await findChart(container)
+    act(() => {
+      chart.xAxis[0].zoom(2, 5)
+      chart.showResetZoom()
+      chart.redraw(false)
+    })
+    const orderings = () => controls(container).querySelector(`.dropdown-toggle`)
+    expect(orderings()).toBeDisabled()
+    const rowLinks = () => rowLabels(container).map(label => label.querySelector(`a[href]`))
+    const otherLinks = () => [...container.querySelectorAll(`a[href]`)].filter(link => !link.closest(`[data-gxa-y]`))
+    expect(rowLinks().map(link => link.getAttribute(`target`))).toEqual(Array(9).fill(`_blank`))
+
+    // Upstream's labels are formatted as the chart is drawn: a chart kept for equal data kept the old targets
+    rerender(allStudiesHeatmap({linkTarget: `_self`}))
+    await waitFor(() => expect(rowLinks()[0]).toHaveAttribute(`target`, `_self`))
+    for (const link of [...rowLinks(), ...otherLinks()]) {
+      expect(link).toHaveAttribute(`target`, `_self`)
+      expect(link).not.toHaveAttribute(`rel`)
+    }
+    expect(rowLinks()).toHaveLength(9)
+    expect(onlyChart().xAxis[0].getExtremes()).toMatchObject({userMin: 2, userMax: 5})
+    expect(onlyChart().resetZoomButton).toBeTruthy()
+    // the controls still know the chart is zoomed
+    expect(orderings()).toBeDisabled()
+
+    const PROXY = `https://proxy.example/?u=`
+    rerender(allStudiesHeatmap({linkTarget: `_self`, outProxy: PROXY}))
+    await waitFor(() => expect(rowLinks()[0].getAttribute(`href`).startsWith(PROXY)).toBe(true))
+    expect(rowLinks().every(link => link.getAttribute(`href`).startsWith(`${PROXY}https://www.ebi.ac.uk/gxa/`))).toBe(true)
+    expect(otherLinks().some(link => link.getAttribute(`href`).startsWith(PROXY))).toBe(true)
+    expect(onlyChart().xAxis[0].getExtremes()).toMatchObject({userMin: 2, userMax: 5})
+    expect(orderings()).toBeDisabled()
+    // the same payload: no new request
+    expect(fetchMock).toHaveBeenCalledTimes(1)
+  })
+
   it(`sizes two heatmaps on one page to their own panels`, async () => {
     answerWithFixtures()
     // the narrow panel is 600 px wide, everything else the shim's 1000 px

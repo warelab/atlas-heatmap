@@ -191,6 +191,8 @@ const heatmapExtraArgs = ({
   noDataCellsColour: heatmapConfig.isMultiExperiment ? `white` : `rgb(235, 235, 235)`,
   ontologyIdsToHighlight,
   onZoom:onChangeCurrentZoom,
+  // The row labels' links depend on these as well as on the data
+  labelsKey: JSON.stringify([heatmapConfig.linkTarget, heatmapConfig.outProxy]),
   events:
     makeEventCallbacks({
       heatmapData: heatmapData,
