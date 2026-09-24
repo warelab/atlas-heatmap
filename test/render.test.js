@@ -9,6 +9,7 @@ import { ExpressionAtlasHeatmap, render as renderHeatmap } from '../src/Main.js'
 import { mockFetch } from './helpers/fetch.js'
 import { lastProps, renders as anatomogramRenders, resetAnatomogramStub } from './stubs/anatomogram.js'
 import allStudies from './fixtures/all-studies.SORBI_3001G000200.json'
+import allStudiesV11 from './fixtures/all-studies.SORBI_3001G000200.sorghum_v11.json'
 import curd25 from './fixtures/paralogs.E-CURD-25.baseline.json'
 import geod30249 from './fixtures/paralogs.E-GEOD-30249.differential.json'
 import geod167101 from './fixtures/paralogs.E-GEOD-167101.baseline.json'
@@ -27,7 +28,7 @@ const ROOT = `PO_0009005`
 const SHOOT = `PO_0009006`
 
 // Answers a request with the fixture captured for exactly that URL and body, so a changed body fails the test
-const FIXTURES = [allStudies, curd25, geod30249, geod167101, unknownGene]
+const FIXTURES = [allStudies, allStudiesV11, curd25, geod30249, geod167101, unknownGene]
 const answerWithFixtures = () => mockFetch((url, init) =>
   FIXTURES.find(f => url === f.base + f.path && init.body === f.body_sent) ||
   {status: 404, body: {error: `no fixture for ${url} ${init.body}`}})
@@ -282,6 +283,38 @@ describe(`All Studies (SORBI_3001G000200)`, () => {
     // no two elements share an id
     const ids = [...document.querySelectorAll(`[id]`)].map(element => element.id)
     expect(new Set(ids).size).toBe(ids.length)
+  })
+})
+
+describe(`All Studies with filterRows (SORBI_3001G000200 on sorghum_v11)`, () => {
+  const SORGHUM_V11 = `https://data.sorghumbase.org/sorghum_v11/gxa/`
+  const isJgiRow = row => row.id.startsWith(`JGI-`) || row.name.startsWith(`Mullet lab - `)
+
+  it(`draws the rows filterRows keeps, and only the columns they have values in`, async () => {
+    const fetchMock = answerWithFixtures()
+    const filterRows = row => !isJgiRow(row)
+    const {container, rerender} = render(
+      <ExpressionAtlasHeatmap atlasUrl={SORGHUM_V11} query={{gene: `SORBI_3001G000200`}} filterRows={filterRows} />)
+    const chart = await findChart(container)
+
+    expect(await screen.findByText(`Showing 9 experiments:`)).toBeInTheDocument()
+    expect(rowLabels(container)).toHaveLength(9)
+    expect(rowLabels(container).map(label => label.textContent).join(` `)).not.toMatch(/Mullet lab/)
+    const columns = chart.xAxis[0].categories.map(category => category.label)
+    expect(columns).toHaveLength(24)
+    expect(columns).not.toContain(`peduncle`)
+    // the anatomogram shows the tissues of the columns drawn
+    expect(lastProps().showIds).toEqual(chart.xAxis[0].categories.map(category => category.id))
+
+    // the same filter again: the chart stays as it is
+    rerender(<ExpressionAtlasHeatmap atlasUrl={SORGHUM_V11} query={{gene: `SORBI_3001G000200`}} filterRows={filterRows} />)
+    expect(onlyChart()).toBe(chart)
+
+    // no filter: every row, and no new request
+    rerender(<ExpressionAtlasHeatmap atlasUrl={SORGHUM_V11} query={{gene: `SORBI_3001G000200`}} />)
+    await waitFor(() => expect(rowLabels(container)).toHaveLength(58))
+    expect(onlyChart().xAxis[0].categories).toHaveLength(31)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
   })
 })
 

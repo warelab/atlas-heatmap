@@ -57,6 +57,31 @@ export interface HeatmapFailure {
   message: string
 }
 
+/** One expression of a profile row; `{}` where there is none. */
+export interface HeatmapExpression {
+  value?: number
+  quartiles?: { min: number; lower: number; median: number; upper: number; max: number }
+  foldChange?: number
+  pValue?: number
+  tStat?: number
+  [key: string]: unknown
+}
+
+/**
+ * A row of the payload (`profiles.rows`): an experiment, or one slice of it, in All Studies
+ * (`id` is the accession, or the same as `name` for a slice such as `'<study name> - <value>'`), a gene otherwise.
+ */
+export interface HeatmapProfileRow {
+  id: string
+  name: string
+  uri?: string
+  experimentType?: string
+  expressionUnit?: string
+  /** Aligned with the payload's column headers. */
+  expressions: HeatmapExpression[]
+  [key: string]: unknown
+}
+
 export interface ExpressionAtlasHeatmapProps {
   /** An object query, or an endpoint relative to `atlasUrl`. */
   query?: HeatmapQuery | string
@@ -86,6 +111,12 @@ export interface ExpressionAtlasHeatmapProps {
   style?: CSSProperties
   /** Default true. With false, load `gramene-atlas-heatmap/dist/gramene-atlas-heatmap.css` yourself. */
   injectStyles?: boolean
+  /**
+   * Keeps the payload's rows for which it returns true; columns left with no value in any row kept are dropped too, and
+   * with no row left the "no results" message shows. It filters the fetched payload: a new function filters again
+   * without a new request, and redraws only when it keeps other rows (memoize it anyway).
+   */
+  filterRows?: (row: HeatmapProfileRow) => boolean
   /** @deprecated Accepted and ignored: there is no Google Analytics any more. */
   disableGoogleAnalytics?: boolean
 }

@@ -4,6 +4,7 @@ import { Spinner } from 'react-bootstrap'
 
 import Container from './Container.js'
 import CalloutAlert from './CalloutAlert.js'
+import {useFilteredPayload} from './filterRows.js'
 import {buildRequest, requestKey} from './request.js'
 import useAtlasFetch from './useAtlasFetch.js'
 
@@ -40,48 +41,75 @@ const outcome = sourceUrlFetch => {
   }
 }
 
+// `fail` hears about a failed request once, not on every render as upstream (and not twice under StrictMode, whose
+// second effect run sees the ref the first one set). `key` identifies the fetch (useAtlasFetch's key).
+const useReportFailure = ({fail, request, key, failure}) => {
+  const reportedKey = useRef(null)
+  useEffect(() => {
+    if (failure === undefined || reportedKey.current === key) {
+      return
+    }
+    reportedKey.current = key
+    fail && fail({
+      url: request.url,
+      method: request.method,
+      message: failure
+    })
+  }, [key, failure])
+}
+
+const FailureAlert = ({failure, linkTarget, urlFor}) =>
+  <CalloutAlert
+    error={{
+      description: PROBLEM_CONTACTING_SERVER,
+      name: `Error`,
+      message: failure
+    }}
+    linkTarget={linkTarget}
+    urlFor={urlFor} />
+
+FailureAlert.propTypes = {
+  failure: PropTypes.string.isRequired,
+  linkTarget: PropTypes.string,
+  urlFor: PropTypes.func
+}
+
+const NoResultsAlert = () => <CalloutAlert variant={`info`} error={{description: NO_RESULTS}} />
+
 const ContainerLoader = (props) => {
-  const {inProxy, atlasUrl, source, fail, linkTarget, urlFor} = props
+  const {inProxy, atlasUrl, source, fail, linkTarget, urlFor, filterRows, ...containerProps} = props
 
   // A new `source` object with the same content is the same request.
   const nextRequest = buildRequest({inProxy, atlasUrl, source})
   const request = useMemo(() => nextRequest, [requestKey(nextRequest)])
   const sourceUrlFetch = useAtlasFetch(request)
   const result = outcome(sourceUrlFetch)
+  // filterRows works on the fetched payload: a new function filters it again, with no new request
+  const filtered = useFilteredPayload(result.data, filterRows)
 
-  // `fail` hears about a failed request once, not on every render as upstream (and not twice under StrictMode, whose
-  // second effect run sees the ref the first one set).
-  const reportedKey = useRef(null)
-  useEffect(() => {
-    if (result.failure === undefined || reportedKey.current === sourceUrlFetch.key) {
-      return
-    }
-    reportedKey.current = sourceUrlFetch.key
-    fail && fail({
-      url: request.url,
-      method: request.method,
-      message: result.failure
-    })
-  }, [sourceUrlFetch.key, result.failure])
+  useReportFailure({fail, request, key: sourceUrlFetch.key, failure: result.failure})
 
   if (result.loading) {
     return <Loading />
   } else if (result.failure !== undefined) {
-    return (
-      <CalloutAlert
-        error={{
-          description: PROBLEM_CONTACTING_SERVER,
-          name: `Error`,
-          message: result.failure
-        }}
-        linkTarget={linkTarget}
-        urlFor={urlFor} />
-    )
-  } else if (result.noResults) {
-    return <CalloutAlert variant={`info`} error={{description: NO_RESULTS}} />
+    return <FailureAlert failure={result.failure} linkTarget={linkTarget} urlFor={urlFor} />
+  } else if (result.noResults || (filtered.filtered && filtered.data.profiles.rows.length === 0)) {
+    return <NoResultsAlert />
   } else {
-    // Keyed on the request, so the controls' state (ordering, filters, zoom) starts afresh with new data
-    return <Container key={sourceUrlFetch.key} {...props} data={result.data} />
+    // Keyed on the request and on the rows filterRows keeps, so the controls' state (ordering, filters, zoom) starts
+    // afresh with new data
+    return (
+      <Container
+        key={`${sourceUrlFetch.key}\n${filtered.key}`}
+        {...containerProps}
+        inProxy={inProxy}
+        atlasUrl={atlasUrl}
+        source={source}
+        fail={fail}
+        linkTarget={linkTarget}
+        urlFor={urlFor}
+        data={filtered.data} />
+    )
   }
 }
 
@@ -94,7 +122,9 @@ ContainerLoader.propTypes = {
   }).isRequired,
   fail: PropTypes.func,
   linkTarget: PropTypes.string,
-  urlFor: PropTypes.func
+  urlFor: PropTypes.func,
+  filterRows: PropTypes.func
 }
 
+export {outcome, Loading, FailureAlert, NoResultsAlert, useReportFailure, PROBLEM_CONTACTING_SERVER, NO_RESULTS}
 export default ContainerLoader

@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useRef} from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {createRoot} from 'react-dom/client'
 
 import ContainerLoader from './layout/ContainerLoader.js'
 import HeatmapErrorBoundary from './layout/HeatmapErrorBoundary.js'
-import {applyResolveUrl} from './layout/links.js'
+import {DEFAULT_ATLAS_URL, useUrlFor, withDefaults, withTrailingSlash} from './layout/options.js'
 import {buildRequest, buildSource, requestKey} from './layout/request.js'
 import {ensureStylesInjected, HEATMAP_CSS, STYLE_ELEMENT_ID, useStyleInjection} from './styles/inject.js'
 
@@ -38,12 +38,15 @@ import {ensureStylesInjected, HEATMAP_CSS, STYLE_ELEMENT_ID, useStyleInjection} 
  * @param {Object}          options.style - Style of the root div
  * @param {boolean}         options.injectStyles - Inject the stylesheet (default true); with false, import
  *                              gramene-atlas-heatmap/dist/gramene-atlas-heatmap.css instead
+ * @param {function}        options.filterRows - (row) => boolean: drops the payload's profiles.rows for which it is false,
+ *                              and the columns left without a value. It filters the fetched payload: a new function
+ *                              filters again without a new request (memoize it to keep the chart as it is).
  */
 const DEFAULT_OPTIONS = Object.freeze({
   showAnatomogram: true,
   isWidget: true,
   showControlMenu: true,
-  atlasUrl: `https://www.ebi.ac.uk/gxa/`,
+  atlasUrl: DEFAULT_ATLAS_URL,
   inProxy: ``,
   outProxy: ``,
   experiment: ``,
@@ -51,35 +54,18 @@ const DEFAULT_OPTIONS = Object.freeze({
   injectStyles: true
 })
 
-// Unlike upstream, an explicit `undefined` (e.g. atlasUrl={config.atlasUrl} when it is not configured) keeps the default
-const withDefaults = props => Object.entries(props).reduce(
-  (options, [name, value]) => {
-    if (value !== undefined) {
-      options[name] = value
-    }
-    return options
-  },
-  {...DEFAULT_OPTIONS})
-
-// Endpoints are resolved relative to atlasUrl, so without a trailing slash its last segment would be dropped
-const withTrailingSlash = url => url && !url.endsWith(`/`) ? `${url}/` : url
-
 const ExpressionAtlasHeatmap = props => {
-  const options = withDefaults(props)
+  const options = withDefaults(DEFAULT_OPTIONS, props)
   const {
-    query, experiment, inProxy, outProxy, showAnatomogram, isWidget, showControlMenu, fail, linkTarget, className, style
+    query, experiment, inProxy, outProxy, showAnatomogram, isWidget, showControlMenu, fail, linkTarget, className, style,
+    filterRows
   } = options
   const atlasUrl = withTrailingSlash(options.atlasUrl)
   useStyleInjection(options.injectStyles !== false)
 
   // urlFor(kind, defaultUrl, context) asks the latest resolveUrl, so its own identity never changes and a new
   // resolveUrl function alone does not rebuild the chart
-  const latest = useRef(null)
-  latest.current = {resolveUrl: options.resolveUrl, query, experiment}
-  const urlFor = useCallback((kind, defaultUrl, context) => {
-    const {resolveUrl, query, experiment} = latest.current
-    return applyResolveUrl(resolveUrl, kind, defaultUrl, {query, experiment: experiment || null, ...context})
-  }, [])
+  const urlFor = useUrlFor(options.resolveUrl, {query, experiment: experiment || null})
 
   const source = buildSource({query, experiment})
   const request = buildRequest({inProxy, atlasUrl, source})
@@ -104,6 +90,7 @@ const ExpressionAtlasHeatmap = props => {
           fail={fail}
           linkTarget={linkTarget}
           urlFor={urlFor}
+          filterRows={filterRows}
           source={source} />
       </HeatmapErrorBoundary>
     </div>
@@ -125,6 +112,7 @@ ExpressionAtlasHeatmap.propTypes = {
   className: PropTypes.string,
   style: PropTypes.object,
   injectStyles: PropTypes.bool,
+  filterRows: PropTypes.func,
   disableGoogleAnalytics: PropTypes.bool
 }
 
