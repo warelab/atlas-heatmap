@@ -1,16 +1,18 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  heatmapDataInColumns, heatmapFileName, heatmapIsEmpty, heatmapJson, heatmapSummary, heatmapTable, heatmapTsv,
-  queryOfSource, withQueriedGenes
+  heatmapDataInColumns, heatmapFileName, heatmapIsEmpty, heatmapJson, heatmapSources, heatmapSummary, heatmapTable,
+  heatmapTsv, queryOfSource, withQueriedGenes
 } from '../../src/manipulate/controls/download-button/Download.js'
 import { manipulate } from '../../src/manipulate/Manipulators.js'
 import { buildSource } from '../../src/layout/request.js'
 import { chartDataOf } from '../helpers/canvas.js'
 import allStudies from '../fixtures/all-studies.SORBI_3001G000200.json'
+import allStudiesV11 from '../fixtures/all-studies.SORBI_3001G000200.sorghum_v11.json'
 import curd25 from '../fixtures/paralogs.E-CURD-25.baseline.json'
 import geod30249 from '../fixtures/paralogs.E-GEOD-30249.differential.json'
 import geod128441 from '../fixtures/paralogs.E-GEOD-128441.differential.sorghum_v11.json'
+import sb1 from '../fixtures/grid.JGI-SB-1.msd2.json'
 
 // The Download dialog's content builders for the heatmap, as pure functions of the chart data shown
 const CONTEXT = {downloadedFrom: `https://example.org/gene/SORBI_3001G000200`, downloadedAt: `2026-09-24T12:00:00.000Z`}
@@ -180,6 +182,56 @@ describe(`the heatmap's JSON file`, () => {
     expect(json.rows.every(row => row.values.length === 4 && row.values.every(v => v === null || typeof v === `number`)))
       .toBe(true)
     expect(json.rows.every(row => !(`pValues` in row))).toBe(true)
+    // every row an Expression Atlas experiment
+    expect(json.source).toBe(`Expression Atlas`)
+    expect(Object.keys(json.rows[0])).toEqual([`label`, `id`, `source`, `unit`, `values`])
+    expect(json.rows.every(row => row.source === `Expression Atlas`)).toBe(true)
+  })
+
+  it(`credits a JGI study to its host, not to Expression Atlas (JGI-SB-1 drawn as a heatmap, in Paralogs)`, () => {
+    const {heatmapData, heatmapConfig} = chartDataOf(sb1)
+    const json = JSON.parse(heatmapJson({
+      heatmapData, experiment: heatmapConfig.experiment, query: {genes: [`SORBI_3006G095600`]}, atlasUrl: ATLAS_URL,
+      isDifferential: false, ...CONTEXT
+    }))
+    expect(json.source).toBe(`phytozome-next.jgi.doe.gov`)
+    expect(json.experiment.accession).toBe(`JGI-SB-1`)
+    expect(json.rows.every(row => !(`source` in row))).toBe(true)
+  })
+
+  it(`gives each row its source across experiments, and none overall when they differ (sorghum_v11 with JGI rows)`, () => {
+    const heatmapData = shown(allStudiesV11)
+    const json = JSON.parse(heatmapJson({
+      heatmapData, experiment: null, query: {genes: [`SORBI_3001G000200`]}, atlasUrl: ATLAS_URL, isDifferential: false,
+      ...CONTEXT
+    }))
+    expect(json.source).toBeNull()
+    const sourceOf = id => json.rows.find(row => row.id === id).source
+    expect(sourceOf(`E-CURD-25`)).toBe(`Expression Atlas`)
+    expect(sourceOf(`JGI-SB-1`)).toBe(`phytozome-next.jgi.doe.gov`)
+    expect(new Set(json.rows.map(row => row.source))).toEqual(new Set([`Expression Atlas`, `phytozome-next.jgi.doe.gov`]))
+
+    // only the JGI rows: theirs
+    const jgiOnly = {...heatmapData, yAxisCategories: heatmapData.yAxisCategories.filter(row => /jgi/.test(row.info.uri))}
+    expect(jgiOnly.yAxisCategories.length).toBeGreaterThan(40)
+    expect(heatmapSources(jgiOnly, {experiment: null, atlasUrl: ATLAS_URL}).source).toBe(`phytozome-next.jgi.doe.gov`)
+  })
+
+  it(`takes Expression Atlas, the atlas read, or no page at all for Expression Atlas`, () => {
+    const empty = {xAxisCategories: [], yAxisCategories: [], dataSeries: []}
+    const of = (experiment, atlasUrl = ATLAS_URL) => heatmapSources(empty, {experiment, atlasUrl}).source
+    expect(of({accession: `E-X`})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {}})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {main_page: `https://www.ebi.ac.uk/gxa/experiments/E-X`}})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {download: `https://ebi.ac.uk/gxa/x`}})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {main_page: `experiments/E-X`}})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {main_page: `https://data.sorghumbase.org/other/gxa/E-X`}})).toBe(`Expression Atlas`)
+    expect(of({accession: `E-X`, urls: {main_page: `experiments/E-X`}}, ``)).toBe(`Expression Atlas`)
+    expect(of({accession: `X`, urls: {main_page: `https://Example.org/x`}})).toBe(`example.org`)
+    expect(of({accession: `X`, urls: {main_page: `https://notebi.ac.uk.example.org/x`}})).toBe(`notebi.ac.uk.example.org`)
+    expect(of(null)).toBe(`Expression Atlas`)
+    const rows = {...empty, yAxisCategories: [{label: `a`, id: `a`, info: {uri: `experiments/a`, url: `https://proxy.example.org/x`}}]}
+    expect(heatmapSources(rows, {experiment: null, atlasUrl: ATLAS_URL})).toEqual({source: `Expression Atlas`, rows: [`Expression Atlas`]})
   })
 })
 

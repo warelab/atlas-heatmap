@@ -217,12 +217,17 @@ zoomed axis, i.e. whose labels show). Labels are whole, not the shortened ones t
   SORBI_3001G000100		0.7		
   ```
 
-- JSON: `{source: "Expression Atlas", atlasUrl, experiment: {accession, description, type} | null (All Studies),
-  query: {genes: [...]}, unit, zoom: null | {from, to, of} (1-based columns), columns: [{label, id}], rows: [{label,
-  id, unit, values}], downloadedFrom, downloadedAt}`. `values` are aligned with `columns`, `null` where there is no
-  data. A column's `id` is its ontology term (or the contrast id; `null` when there is none), and a baseline
-  experiment's columns also have their `assayGroupId`. `unit` is the unit every row shares (`null` when they differ;
-  each row has its own). Differential experiments' rows also have `pValues`, aligned with `values`.
+- JSON: `{source, atlasUrl, experiment: {accession, description, type} | null (All Studies), query: {genes: [...]},
+  unit, zoom: null | {from, to, of} (1-based columns), columns: [{label, id}], rows: [{label, id, unit, values}],
+  downloadedFrom, downloadedAt}`. `values` are aligned with `columns`, `null` where there is no data. A column's `id`
+  is its ontology term (or the contrast id; `null` when there is none), and a baseline experiment's columns also have
+  their `assayGroupId`. `unit` is the unit every row shares (`null` when they differ; each row has its own).
+  Differential experiments' rows also have `pValues`, aligned with `values`.
+  - `source` is where the data come from, by the experiment's page (`experiment.urls.main_page`, else `download`):
+    `"Expression Atlas"` for a page on ebi.ac.uk or on the atlas read (`atlasUrl`), or with no page; otherwise the
+    page's host, e.g. `"phytozome-next.jgi.doe.gov"` for a JGI study drawn as a heatmap. Across experiments each row
+    (an experiment) has its own `source`, from its page (`uri`), after its `id`; the top-level `source` is theirs
+    when they all share it, and `null` when they differ.
 
   ```json
   {

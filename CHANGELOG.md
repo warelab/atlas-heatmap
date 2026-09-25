@@ -34,7 +34,9 @@ Versions before 6.0.0 are upstream's
     `Gene query: [null,…]` (and drops `in conditions []`).
   - JSON: `{source, atlasUrl, experiment: {accession, description, type} | null, query: {genes}, unit, zoom, columns:
     [{label, id}], rows: [{label, id, unit, values}], downloadedFrom, downloadedAt}`, `null` for no data. Rows of a
-    differential experiment also have `pValues`.
+    differential experiment also have `pValues`. `source` comes from the experiment's page: `Expression Atlas` for
+    EBI's (or the atlas read, or none), else its host (`phytozome-next.jgi.doe.gov` for a JGI study); across
+    experiments each row has its own `source`, and the top-level one is `null` when they differ.
 - The full experiment data ("All data") is now a secondary link in the dialog, *Full experiment data on Expression
   Atlas*, shown only when there is a full dataset URL (`resolveUrl('download', …)` can still drop it). It is no
   longer the default action.

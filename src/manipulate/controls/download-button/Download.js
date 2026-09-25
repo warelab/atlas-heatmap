@@ -111,6 +111,47 @@ const heatmapTable = (heatmapData, {range, isDifferential = false} = {}) => {
   return {columns, rows, unit: commonUnit(rows), zoom: zoomOf(heatmapData, range)}
 }
 
+const EXPRESSION_ATLAS = `Expression Atlas`
+
+// The host name of `url`, relative to `base`, or null
+const hostOf = (url, base) => {
+  try {
+    return new URL(url, base || undefined).hostname.toLowerCase() || null
+  } catch (error) {
+    return null
+  }
+}
+
+/**
+ * Where the data of a page come from: `Expression Atlas` for a page on EBI's Expression Atlas (ebi.ac.uk) or on the
+ * atlas the widget reads (atlasUrl, e.g. a relative URL), else the page's host name (`phytozome-next.jgi.doe.gov` for
+ * a JGI study), and `Expression Atlas`, where the widget got them, when there is no page.
+ */
+const sourceOfPage = (url, atlasUrl) => {
+  const host = url ? hostOf(url, atlasUrl) : null
+  return !host || host === `ebi.ac.uk` || host.endsWith(`.ebi.ac.uk`) || host === hostOf(atlasUrl) ?
+    EXPRESSION_ATLAS :
+    host
+}
+
+const pageOfExperiment = experiment => (experiment.urls ? experiment.urls.main_page || experiment.urls.download : null)
+
+// A row's experiment page, across experiments (its uri, not its url, which has inProxy before it)
+const pageOfRow = category => (category.info ? category.info.uri || category.info.url : null)
+
+/**
+ * The sources of the heatmap's data (see sourceOfPage): of the experiment, or across experiments, of each row (rows)
+ * and of them all (source; null when the rows have different sources).
+ */
+const heatmapSources = (heatmapData, {experiment, atlasUrl}) => {
+  if (experiment) {
+    return {source: sourceOfPage(pageOfExperiment(experiment), atlasUrl), rows: null}
+  }
+  const rows = heatmapData.yAxisCategories.map(category => sourceOfPage(pageOfRow(category), atlasUrl))
+  const sources = [...new Set(rows)]
+  return {source: sources.length === 0 ? EXPRESSION_ATLAS : sources.length === 1 ? sources[0] : null, rows}
+}
+
 /**
  * The tab-delimited file: upstream's comment lines (where and when, then descriptionLines), the unit and the zoom when
  * there is one, then upstream's table of the columns in view. Cells with no data are empty in one experiment and `NA`
@@ -130,12 +171,14 @@ const heatmapTsv = ({heatmapData, range, descriptionLines = [], isSingleExperime
 
 /**
  * The JSON file: {source, atlasUrl, experiment: {accession, description, type} | null, query, unit, zoom, columns,
- * rows, downloadedFrom, downloadedAt}, with columns and rows as heatmapTable gives them.
+ * rows, downloadedFrom, downloadedAt}, with columns and rows as heatmapTable gives them. source is where the data come
+ * from (see heatmapSources); across experiments, each row also has its own.
  */
 const heatmapJson = ({heatmapData, range, experiment, query, atlasUrl, isDifferential, downloadedFrom, downloadedAt}) => {
   const {columns, rows, unit, zoom} = heatmapTable(heatmapData, {range, isDifferential})
+  const sources = heatmapSources(heatmapData, {experiment, atlasUrl})
   return jsonText({
-    source: `Expression Atlas`,
+    source: sources.source,
     atlasUrl: atlasUrl || null,
     experiment: experiment ?
       {accession: experiment.accession, description: experiment.description || null, type: experiment.type || null} :
@@ -144,7 +187,7 @@ const heatmapJson = ({heatmapData, range, experiment, query, atlasUrl, isDiffere
     unit,
     zoom,
     columns,
-    rows,
+    rows: sources.rows ? rows.map(({label, id, ...values}, y) => ({label, id, source: sources.rows[y], ...values})) : rows,
     downloadedFrom,
     downloadedAt
   })
@@ -208,6 +251,6 @@ const withQueriedGenes = (lines, genes) => lines.map(line => {
 })
 
 export {
-  heatmapDataIntoLinesOfData, heatmapDataInColumns, heatmapTable, heatmapTsv, heatmapJson, heatmapIsEmpty, heatmapSummary,
-  queryOfSource, heatmapFileName, withQueriedGenes
+  heatmapDataIntoLinesOfData, heatmapDataInColumns, heatmapTable, heatmapSources, heatmapTsv, heatmapJson, heatmapIsEmpty,
+  heatmapSummary, queryOfSource, heatmapFileName, withQueriedGenes
 }
