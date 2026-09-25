@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { render, screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import download from 'downloadjs'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -208,6 +208,53 @@ describe(`DownloadDialog`, () => {
     await user.type(nameInput(again), `///`)
     await user.keyboard(`{Enter}`)
     expect((await lastDownload()).fileName).toBe(`SORBI_3006G095600-JGI-SB-1.tsv`)
+  })
+
+  // The modal stays in the page while it fades out: a double click or a second Enter came in then
+  it(`saves once however often Download is clicked or Enter pressed before it has closed`, async () => {
+    const user = userEvent.setup()
+    const buildContent = vi.fn(contentOf)
+    const onDownload = vi.fn()
+    render(<Host buildContent={buildContent} onDownload={onDownload} />)
+    const dialog = await open(user)
+    const button = downloadButton(dialog)
+    const form = dialog.querySelector(`form`)
+
+    fireEvent.click(button)
+    expect(screen.getByRole(`dialog`)).toBe(dialog)     // still fading out
+    expect(button).toBeDisabled()
+    fireEvent.click(button)
+    fireEvent.submit(form)
+    fireEvent.keyDown(nameInput(dialog), {key: `Enter`, code: `Enter`})
+    fireEvent.submit(form)
+    await closed()
+    expect(buildContent).toHaveBeenCalledTimes(1)
+    expect(download).toHaveBeenCalledTimes(1)
+    expect(onDownload).toHaveBeenCalledTimes(1)
+
+    // and once again at the next opening
+    const again = await open(user)
+    await user.dblClick(downloadButton(again))
+    await closed()
+    expect(download).toHaveBeenCalledTimes(2)
+  })
+
+  it(`opens the full experiment data once however often its link is clicked before it has closed`, async () => {
+    const user = userEvent.setup()
+    render(<Host buildContent={vi.fn(contentOf)} fullDatasetUrl={`https://example.org/all.tsv`} />)
+    const dialog = await open(user)
+    const full = within(dialog).getByRole(`button`, {name: `Full experiment data on Expression Atlas`})
+    fireEvent.click(full)
+    expect(full).toBeDisabled()
+    fireEvent.click(full)
+    await closed()
+    expect(window.open).toHaveBeenCalledTimes(1)
+
+    const again = await open(user)
+    await user.dblClick(within(again).getByRole(`button`, {name: /Full experiment data/}))
+    await closed()
+    expect(window.open).toHaveBeenCalledTimes(2)
+    expect(download).not.toHaveBeenCalled()
   })
 
   it(`disables Download while the name is blank, and Enter does nothing then`, async () => {

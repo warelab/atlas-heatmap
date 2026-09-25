@@ -21,9 +21,9 @@ Versions before 6.0.0 are upstream's
   - a **format**: tab-delimited text (`.tsv`, `text/tab-separated-values`), selected every time the dialog opens, or
     JSON (`.json`, `application/json`).
 
-  Download (or Enter) saves the file under exactly that name and closes the dialog; Cancel, the close button and
-  Escape save nothing. The focus returns to the Download button. The dialog says what it saves, e.g. "9 rows × 24
-  columns, as shown".
+  Download (or Enter) saves the file under exactly that name and closes the dialog, once per opening (a double click
+  or a second Enter while it fades out saves nothing more); Cancel, the close button and Escape save nothing. The
+  focus returns to the Download button. The dialog says what it saves, e.g. "9 rows × 24 columns, as shown".
 - The file holds **what the heatmap shows**: the rows and columns after the filters, the ordering and the similarly
   expressed genes, in the order shown, with whole labels (not the shortened column labels). **While the chart is
   zoomed in, only the columns in view** (whose labels show) are saved.

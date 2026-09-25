@@ -1,4 +1,4 @@
-import React, {useId, useRef, useState} from 'react'
+import React, {useEffect, useId, useRef, useState} from 'react'
 import PropTypes from 'prop-types'
 import { Button, Form, Modal } from 'react-bootstrap'
 
@@ -15,8 +15,8 @@ const buttonUnsetStyles = {
 /**
  * The Download dialog of the heatmap and the factor grid: a file name (prefilled with `defaultFileName`, focused and
  * selected) and a format (tab-delimited text, preselected each time the dialog opens, or JSON). Download (or Enter)
- * saves `buildContent(format)` under the name, sanitised and with the format's extension, and closes the dialog; it is
- * disabled while the name is blank. With a `disclaimer` (a component), the dialog shows it and Download waits for the
+ * saves `buildContent(format)` under the name, sanitised and with the format's extension, and closes the dialog, once
+ * per opening (a double click saves one file); it is disabled while the name is blank and while the dialog closes. With a `disclaimer` (a component), the dialog shows it and Download waits for the
  * reader to agree to it. With a `fullDatasetUrl`, a link opens the experiment's full data in `linkTarget`. Focus goes
  * back to `returnFocusRef` (the button that opened the dialog) when it closes.
  *
@@ -43,23 +43,40 @@ const DownloadDialog = ({
     }
   }
 
+  // Set by the first Download (or full data link) of an opening: the modal stays in the page, and its buttons
+  // clickable, while it fades out, and a double click or a second Enter must not save the file twice
+  const doneRef = useRef(false)
+  useEffect(() => {
+    if (show) {
+      doneRef.current = false
+    }
+  }, [show])
+  // Once only per opening, and not while the dialog is closing
+  const once = action => {
+    if (!show || doneRef.current) {
+      return false
+    }
+    doneRef.current = true
+    action()
+    return true
+  }
+
   const needsAgreement = Boolean(Disclaimer) && !accepted
-  const canDownload = fileName.trim() !== `` && !needsAgreement
+  const canDownload = show && fileName.trim() !== `` && !needsAgreement
   const savedAs = fileNameFor(fileName, format, defaultFileName)
 
   const submit = event => {
     event.preventDefault()
-    if (!canDownload) {
-      return
+    if (canDownload && once(() => saveFile(buildContent(format), savedAs, format))) {
+      onHide()
+      onDownload && onDownload({fileName: savedAs, format})
     }
-    saveFile(buildContent(format), savedAs, format)
-    onHide()
-    onDownload && onDownload({fileName: savedAs, format})
   }
 
   const openFullDataset = () => {
-    openUrl(fullDatasetUrl, linkTarget)
-    onHide()
+    if (once(() => openUrl(fullDatasetUrl, linkTarget))) {
+      onHide()
+    }
   }
 
   // Focus the name, selected so that typing replaces it (restart-ui's Modal then leaves the focus where it is)
@@ -144,7 +161,7 @@ const DownloadDialog = ({
                 variant={`link`}
                 size={`sm`}
                 className={`p-0 align-baseline`}
-                disabled={needsAgreement}
+                disabled={!show || needsAgreement}
                 onClick={openFullDataset}>
                 Full experiment data on Expression Atlas
               </Button>
