@@ -181,8 +181,11 @@ The Download button (among the heatmap's controls, and in the factor grid's tool
 - A line saying what is saved, e.g. `9 rows × 24 columns, as shown` or `31 samples of JGI-SB-1 for SORBI_3006G095600`.
 - *Download* (or Enter) saves the file with downloadjs, as `text/tab-separated-values` or `application/json` in UTF-8,
   and closes the dialog. It saves one file per opening: a double click or a second Enter while the dialog fades out
-  does nothing (nor does a second click on the full data link below). *Cancel*, the close button and Escape save nothing. The focus goes back to the Download
-  button.
+  does nothing (nor does a second click on the full data link below). *Cancel*, the close button and Escape save
+  nothing. The focus goes back to the Download button.
+- When the widget shows no data (the heatmap has no rows, and says "No data match your filtering criteria…"), the
+  dialog says *Nothing to download: the heatmap shows no data.* instead, without the name and format fields, and
+  *Download* is disabled. The full data link below stays.
 - For an experiment whose payload names a full download (`experiment.urls.download`, then `resolveUrl('download', …)`),
   a secondary link *Full experiment data on Expression Atlas* opens it in `linkTarget`, as the old menu's “All data”
   did. It is not the default action; `resolveUrl` returning `null` leaves it out.

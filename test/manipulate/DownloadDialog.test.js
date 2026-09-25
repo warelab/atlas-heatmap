@@ -257,6 +257,24 @@ describe(`DownloadDialog`, () => {
     expect(download).not.toHaveBeenCalled()
   })
 
+  it(`shows only the summary, and saves nothing, when there is nothing to save`, async () => {
+    const user = userEvent.setup()
+    const buildContent = vi.fn(contentOf)
+    render(<Host buildContent={buildContent} nothingToSave summary={`Nothing to download: the heatmap shows no data.`} />)
+    const dialog = await open(user)
+    expect(dialog).toHaveAccessibleDescription(`Nothing to download: the heatmap shows no data.`)
+    expect(within(dialog).queryByRole(`textbox`)).toBeNull()
+    expect(within(dialog).queryByRole(`radio`)).toBeNull()
+    expect(downloadButton(dialog)).toBeDisabled()
+    fireEvent.submit(dialog.querySelector(`form`))
+    await user.keyboard(`{Enter}`)
+    expect(buildContent).not.toHaveBeenCalled()
+    expect(download).not.toHaveBeenCalled()
+    await user.click(within(dialog).getByRole(`button`, {name: `Cancel`}))
+    await closed()
+    await waitFor(() => expect(screen.getByRole(`button`, {name: `Open`})).toHaveFocus())
+  })
+
   it(`disables Download while the name is blank, and Enter does nothing then`, async () => {
     const user = userEvent.setup()
     render(<Host buildContent={vi.fn(contentOf)} />)

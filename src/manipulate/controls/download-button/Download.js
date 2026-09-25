@@ -150,8 +150,21 @@ const heatmapJson = ({heatmapData, range, experiment, query, atlasUrl, isDiffere
   })
 }
 
-/** What the dialog says it saves, e.g. `9 rows × 24 columns, as shown`. */
+/**
+ * Whether the heatmap shows nothing to save: no rows (it then says "No data match your filtering criteria…" instead of
+ * drawing a chart) or no columns.
+ */
+const heatmapIsEmpty = heatmapData =>
+  heatmapData.yAxisCategories.length === 0 || heatmapData.xAxisCategories.length === 0
+
+/**
+ * What the dialog says it saves, e.g. `9 rows × 24 columns, as shown`, or that there is nothing to save when the heatmap
+ * is empty.
+ */
 const heatmapSummary = (heatmapData, range) => {
+  if (heatmapIsEmpty(heatmapData)) {
+    return `Nothing to download: the heatmap shows no data.`
+  }
   const zoom = zoomOf(heatmapData, range)
   const rows = plural(heatmapData.yAxisCategories.length, `row`)
   return zoom ?
@@ -195,6 +208,6 @@ const withQueriedGenes = (lines, genes) => lines.map(line => {
 })
 
 export {
-  heatmapDataIntoLinesOfData, heatmapDataInColumns, heatmapTable, heatmapTsv, heatmapJson, heatmapSummary, queryOfSource,
-  heatmapFileName, withQueriedGenes
+  heatmapDataIntoLinesOfData, heatmapDataInColumns, heatmapTable, heatmapTsv, heatmapJson, heatmapIsEmpty, heatmapSummary,
+  queryOfSource, heatmapFileName, withQueriedGenes
 }

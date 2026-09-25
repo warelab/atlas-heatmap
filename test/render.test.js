@@ -526,6 +526,46 @@ describe(`the Download dialog`, () => {
     expect(download).toHaveBeenCalledTimes(1)
   })
 
+  // As SORBI_3001G000501 in E-GEOD-167101: a gene without a value in the experiment
+  it(`says there is nothing to download when the heatmap shows no data, and keeps the full data link`, async () => {
+    const user = userEvent.setup()
+    const gene = `SORBI_3001G000200`
+    const noValues = {
+      ...geod167101,
+      body_sent: `geneQuery=${gene}`,
+      body: {
+        ...geod167101.body,
+        profiles: {
+          ...geod167101.body.profiles,
+          rows: [{...geod167101.body.profiles.rows[0], expressions: geod167101.body.columnHeaders.map(() => ({}))}],
+          searchResultTotal: 1
+        }
+      }
+    }
+    mockFetch((url, init) =>
+      (url === noValues.base + noValues.path && init.body === noValues.body_sent ?
+        noValues :
+        {status: 404, body: {error: `no fixture for ${url} ${init.body}`}}))
+    const {container} = render(
+      <ExpressionAtlasHeatmap atlasUrl={AUTH_TESTING} query={{gene}} experiment={`E-GEOD-167101`} />)
+    await waitFor(() => expect(container).toHaveTextContent(`No data match your filtering criteria`))
+    expect(container.querySelector(`.highcharts-container`)).toBeNull()
+
+    const dialog = await openDownload(user, container)
+    expect(dialog).toHaveAccessibleDescription(`Nothing to download: the heatmap shows no data.`)
+    expect(within(dialog).queryByRole(`textbox`, {name: `File name`})).toBeNull()
+    expect(within(dialog).queryByRole(`radio`)).toBeNull()
+    expect(within(dialog).getByRole(`button`, {name: `Download`})).toBeDisabled()
+    await user.keyboard(`{Enter}`)
+    expect(download).not.toHaveBeenCalled()
+
+    await user.click(within(dialog).getByRole(`button`, {name: `Full experiment data on Expression Atlas`}))
+    expect(window.open).toHaveBeenCalledTimes(1)
+    expect(window.open.mock.calls[0][0]).toMatch(/^https:\/\/www\.ebi\.ac\.uk\/gxa\/experiments-content\/E-GEOD-167101\/download\//)
+    await waitFor(() => expect(screen.queryByRole(`dialog`)).toBeNull())
+    expect(download).not.toHaveBeenCalled()
+  })
+
   it(`has no full data link when resolveUrl drops it, suggests downloadFileName, and hides with showDownload={false}`, async () => {
     const user = userEvent.setup()
     answerWithFixtures()

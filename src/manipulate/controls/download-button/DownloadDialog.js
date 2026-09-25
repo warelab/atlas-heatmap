@@ -16,15 +16,17 @@ const buttonUnsetStyles = {
  * The Download dialog of the heatmap and the factor grid: a file name (prefilled with `defaultFileName`, focused and
  * selected) and a format (tab-delimited text, preselected each time the dialog opens, or JSON). Download (or Enter)
  * saves `buildContent(format)` under the name, sanitised and with the format's extension, and closes the dialog, once
- * per opening (a double click saves one file); it is disabled while the name is blank and while the dialog closes. With a `disclaimer` (a component), the dialog shows it and Download waits for the
- * reader to agree to it. With a `fullDatasetUrl`, a link opens the experiment's full data in `linkTarget`. Focus goes
- * back to `returnFocusRef` (the button that opened the dialog) when it closes.
+ * per opening (a double click saves one file); it is disabled while the name is blank and while the dialog closes.
+ * With `nothingToSave`, the dialog shows only the `summary` (which says why) and Download stays disabled. With a
+ * `disclaimer` (a component), the dialog shows it and Download waits for the reader to agree to it. With a
+ * `fullDatasetUrl`, a link opens the experiment's full data in `linkTarget`. Focus goes back to `returnFocusRef` (the
+ * button that opened the dialog) when it closes.
  *
  * The modal renders in a portal outside .gxaHeatmapContainer; .gxa-heatmap-modal scopes its styles.
  */
 const DownloadDialog = ({
-  show, onHide, defaultFileName, summary, buildContent, disclaimer: Disclaimer, fullDatasetUrl, linkTarget,
-  returnFocusRef, onDownload
+  show, onHide, defaultFileName, summary, nothingToSave = false, buildContent, disclaimer: Disclaimer, fullDatasetUrl,
+  linkTarget, returnFocusRef, onDownload
 }) => {
   const ids = useId()
   const inputRef = useRef(null)
@@ -62,7 +64,7 @@ const DownloadDialog = ({
   }
 
   const needsAgreement = Boolean(Disclaimer) && !accepted
-  const canDownload = show && fileName.trim() !== `` && !needsAgreement
+  const canDownload = show && !nothingToSave && fileName.trim() !== `` && !needsAgreement
   const savedAs = fileNameFor(fileName, format, defaultFileName)
 
   const submit = event => {
@@ -112,34 +114,37 @@ const DownloadDialog = ({
         <Modal.Body>
           <p id={`${ids}-summary`} className={`gxa-download-summary`}>{summary}</p>
 
-          <Form.Group controlId={`${ids}-name`} className={`mb-3`}>
-            <Form.Label>File name</Form.Label>
-            <Form.Control
-              ref={inputRef}
-              type={`text`}
-              value={fileName}
-              onChange={event => setFileName(event.target.value)}
-              autoComplete={`off`}
-              spellCheck={false}
-              aria-describedby={`${ids}-saved-as`} />
-            <Form.Text id={`${ids}-saved-as`} className={`gxa-download-saved-as`} aria-live={`polite`}>
-              {fileName.trim() === `` ? `Enter a file name.` : <>Saved as <code>{savedAs}</code></>}
-            </Form.Text>
-          </Form.Group>
+          {!nothingToSave &&
+            <>
+              <Form.Group controlId={`${ids}-name`} className={`mb-3`}>
+                <Form.Label>File name</Form.Label>
+                <Form.Control
+                  ref={inputRef}
+                  type={`text`}
+                  value={fileName}
+                  onChange={event => setFileName(event.target.value)}
+                  autoComplete={`off`}
+                  spellCheck={false}
+                  aria-describedby={`${ids}-saved-as`} />
+                <Form.Text id={`${ids}-saved-as`} className={`gxa-download-saved-as`} aria-live={`polite`}>
+                  {fileName.trim() === `` ? `Enter a file name.` : <>Saved as <code>{savedAs}</code></>}
+                </Form.Text>
+              </Form.Group>
 
-          <fieldset className={`mb-3`}>
-            <legend className={`form-label fs-6 mb-2`}>Format</legend>
-            {Object.entries(FORMATS).map(([key, {label}]) =>
-              <Form.Check
-                key={key}
-                type={`radio`}
-                id={`${ids}-format-${key}`}
-                name={`${ids}-format`}
-                value={key}
-                label={label}
-                checked={format === key}
-                onChange={() => setFormat(key)} />)}
-          </fieldset>
+              <fieldset className={`mb-3`}>
+                <legend className={`form-label fs-6 mb-2`}>Format</legend>
+                {Object.entries(FORMATS).map(([key, {label}]) =>
+                  <Form.Check
+                    key={key}
+                    type={`radio`}
+                    id={`${ids}-format-${key}`}
+                    name={`${ids}-format`}
+                    value={key}
+                    label={label}
+                    checked={format === key}
+                    onChange={() => setFormat(key)} />)}
+              </fieldset>
+            </>}
 
           {Disclaimer &&
             <div className={`mb-3`}>
@@ -185,6 +190,8 @@ DownloadDialog.propTypes = {
   onHide: PropTypes.func.isRequired,
   defaultFileName: PropTypes.string,
   summary: PropTypes.node,
+  // There is nothing to save (the widget shows no data): the summary says so, and Download is disabled
+  nothingToSave: PropTypes.bool,
   buildContent: PropTypes.func.isRequired,
   disclaimer: PropTypes.elementType,
   fullDatasetUrl: PropTypes.string,

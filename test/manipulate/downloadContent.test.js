@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  heatmapDataInColumns, heatmapFileName, heatmapJson, heatmapSummary, heatmapTable, heatmapTsv, queryOfSource,
-  withQueriedGenes
+  heatmapDataInColumns, heatmapFileName, heatmapIsEmpty, heatmapJson, heatmapSummary, heatmapTable, heatmapTsv,
+  queryOfSource, withQueriedGenes
 } from '../../src/manipulate/controls/download-button/Download.js'
 import { manipulate } from '../../src/manipulate/Manipulators.js'
 import { buildSource } from '../../src/layout/request.js'
@@ -217,6 +217,19 @@ describe(`the summary, the default file name and the query`, () => {
     expect(heatmapSummary(heatmapData)).toBe(`9 rows × 24 columns, as shown`)
     expect(heatmapSummary(heatmapData, {from: 2, to: 7})).toBe(`9 rows × 6 of 24 columns (zoomed in), as shown`)
     expect(heatmapSummary(chartDataOf(geod30249).heatmapData)).toBe(`2 rows × 2 columns, as shown`)
+  })
+
+  // The heatmap then says "No data match your filtering criteria…" instead of drawing a chart
+  it(`says there is nothing to download when no row (or no column) is shown`, () => {
+    const {heatmapData} = chartDataOf(curd25)
+    expect(heatmapIsEmpty(heatmapData)).toBe(false)
+    const noRows = shown(curd25, {keepColumn: () => false})
+    expect(noRows.yAxisCategories).toEqual([])
+    expect(heatmapIsEmpty(noRows)).toBe(true)
+    expect(heatmapSummary(noRows)).toBe(`Nothing to download: the heatmap shows no data.`)
+    const noColumns = {...heatmapData, xAxisCategories: [], dataSeries: heatmapData.dataSeries.map(s => ({...s, data: []}))}
+    expect(heatmapIsEmpty(noColumns)).toBe(true)
+    expect(heatmapSummary(noColumns, {from: 0, to: 3})).toBe(`Nothing to download: the heatmap shows no data.`)
   })
 
   it(`names the file after the experiment (or studies) and the first gene`, () => {

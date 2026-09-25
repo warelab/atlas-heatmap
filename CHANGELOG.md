@@ -23,7 +23,9 @@ Versions before 6.0.0 are upstream's
 
   Download (or Enter) saves the file under exactly that name and closes the dialog, once per opening (a double click
   or a second Enter while it fades out saves nothing more); Cancel, the close button and Escape save nothing. The
-  focus returns to the Download button. The dialog says what it saves, e.g. "9 rows × 24 columns, as shown".
+  focus returns to the Download button. The dialog says what it saves, e.g. "9 rows × 24 columns, as shown", or, when
+  the heatmap shows no data ("No data match your filtering criteria…"), "Nothing to download: the heatmap shows no
+  data." with Download disabled (the full data link stays).
 - The file holds **what the heatmap shows**: the rows and columns after the filters, the ordering and the similarly
   expressed genes, in the order shown, with whole labels (not the shortened column labels). **While the chart is
   zoomed in, only the columns in view** (whose labels show) are saved.

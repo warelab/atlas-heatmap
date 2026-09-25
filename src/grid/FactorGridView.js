@@ -214,6 +214,7 @@ const FactorGridView = ({
                 className={`gxa-grid-download`}
                 defaultFileName={downloadFileName || gridFileName({gene: gene || grid.gene.id, accession: downloadAccession})}
                 summary={gridSummary(grid, {accession: downloadAccession})}
+                nothingToSave={grid.samples.length === 0}
                 buildContent={buildDownload}
                 disclaimer={disclaimers[payload.config && payload.config.disclaimer]}
                 linkTarget={linkTarget} />}

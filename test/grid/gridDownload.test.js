@@ -136,6 +136,8 @@ describe(`the factor grid's summary, file name and order`, () => {
   it(`counts the samples`, () => {
     expect(gridSummary(gridOf(sb1), {accession: `JGI-SB-1`})).toBe(`31 samples of JGI-SB-1 for ${MSD2}`)
     expect(gridSummary(gridOf(sb3), {accession: ``})).toBe(`10 samples for ${MSD2}`)
+    expect(gridSummary({...gridOf(sb1), samples: []}, {accession: `JGI-SB-1`}))
+      .toBe(`Nothing to download: the study has no samples.`)
   })
 
   it(`names the file <gene>-<experiment>`, () => {

@@ -68,9 +68,14 @@ const gridJson = (grid, {experiment, accession, downloadedFrom, downloadedAt}) =
   })
 }
 
-/** What the dialog says it saves, e.g. `31 samples of JGI-SB-1 for SORBI_3006G095600`. */
+/**
+ * What the dialog says it saves, e.g. `31 samples of JGI-SB-1 for SORBI_3006G095600`, or that there is nothing to save
+ * when the study has no samples.
+ */
 const gridSummary = (grid, {accession}) =>
-  `${plural(grid.samples.length, `sample`)}${accession ? ` of ${accession}` : ``}${grid.gene.id ? ` for ${grid.gene.id}` : ``}`
+  grid.samples.length === 0 ?
+    `Nothing to download: the study has no samples.` :
+    `${plural(grid.samples.length, `sample`)}${accession ? ` of ${accession}` : ``}${grid.gene.id ? ` for ${grid.gene.id}` : ``}`
 
 /** The default file name (no extension): <gene>-<experiment>. */
 const gridFileName = ({gene, accession}) => [gene, accession].filter(Boolean).join(`-`)
