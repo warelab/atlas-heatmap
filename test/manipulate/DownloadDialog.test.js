@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import DownloadDialog, { DownloadDialogButton } from '../../src/manipulate/controls/download-button/DownloadDialog.js'
 import {
-  fileNameFor, FORMATS, sanitiseFileName, saveFile, tsvLines, withExtension
+  fileNameFor, FORMATS, MAX_FILE_NAME_BYTES, sanitiseFileName, saveFile, tsvLines, withExtension
 } from '../../src/manipulate/controls/download-button/downloadFile.js'
 import disclaimers from '../../src/manipulate/controls/download-button/disclaimers.js'
 import { lastDownload, textOf } from '../helpers/download.js'
@@ -26,6 +26,41 @@ describe(`file names`, () => {
     expect(sanitiseFileName(`.hidden`)).toBe(`hidden`)
     expect(sanitiseFileName(`ends with dots...`)).toBe(`ends with dots`)
     expect(sanitiseFileName(`émigré — ×2`)).toBe(`émigré — ×2`)
+  })
+
+  // What Chrome replaces with `_` (checked in Chrome 140): the name the dialog shows must be the name saved
+  it(`strips the format characters, lone surrogates, noncharacters and leading tildes browsers would replace`, () => {
+    expect(sanitiseFileName(`\u202Egpj.exe`)).toBe(`gpj.exe`)          // right-to-left override
+    expect(sanitiseFileName(`x\u200By\u200Dz\u00ADw\u061Cv\uFEFFu`)).toBe(`xyzwvu`)
+    expect(sanitiseFileName(`a\u{E0001}b`)).toBe(`ab`)                 // a tag character, outside the BMP
+    expect(sanitiseFileName(`a\uD800b\uDC00c`)).toBe(`abc`)            // lone surrogates
+    expect(sanitiseFileName(`a\uFDD0b\uFFFEc\u{10FFFF}d`)).toBe(`abcd`)
+    expect(sanitiseFileName(`a\u0085b\u009Fc`)).toBe(`abc`)            // C1 controls
+    expect(sanitiseFileName(`~tilde`)).toBe(`tilde`)
+    expect(sanitiseFileName(` ~ .~x`)).toBe(`x`)
+    expect(sanitiseFileName(`a~b~`)).toBe(`a~b~`)                     // only a leading tilde is replaced
+    expect(sanitiseFileName(`\u00A0lead\u3000trail\u2028`)).toBe(`lead trail`)
+    expect(sanitiseFileName(`\u{1F468}\u200D\u{1F469}\u200D\u{1F467} e\u0301`)).toBe(`\u{1F468}\u{1F469}\u{1F467} e\u0301`)
+  })
+
+  it(`cuts a long name to 200 bytes of UTF-8, between whole characters`, () => {
+    expect(MAX_FILE_NAME_BYTES).toBe(200)
+    expect(sanitiseFileName(`a`.repeat(300))).toBe(`a`.repeat(200))
+    expect(sanitiseFileName(`a`.repeat(200))).toBe(`a`.repeat(200))
+    expect(sanitiseFileName(`é`.repeat(150))).toBe(`é`.repeat(100))    // two bytes each
+    expect(sanitiseFileName(`a${`\u{1F600}`.repeat(60)}`)).toBe(`a${`\u{1F600}`.repeat(49)}`)   // four bytes each, never split
+    expect(sanitiseFileName(`${`a`.repeat(198)} .b`)).toBe(`a`.repeat(198))       // no trailing space or dot left
+    expect(fileNameFor(`${`x`.repeat(250)}.tsv`, `tsv`)).toBe(`${`x`.repeat(200)}.tsv`)
+    expect(new TextEncoder().encode(fileNameFor(`é`.repeat(300), `json`)).length).toBe(205)
+  })
+
+  it(`puts _ before a Windows device name, with or without an extension`, () => {
+    expect([`CON`, `con.foo`, `Aux`, `nul.tar`, `PRN`, `COM1`, `lpt9.tsv`, `clock$`].map(name => sanitiseFileName(name)))
+      .toEqual([`_CON`, `_con.foo`, `_Aux`, `_nul.tar`, `_PRN`, `_COM1`, `_lpt9.tsv`, `_clock$`])
+    expect([`console`, `COM0`, `COM10`, `lpt1x`, `my con`, `CON-data`].map(name => sanitiseFileName(name)))
+      .toEqual([`console`, `COM0`, `COM10`, `lpt1x`, `my con`, `CON-data`])
+    expect(fileNameFor(` con `, `tsv`)).toBe(`_con.tsv`)
+    expect(sanitiseFileName(`///`, `nul`)).toBe(`_nul`)
   })
 
   it(`falls back to the default name, cleaned, or to expression-data when nothing is left`, () => {

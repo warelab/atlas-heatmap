@@ -170,10 +170,13 @@ The Download button (among the heatmap's controls, and in the factor grid's tool
 *Download*:
 
 - **File name**, prefilled with `downloadFileName` (or the default), focused and selected so that typing replaces it.
-  *Download* is disabled while it is blank. The name is sanitised: path separators (`/`, `\`), the characters
-  Windows does not allow (`: * ? " < > |`) and control characters are removed, as are the spaces around it, leading
-  dots and trailing dots; a name with nothing left is saved under the default name. The format's extension is added
-  unless the name already ends with it (in any case). The dialog shows the name the file will be saved under.
+  *Download* is disabled while it is blank. The name is sanitised so that the browser saves it unchanged: path
+  separators (`/`, `\`), the characters Windows does not allow (`: * ? " < > |`), control and format characters
+  (bidi controls such as U+202E, zero-width spaces, soft hyphens), lone surrogates and noncharacters are removed, as
+  are the spaces around it, leading dots and tildes, and trailing dots. It is cut to 200 bytes of UTF-8, and a Windows
+  device name (`CON`, `PRN`, `AUX`, `NUL`, `COM1`–`COM9`, `LPT1`–`LPT9`, `CLOCK$`, with or without an extension) gets
+  a `_` before it. A name with nothing left is saved under the default name. The format's extension is added unless
+  the name already ends with it (in any case). The dialog shows the name the file will be saved under.
 - **Format**: *Tab-delimited text (.tsv)*, selected each time the dialog opens, or *JSON (.json)*.
 - A line saying what is saved, e.g. `9 rows × 24 columns, as shown` or `31 samples of JGI-SB-1 for SORBI_3006G095600`.
 - *Download* (or Enter) saves the file with downloadjs, as `text/tab-separated-values` or `application/json` in UTF-8,

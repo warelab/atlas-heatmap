@@ -22,22 +22,50 @@ const DEFAULT_FORMAT = `tsv`
 /** The base name of a file saved with no usable name. */
 const FALLBACK_FILE_NAME = `expression-data`
 
-// Path separators, the characters Windows forbids in file names, and control characters
-const INVALID_CHARACTERS = /[/\\:*?"<>|\u0000-\u001f\u007f]/g
+// Path separators, the characters Windows forbids, and characters browsers replace with `_` in a file name: control
+// and format characters (bidi controls such as U+202E, zero-width spaces, soft hyphens), lone surrogates and
+// noncharacters
+const INVALID_CHARACTERS = /[/\\:*?"<>|\p{Cc}\p{Cf}\p{Cs}\p{Noncharacter_Code_Point}]/gu
+
+// Windows device names, reserved with any extension (Chrome on Windows puts `_` before them)
+const RESERVED_NAME = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9]|clock\$)(?:\.|$)/i
 
 /**
- * A name that is safe as a file name: without path separators, the characters Windows does not allow (: * ? " < > |)
- * or control characters, without the spaces around it, and without leading dots (hidden files, `..`) or trailing dots
- * (which Windows drops). A name left empty becomes `fallback`, itself cleaned, or FALLBACK_FILE_NAME.
+ * The longest a sanitised name can be, in UTF-8 bytes: with an extension, a browser's ` (1)` and its `.crdownload`
+ * while saving, the file name stays well under the 255 bytes of common file systems (longer ones are not saved).
+ */
+const MAX_FILE_NAME_BYTES = 200
+
+const utf8Length = codePoint => (codePoint < 0x80 ? 1 : codePoint < 0x800 ? 2 : codePoint < 0x10000 ? 3 : 4)
+
+// `name` cut to MAX_FILE_NAME_BYTES, between whole characters
+const truncated = name => {
+  let bytes = 0
+  let end = 0
+  for (const character of name) {
+    bytes += utf8Length(character.codePointAt(0))
+    if (bytes > MAX_FILE_NAME_BYTES) {
+      return name.slice(0, end)
+    }
+    end += character.length
+  }
+  return name
+}
+
+/**
+ * A name that is safe as a file name, and that the browser saves unchanged: without path separators, the characters
+ * Windows does not allow (: * ? " < > |), control and format characters, lone surrogates or noncharacters; without the
+ * spaces around it, leading dots (hidden files, `..`) and tildes, or trailing dots (which Windows drops); at most
+ * MAX_FILE_NAME_BYTES long; and with `_` before a Windows device name (CON, PRN, AUX, NUL, COM1 to COM9, LPT1 to LPT9,
+ * CLOCK$). A name left empty becomes `fallback`, itself cleaned, or FALLBACK_FILE_NAME.
  */
 const sanitiseFileName = (name, fallback = FALLBACK_FILE_NAME) => {
-  const clean = value => String(value === undefined || value === null ? `` : value)
-    .replace(INVALID_CHARACTERS, ``)
-    .replace(/\s+/g, ` `)
-    .trim()
-    .replace(/^\.+/, ``)
-    .replace(/[. ]+$/, ``)
-    .trim()
+  const trimmed = value => value.trim().replace(/^[.~\s]+/, ``).replace(/[.\s]+$/, ``)
+  const clean = value => {
+    const cleaned = trimmed(truncated(trimmed(
+      String(value === undefined || value === null ? `` : value).replace(INVALID_CHARACTERS, ``).replace(/\s+/g, ` `))))
+    return RESERVED_NAME.test(cleaned) ? `_${cleaned}` : cleaned
+  }
   return clean(name) || clean(fallback) || FALLBACK_FILE_NAME
 }
 
@@ -77,6 +105,6 @@ const downloadContext = () => ({
 const plural = (count, noun, nouns = `${noun}s`) => `${count} ${count === 1 ? noun : nouns}`
 
 export {
-  FORMATS, DEFAULT_FORMAT, FALLBACK_FILE_NAME, sanitiseFileName, withExtension, fileNameFor, saveFile, tsvCell,
+  FORMATS, DEFAULT_FORMAT, FALLBACK_FILE_NAME, MAX_FILE_NAME_BYTES, sanitiseFileName, withExtension, fileNameFor, saveFile, tsvCell,
   tsvLines, jsonText, downloadContext, plural
 }

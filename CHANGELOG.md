@@ -14,9 +14,10 @@ Versions before 6.0.0 are upstream's
   experiment download. The dialog asks for:
   - a **file name**, prefilled with a default (`expression-<experiment accession, or studies>-<first gene>`, or the
     new `downloadFileName` prop), focused and selected. Download is disabled while it is blank. The name is
-    sanitised (path separators, `: * ? " < > |`, control characters, and surrounding spaces and dots are removed; an
-    empty result falls back to the default), and the format's extension is added unless it is already there (in any
-    case);
+    sanitised so that the browser saves it unchanged (path separators, `: * ? " < > |`, control and format
+    characters, lone surrogates, noncharacters, surrounding spaces and dots, and leading tildes are removed; it is cut
+    to 200 bytes of UTF-8; a Windows device name such as `CON` gets a `_` before it; an empty result falls back to the
+    default), and the format's extension is added unless it is already there (in any case);
   - a **format**: tab-delimited text (`.tsv`, `text/tab-separated-values`), selected every time the dialog opens, or
     JSON (`.json`, `application/json`).
 
